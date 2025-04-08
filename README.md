@@ -23,6 +23,7 @@ This project is a modern full-stack web application starter built with **Next.js
 - ✅ Ready for deployment on Vercel / Railway / Render
 
 ## 📁 Folder Structure
+```bash
 ├── app/
 │   ├── pages/              # Next.js pages and API routes
 │   ├── components/         # Reusable components (e.g., buttons, forms)
@@ -39,6 +40,7 @@ This project is a modern full-stack web application starter built with **Next.js
 ├── next.config.js          # Next.js configuration
 ├── package.json            # Project dependencies and scripts
 └── tailwind.config.js      # Tailwind CSS configuration
+```
 
 ## Quick Start
 
@@ -50,8 +52,4 @@ npm install
 cd server && npm install && cd ..
 cp .env.example .env
 npm run dev
-
-
-
-
-   
+```
