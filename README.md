@@ -4,12 +4,12 @@ This project is a modern full-stack web application starter built with **Next.js
 
 ## 📦 Tech Stack
 
-- **Frontend**: Next.js 14 (App Router), React, Tailwind CSS
+- **Frontend**: Next.js 15 (App Router), React
 - **Backend**: Express.js, Node.js
 - **Database**: MongoDB with Mongoose
-- **Authentication**: JWT-based login (configurable)
+- **Authentication**: JWT-based login and Registration, OAuth(Soon)
 - **API**: RESTful endpoints with Express
-- **State Management**: Zustand / Context API (customizable)
+- **State Management**: Redux
 - **Styling**: Tailwind CSS
 
 ## 🔧 Features
