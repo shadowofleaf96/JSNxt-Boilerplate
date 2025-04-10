@@ -17,7 +17,7 @@ const Testimonials: React.FC = () => {
           <div className="relative aspect-2/1 h-full md:-mx-8 xl:mx-0 xl:aspect-auto">
             <img
               alt=""
-              src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2102&q=80"
+              src="https://raw.githubusercontent.com/shadowofleaf96/PortFolio-NextJS/refs/heads/main/public/images/Profile%20Skecth%20Art.webp"
               className="absolute inset-0 size-full rounded-2xl bg-gray-800 object-cover shadow-2xl"
             />
           </div>
@@ -38,15 +38,16 @@ const Testimonials: React.FC = () => {
             </svg>
             <blockquote className="text-xl/8 font-semibold text-white sm:text-2xl/9">
               <p>
-                Gravida quam mi erat tortor neque molestie. Auctor aliquet at
-                porttitor a enim nunc suscipit tincidunt nunc. Et non lorem
-                tortor posuere. Nunc eu scelerisque interdum eget tellus non
-                nibh scelerisque bibendum.
+                As a web development creator, I simplify the project setup
+                process by focusing on clear structures, intuitive designs, and
+                reusable components. Whether it's a small project or large
+                application, my goal is to make development efficient, helping
+                developers focus on creating great projects.
               </p>
             </blockquote>
             <figcaption className="mt-8 text-base">
-              <div className="font-semibold text-white">Judith Black</div>
-              <div className="mt-1 text-gray-400">CEO of Tuple</div>
+              <div className="font-semibold text-white">Shadow Of Leaf</div>
+              <div className="mt-1 text-gray-400">Creator of JSNxt</div>
             </figcaption>
           </figure>
         </div>

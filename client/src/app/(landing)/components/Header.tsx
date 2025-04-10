@@ -4,19 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { HiBars3, HiXMark } from "react-icons/hi2";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import { fetchCurrentUser } from "../../redux/user/usersSlice";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { fetchCurrentUser } from "../../../redux/user/usersSlice";
 import { FiLogOut, FiUser } from "react-icons/fi";
-import AxiosConfig from "../../components/Utils/AxiosConfig";
-import LoadingSpinner from "../../components/Utils/LoadingSpinner";
+import AxiosConfig from "../../../components/Utils/AxiosConfig";
+import LoadingSpinner from "../../../components/Utils/LoadingSpinner";
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
   const { currentUser, loading } = useSelector(
@@ -60,10 +58,13 @@ const Header: React.FC = () => {
     }
   };
   const navigation = [
-    { name: "Product", href: "#" },
-    { name: "Features", href: "#" },
-    { name: "Marketplace", href: "#" },
-    { name: "Company", href: "#" },
+    { name: "Docs", href: "#docs" },
+    { name: "Features", href: "#features" },
+    { name: "Stack", href: "#stack" },
+    {
+      name: "GitHub",
+      href: "https://github.com/shadowofleaf96/JSNxt-Boilerplate",
+    },
   ];
 
   return (
@@ -75,11 +76,7 @@ const Header: React.FC = () => {
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
-            <img
-              alt=""
-              src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-              className="h-8 w-auto"
-            />
+            <img alt="" src="/jsnxt-logo-white.webp" className="h-16 w-auto" />
           </Link>
         </div>
 

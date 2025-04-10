@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
-import AxiosConfig from "../../../../components/Utils/AxiosConfig";
+import LoadingSpinner from "../../../../../components/Utils/LoadingSpinner";
+import AxiosConfig from "../../../../../components/Utils/AxiosConfig";
 import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { z } from "zod";

@@ -1,3 +1,11 @@
+import {
+  FaNodeJs,
+  FaReact,
+  FaDatabase,
+  FaCss3Alt,
+  FaGithub,
+} from "react-icons/fa";
+
 const Hero: React.FC = () => {
   return (
     <main>
@@ -22,73 +30,55 @@ const Hero: React.FC = () => {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
             <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-              <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
-                Announcing our next round of funding.{" "}
-                <a href="#" className="font-semibold text-white">
-                  <span aria-hidden="true" className="absolute inset-0" />
-                  Read more <span aria-hidden="true">&rarr;</span>
+              <div className="relative rounded-full px-3 py-1 text-sm text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
+                New: Now with MongoDB + Auth integration.{" "}
+                <a href="/changelog" className="font-semibold text-white">
+                  See what’s new <span aria-hidden="true">&rarr;</span>
                 </a>
               </div>
             </div>
             <div className="text-center">
-              <h1 className="text-5xl font-semibold tracking-tight text-balance text-white sm:text-7xl">
-                Data to enrich your online business
+              <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-7xl">
+                Kickstart your next project with JSNxt
               </h1>
-              <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
-                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-                lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat.
+              <p className="mt-8 text-lg font-medium text-gray-400 sm:text-xl">
+                A modern and scalable boilerplate using Next.js, Express.js,
+                TypeScript, and Tailwind CSS — built for developers who value
+                structure and speed.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <a
-                  href="#"
-                  className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                  href="/docs"
+                  className="rounded-md bg-gray-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
                 >
-                  Get started
+                  Read the Docs
                 </a>
-                <a href="#" className="text-sm/6 font-semibold text-white">
-                  Learn more <span aria-hidden="true">→</span>
+                <a
+                  href="https://github.com/shadowofleaf96/JSNxt-Boilerplate"
+                  className="text-sm font-semibold text-white"
+                >
+                  View on GitHub <span aria-hidden="true">→</span>
                 </a>
               </div>
             </div>
           </div>
 
-          {/* Logo cloud */}
           <div className="mx-auto grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
-            <img
-              alt="Transistor"
-              src="https://tailwindui.com/plus-assets/img/logos/158x48/transistor-logo-white.svg"
-              width={158}
-              height={48}
-              className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-            />
-            <img
-              alt="Reform"
-              src="https://tailwindui.com/plus-assets/img/logos/158x48/reform-logo-white.svg"
-              width={158}
-              height={48}
-              className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-            />
-            <img
-              alt="Tuple"
-              src="https://tailwindui.com/plus-assets/img/logos/158x48/tuple-logo-white.svg"
-              width={158}
-              height={48}
-              className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-            />
-            <img
-              alt="SavvyCal"
-              src="https://tailwindui.com/plus-assets/img/logos/158x48/savvycal-logo-white.svg"
-              width={158}
-              height={48}
-              className="col-span-2 max-h-12 w-full object-contain sm:col-start-2 lg:col-span-1"
-            />
-            <img
-              alt="Statamic"
-              src="https://tailwindui.com/plus-assets/img/logos/158x48/statamic-logo-white.svg"
-              width={158}
-              height={48}
-              className="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1"
-            />
+            <div className="flex items-center justify-center">
+              <FaReact size={64} className="text-white" />
+            </div>
+            <div className="flex items-center justify-center">
+              <FaNodeJs size={64} className="text-white" />
+            </div>
+            <div className="flex items-center justify-center">
+              <FaDatabase size={64} className="text-white" />
+            </div>
+            <div className="flex items-center justify-center">
+              <FaCss3Alt size={64} className="text-white" />
+            </div>
+            <div className="flex items-center justify-center">
+              <FaGithub size={64} className="text-white" />
+            </div>
           </div>
         </div>
         <div

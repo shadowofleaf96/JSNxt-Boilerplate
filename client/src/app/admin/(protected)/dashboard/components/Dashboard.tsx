@@ -5,9 +5,9 @@ import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import Error from "../../../components/Error/Error";
 import { FaUserClock, FaUsers } from "react-icons/fa6";
-import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../../components/Utils/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../../components/Utils/AxiosConfig";
 
 interface User {
   name?: string;
@@ -126,9 +126,9 @@ const Dashboard: React.FC = () => {
         <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
           <div>
             <h3 className="text-sm font-medium text-gray-700">Total Users</h3>
-            <p className="text-2xl font-bold text-blue-600">{userStats.totalUsers}</p>
+            <p className="text-2xl font-bold text-black">{userStats.totalUsers}</p>
           </div>
-          <FaUsers size={30} className="text-blue-500" />
+          <FaUsers size={30} className="text-black" />
         </div>
 
         <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">

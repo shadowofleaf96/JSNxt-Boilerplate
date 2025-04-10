@@ -1,3 +1,5 @@
+"use client";
+import React from "react";
 import {
   Disclosure,
   DisclosureButton,
@@ -8,9 +10,14 @@ import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 const FAQ: React.FC = () => {
   const faqs = [
     {
-      question: "What's the best thing about Switzerland?",
+      question: "What’s the best thing about JSNxt?",
       answer:
-        "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
+        "It’s flexible, fast, and scalable. JSNxt combines the power of Next.js and Express.js into one full-stack solution.",
+    },
+    {
+      question: "Is this suitable for production?",
+      answer:
+        "Absolutely. With API routes handled via Express and frontend via Next.js, you get SSR and backend logic in one place.",
     },
   ];
 
@@ -18,20 +25,14 @@ const FAQ: React.FC = () => {
     <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
       <div className="mx-auto max-w-4xl">
         <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-          Frequently asked questions
+          Frequently Asked Questions
         </h2>
         <dl className="mt-16 divide-y divide-gray-900/10">
           {faqs.map((faq) => (
-            <Disclosure
-              key={faq.question}
-              as="div"
-              className="py-6 first:pt-0 last:pb-0"
-            >
+            <Disclosure key={faq.question} as="div" className="py-6">
               <dt>
                 <DisclosureButton className="group flex w-full items-start justify-between text-left text-gray-900">
-                  <span className="text-base/7 font-semibold">
-                    {faq.question}
-                  </span>
+                  <span className="text-base font-semibold">{faq.question}</span>
                   <span className="ml-6 flex h-7 items-center">
                     <HiPlusSmall
                       aria-hidden="true"
@@ -45,7 +46,7 @@ const FAQ: React.FC = () => {
                 </DisclosureButton>
               </dt>
               <DisclosurePanel as="dd" className="mt-2 pr-12">
-                <p className="text-base/7 text-gray-600">{faq.answer}</p>
+                <p className="text-base text-gray-600">{faq.answer}</p>
               </DisclosurePanel>
             </Disclosure>
           ))}
@@ -54,4 +55,5 @@ const FAQ: React.FC = () => {
     </div>
   );
 };
+
 export default FAQ;

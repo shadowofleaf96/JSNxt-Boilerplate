@@ -1,51 +1,46 @@
+"use client";
+import React from "react";
+
 const Footer: React.FC = () => {
   const footerNavigation = {
     solutions: [
-      { name: "Marketing", href: "#" },
-      { name: "Analytics", href: "#" },
-      { name: "Automation", href: "#" },
-      { name: "Commerce", href: "#" },
-      { name: "Insights", href: "#" },
+      { name: "Features", href: "#" },
+      { name: "Pricing", href: "#" },
+      { name: "Integrations", href: "#" },
+      { name: "API", href: "#" },
     ],
     support: [
-      { name: "Submit ticket", href: "#" },
-      { name: "Documentation", href: "#" },
-      { name: "Guides", href: "#" },
+      { name: "Help Center", href: "#" },
+      { name: "Contact Us", href: "#" },
+      { name: "Status", href: "#" },
     ],
     company: [
       { name: "About", href: "#" },
       { name: "Blog", href: "#" },
-      { name: "Jobs", href: "#" },
-      { name: "Press", href: "#" },
+      { name: "Careers", href: "#" },
     ],
     legal: [
-      { name: "Terms of service", href: "#" },
-      { name: "Privacy policy", href: "#" },
-      { name: "License", href: "#" },
+      { name: "Privacy", href: "#" },
+      { name: "Terms", href: "#" },
+      { name: "Security", href: "#" },
     ],
   };
 
   return (
-    <footer className="mt-32 bg-gray-900 sm:mt-56">
+    <footer className="mt-24 bg-gray-900 text-white sm:mt-32">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-32">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <img
-            alt="Company name"
-            src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-            className="h-9"
-          />
-          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm/6 font-semibold text-white">
-                  Solutions
-                </h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {footerNavigation.solutions.map((item) => (
+          <img alt="JSNxt" src="/jsnxt-logo-white.webp" className="h-26" />
+          <div className="mt-8 flex flex-wrap gap-8 xl:col-span-2 xl:mt-0">
+            {Object.entries(footerNavigation).map(([section, links]) => (
+              <div key={section} className="min-w-[120px]">
+                <h3 className="text-sm font-semibold capitalize">{section}</h3>
+                <ul className="mt-4 space-y-2">
+                  {links.map((item) => (
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm/6 text-gray-400 hover:text-white"
+                        className="text-sm text-gray-400 hover:text-white"
                       >
                         {item.name}
                       </a>
@@ -53,58 +48,15 @@ const Footer: React.FC = () => {
                   ))}
                 </ul>
               </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="text-sm/6 font-semibold text-white">Support</h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {footerNavigation.support.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm/6 text-gray-400 hover:text-white"
-                      >
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm/6 font-semibold text-white">Company</h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {footerNavigation.company.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm/6 text-gray-400 hover:text-white"
-                      >
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="text-sm/6 font-semibold text-white">Legal</h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {footerNavigation.legal.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm/6 text-gray-400 hover:text-white"
-                      >
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            ))}
           </div>
+        </div>
+        <div className="mt-8 border-t border-gray-700 pt-4 text-sm text-gray-400 text-center">
+          © {new Date().getFullYear()} JSNxt. All rights reserved.
         </div>
       </div>
     </footer>
   );
 };
+
 export default Footer;

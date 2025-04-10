@@ -2,16 +2,16 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../../../redux/store";
-import { fetchUsers } from "../../../../redux/user/usersSlice";
+import { RootState, AppDispatch } from "../../../../../redux/store";
+import { fetchUsers } from "../../../../../redux/user/usersSlice";
 import { FaRegTrashCan, FaPlus } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
-import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../../components/Utils/LoadingSpinner";
 import AddUserForm from "./UsersForm";
 import { toast } from "react-toastify";
 import Error from "../../../components/Error/Error";
 import ConfirmationModal from "../../../components/Utils/ConfirmationModal";
-import AxiosConfig from "../../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../../components/Utils/AxiosConfig";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -223,7 +223,7 @@ function Users() {
         )}
         <button
           onClick={handleAddUser}
-          className="flex items-center justify-center h-12 w-12 px-2 text-white bg-blue-400 rounded-full hover:bg-blue-500 focus:outline-none"
+          className="flex items-center justify-center h-12 w-12 px-2 text-white bg-black rounded-full hover:bg-gray-500 focus:outline-none"
         >
           <FaPlus size={24} />
         </button>
@@ -251,7 +251,7 @@ function Users() {
                 >
                   <input
                     type="checkbox"
-                    className="text-blue-500 border-gray-300 rounded"
+                    className="text-black border-gray-300 rounded"
                     onChange={handleSelectAllChange}
                     checked={selectedUsers.length === currentItems.length}
                   />
@@ -323,7 +323,7 @@ function Users() {
                     <td className="px-4 py-4 text-sm text-gray-700 whitespace-nowrap">
                       <input
                         type="checkbox"
-                        className="text-blue-500 border-gray-300 rounded"
+                        className="text-black border-gray-300 rounded"
                         onChange={() => handleCheckboxChange(user._id)}
                         checked={selectedUsers.includes(user._id)}
                       />
@@ -391,7 +391,7 @@ function Users() {
                         <div className="h-auto w-auto">
                           <button
                             onClick={() => handleEditUser(user)}
-                            className="text-blue-500 transition-colors duration-200 hover:text-yellow-500 focus:outline-none"
+                            className="text-black transition-colors duration-200 hover:text-gray-600 focus:outline-none"
                           >
                             <FaRegEdit size={22} />
                           </button>
@@ -435,7 +435,7 @@ function Users() {
                 onClick={() => setCurrentPage(index + 1)}
                 className={`px-2 py-1 text-sm rounded-md ${
                   currentPage === index + 1
-                    ? "text-blue-500 bg-blue-100"
+                    ? "text-black bg-blue-100"
                     : "text-gray-500 hover:bg-gray-100"
                 }`}
               >

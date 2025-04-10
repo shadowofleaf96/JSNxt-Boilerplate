@@ -2,13 +2,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/store";
-import { fetchCurrentUser } from "../../../redux/user/usersSlice";
+import { AppDispatch, RootState } from "../../../../redux/store";
+import { fetchCurrentUser } from "../../../../redux/user/usersSlice";
 import { FiUser, FiLogOut } from "react-icons/fi";
 import { IoMenu } from "react-icons/io5";
-import LoadingSpinner from "../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../components/Utils/AxiosConfig";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 

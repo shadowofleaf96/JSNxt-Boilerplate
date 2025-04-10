@@ -1,50 +1,50 @@
 import React from "react";
 import {
   HiCloudArrowUp,
-  HiLockClosed,
   HiArrowPath,
   HiFingerPrint,
   HiCog6Tooth,
-  HiServer,
+  HiChartBar,
+  HiRss,
 } from "react-icons/hi2";
 
 const Features: React.FC = () => {
   const features = [
     {
-      name: "Push to deploy.",
+      name: "Instant deployment.",
       description:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
+        "Deploy your Next.js apps quickly with automated workflows, ensuring a smooth deployment process.",
       icon: HiCloudArrowUp,
     },
     {
-      name: "SSL certificates.",
+      name: "Efficient state management.",
       description:
-        "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
-      icon: HiLockClosed,
-    },
-    {
-      name: "Simple queues.",
-      description:
-        "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.",
+        "Integrate state management with tools like Redux or Zustand for scalable and maintainable apps.",
       icon: HiArrowPath,
     },
     {
-      name: "Advanced security.",
+      name: "Authentication services.",
       description:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
+        "Ensure your application’s security with authentication services and fingerprint authentication.",
       icon: HiFingerPrint,
     },
     {
-      name: "Powerful API.",
+      name: "Customizable API.",
       description:
-        "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
+        "Build powerful and flexible APIs using Express.js to handle backend logic and data flow for your Next.js applications.",
       icon: HiCog6Tooth,
     },
     {
-      name: "Database backups.",
+      name: "Performance optimization.",
       description:
-        "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. ",
-      icon: HiServer,
+        "Boost your app's performance with built-in features like server-side rendering and static site generation.",
+      icon: HiChartBar,
+    },
+    {
+      name: "Customizable routing.",
+      description:
+        "Take control of routing in your Next.js application with dynamic routes and an intuitive URL structure.",
+      icon: HiRss,
     },
   ];
 
@@ -52,11 +52,11 @@ const Features: React.FC = () => {
     <div className="bg-gray-900 py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-base font-semibold leading-7 text-indigo-400">
-            Deploy faster
+          <h2 className="text-base font-semibold leading-7 text-gray-400">
+            Deploy faster with JSNxt
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Everything you need to deploy your app
+            Features to boost your Next.js apps
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-4xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -65,7 +65,7 @@ const Features: React.FC = () => {
               <div key={feature.name} className="relative pl-9">
                 <dt className="font-semibold text-white">
                   <feature.icon
-                    className="absolute left-1 top-1 h-5 w-5 text-indigo-400"
+                    className="absolute left-1 top-1 h-5 w-5 text-gray-500"
                     aria-hidden="true"
                   />
                   {feature.name}

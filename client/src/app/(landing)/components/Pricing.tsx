@@ -1,44 +1,60 @@
 import { HiCheck } from "react-icons/hi";
 
-
 const Pricing: React.FC = () => {
   const tiers = [
     {
-      name: "Hobby",
-      id: "tier-hobby",
+      name: "Starter",
+      id: "tier-starter",
       href: "#",
       priceMonthly: "$19",
       description:
-        "The perfect plan if you're just getting started with our product.",
+        "Perfect for personal projects or small apps, with access to essential features.",
       features: [
-        "25 products",
-        "Up to 10,000 subscribers",
-        "Advanced analytics",
-        "24-hour support response time",
+        "1 Project",
+        "Up to 10,000 monthly visits",
+        "Basic analytics",
+        "Email support",
       ],
       featured: false,
+    },
+    {
+      name: "Business",
+      id: "tier-business",
+      href: "#",
+      priceMonthly: "$49",
+      description:
+        "Ideal for growing teams and businesses that need advanced features and priority support.",
+      features: [
+        "Unlimited Projects",
+        "Up to 100,000 monthly visits",
+        "Advanced analytics",
+        "Priority email support",
+        "Custom domain",
+        "Integration with third-party services",
+      ],
+      featured: true,
     },
     {
       name: "Enterprise",
       id: "tier-enterprise",
       href: "#",
-      priceMonthly: "$49",
-      description: "Dedicated support and infrastructure for your company.",
+      priceMonthly: "$99",
+      description:
+        "The most powerful plan with dedicated infrastructure, custom integrations, and personal support.",
       features: [
-        "Unlimited products",
-        "Unlimited subscribers",
-        "Advanced analytics",
-        "Dedicated support representative",
-        "Marketing automations",
-        "Custom integrations",
+        "Unlimited Projects",
+        "Advanced analytics with custom reports",
+        "Custom integrations with enterprise systems",
       ],
-      featured: true,
+      featured: false,
     },
   ];
 
-  function classNames(...classes: (string | false | null | undefined)[]): string {
+  function classNames(
+    ...classes: (string | false | null | undefined)[]
+  ): string {
     return classes.filter(Boolean).join(" ");
-  }  
+  }
 
   return (
     <div className="relative isolate mt-32 bg-white px-6 sm:mt-56 lg:px-8">
@@ -55,36 +71,31 @@ const Pricing: React.FC = () => {
         />
       </div>
       <div className="mx-auto max-w-2xl sm:text-center">
-        <h2 className="text-base/7 font-semibold text-indigo-600">Pricing</h2>
-        <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl sm:text-balance">
-          Choose the right plan for you
+        <h2 className="text-base font-semibold text-gray-600">Pricing</h2>
+        <p className="mt-2 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl sm:text-balance">
+          Choose the right plan for your JSNxt project
         </p>
-        <p className="mt-6 text-lg/8 text-gray-600">
-          Choose an affordable plan that’s packed with the best features for
-          engaging your audience, creating customer loyalty, and driving sales.
+        <p className="mt-6 text-lg text-gray-600">
+          Flexible plans to suit your needs, whether you're just starting or
+          scaling up.
         </p>
       </div>
-      <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-2">
-        {tiers.map((tier, tierIdx) => (
+      <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
+        {tiers.map((tier) => (
           <div
             key={tier.id}
             className={classNames(
               tier.featured
                 ? "relative bg-gray-900 shadow-2xl"
                 : "bg-white/60 sm:mx-8 lg:mx-0",
-              tier.featured
-                ? ""
-                : tierIdx === 0
-                ? "rounded-t-3xl sm:rounded-b-none lg:rounded-tr-none lg:rounded-bl-3xl"
-                : "sm:rounded-t-none lg:rounded-tr-3xl lg:rounded-bl-none",
               "rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10"
             )}
           >
             <h3
               id={tier.id}
               className={classNames(
-                tier.featured ? "text-indigo-400" : "text-indigo-600",
-                "text-base/7 font-semibold"
+                tier.featured ? "text-gray-400" : "text-gray-600",
+                "text-base font-semibold"
               )}
             >
               {tier.name}
@@ -110,7 +121,7 @@ const Pricing: React.FC = () => {
             <p
               className={classNames(
                 tier.featured ? "text-gray-300" : "text-gray-600",
-                "mt-6 text-base/7"
+                "mt-6 text-base"
               )}
             >
               {tier.description}
@@ -119,7 +130,7 @@ const Pricing: React.FC = () => {
               role="list"
               className={classNames(
                 tier.featured ? "text-gray-300" : "text-gray-600",
-                "mt-8 space-y-3 text-sm/6 sm:mt-10"
+                "mt-8 space-y-3 text-sm"
               )}
             >
               {tier.features.map((feature) => (
@@ -127,7 +138,7 @@ const Pricing: React.FC = () => {
                   <HiCheck
                     aria-hidden="true"
                     className={classNames(
-                      tier.featured ? "text-indigo-400" : "text-indigo-600",
+                      tier.featured ? "text-gray-400" : "text-gray-600",
                       "h-6 w-5 flex-none"
                     )}
                   />
@@ -137,12 +148,11 @@ const Pricing: React.FC = () => {
             </ul>
             <a
               href={tier.href}
-              aria-describedby={tier.id}
               className={classNames(
                 tier.featured
-                  ? "bg-indigo-500 text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-indigo-500"
-                  : "text-indigo-600 ring-1 ring-indigo-200 ring-inset hover:ring-indigo-300 focus-visible:outline-indigo-600",
-                "mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10"
+                  ? "bg-gray-500 text-white hover:bg-gray-400"
+                  : "text-gray-600 ring-1 ring-gray-200 hover:ring-gray-300",
+                "mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold"
               )}
             >
               Get started today
@@ -153,4 +163,5 @@ const Pricing: React.FC = () => {
     </div>
   );
 };
+
 export default Pricing;

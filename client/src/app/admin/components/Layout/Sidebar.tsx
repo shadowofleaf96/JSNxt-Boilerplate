@@ -51,7 +51,7 @@ export default function Sidebar({
           <Link className="flex justify-center" href="/">
             <img
               className="max-h-16 w-auto object-contain"
-              src="/logo-wlidaty.webp"
+              src="/jsnxt-logo-black.webp"
               alt="Brand Logo"
             />
           </Link>
@@ -73,13 +73,13 @@ export default function Sidebar({
                 onClick={() => isMobile && toggleSidebar()}
                 className={`flex items-center px-3 py-2.5 rounded-lg transition-colors ${
                   item.current
-                    ? "bg-blue-50 text-blue-700"
+                    ? "bg-blue-50 text-black"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
                 <span
                   className={`${
-                    item.current ? "text-blue-600" : "text-gray-500"
+                    item.current ? "text-black" : "text-gray-500"
                   }`}
                 >
                   {item.icon}

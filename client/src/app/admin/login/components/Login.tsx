@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../components/Utils/AxiosConfig";
 import DOMPurify from "dompurify";
 
 const Login: React.FC = () => {
@@ -81,7 +81,7 @@ const Login: React.FC = () => {
         <div className="flex justify-center mx-auto">
           <img
             className="w-auto h-24 sm:h-24"
-            src="../../../logo-wlidaty.webp"
+            src="/jsnxt-logo-black.webp"
             alt="Company Logo"
             onError={(e) => {
               (e.target as HTMLImageElement).src = "/fallback-logo.png";
@@ -109,7 +109,7 @@ const Login: React.FC = () => {
               onChange={(e) =>
                 setUsername(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))
               }
-              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
 
@@ -126,7 +126,7 @@ const Login: React.FC = () => {
               value={password}
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
 

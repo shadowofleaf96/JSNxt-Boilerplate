@@ -1,8 +1,7 @@
-import "./styles/index.css";
+import "../styles/index.css";
 import { Poppins } from "next/font/google";
-import { ReduxProvider } from "./components/Utils/ReduxProvider";
-import ToastProvider from "./components/Utils/ToastProvider";
-
+import { ReduxProvider } from "../components/Utils/ReduxProvider";
+import ToastProvider from "../components/Utils/ToastProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -13,7 +12,7 @@ const poppins = Poppins({
 
 export const metadata = {
   title: "JSNxt Boilerplate",
-  description: "This is my Next.js/Express.js boilerplate",
+  description: "This is a Simple Next.js/Express.js boilerplate",
 };
 
 export default function RootLayout({

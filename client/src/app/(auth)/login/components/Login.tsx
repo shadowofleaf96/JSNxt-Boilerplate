@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import AxiosConfig from "../../../components/Utils/AxiosConfig";
-import LoadingSpinner from "../../../components/Utils/LoadingSpinner";
+import AxiosConfig from "../../../../components/Utils/AxiosConfig";
+import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
 import Link from "next/link";
 import DOMPurify from "dompurify";
 import { toast } from "react-toastify";
@@ -80,8 +80,8 @@ const Login: React.FC = () => {
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <img
-              className="h-16 w-auto mx-auto"
-              src="../../../logo-wlidaty.webp"
+              className="h-24 sm:h-24 mx-auto"
+              src="../../../jsnxt-logo-black.webp"
               alt="Your Company"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/fallback-logo.png";
@@ -94,7 +94,7 @@ const Login: React.FC = () => {
               Not a member?{" "}
               <Link
                 href="/registration"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
+                className="font-semibold text-gray-600 hover:text-gray-500"
               >
                 Register your account
               </Link>
@@ -123,7 +123,7 @@ const Login: React.FC = () => {
                   onChange={(e) =>
                     setUsername(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))
                   }
-                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600 sm:text-sm"
                 />
               </div>
 
@@ -144,7 +144,7 @@ const Login: React.FC = () => {
                   maxLength={50}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600 sm:text-sm"
                 />
               </div>
 
@@ -160,7 +160,7 @@ const Login: React.FC = () => {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    className="h-4 w-4 rounded border-gray-300 accent-gray-600 text-gray-600 focus:ring-gray-600"
                   />
                   <label
                     htmlFor="remember-me"
@@ -173,7 +173,7 @@ const Login: React.FC = () => {
                 <div className="text-sm">
                   <a
                     href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                    className="font-semibold text-gray-600 hover:text-gray-500"
                   >
                     Forgot password?
                   </a>
@@ -184,7 +184,7 @@ const Login: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
+                  className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-50"
                 >
                   {loading ? <LoadingSpinner size={5} /> : "Sign In"}
                 </button>

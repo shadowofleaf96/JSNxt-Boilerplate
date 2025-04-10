@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../components/Utils/AxiosConfig";
 import DOMPurify from "dompurify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -91,8 +91,8 @@ const Registration: React.FC = () => {
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <img
-              className="h-16 w-auto mx-auto"
-              src="../../../logo-wlidaty.webp"
+              className="h-24 sm:h-24 mx-auto"
+              src="/jsnxt-logo-black.webp"
               alt="Your Company"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/fallback-logo.png";
@@ -105,7 +105,7 @@ const Registration: React.FC = () => {
               Already have an account?{" "}
               <a
                 href="/login"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
+                className="font-semibold text-gray-600 hover:text-gray-500"
               >
                 Sign in here
               </a>
@@ -126,7 +126,7 @@ const Registration: React.FC = () => {
                     {...register("username")}
                     id="username"
                     type="text"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 focus:ring-indigo-600 sm:text-sm"
+                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
                   />
                   {errors.username && (
                     <p className="mt-1 text-sm text-red-600">
@@ -148,7 +148,7 @@ const Registration: React.FC = () => {
                     {...register("email")}
                     id="email"
                     type="email"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 focus:ring-indigo-600 sm:text-sm"
+                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
                   />
                   {errors.email && (
                     <p className="mt-1 text-sm text-red-600">
@@ -170,7 +170,7 @@ const Registration: React.FC = () => {
                     {...register("password")}
                     id="password"
                     type="password"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 focus:ring-indigo-600 sm:text-sm"
+                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
                   />
                   {errors.password && (
                     <p className="mt-1 text-sm text-red-600">
@@ -186,7 +186,7 @@ const Registration: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading || attempts >= 3}
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60"
+                  className="flex w-full justify-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-60"
                 >
                   {loading ? (
                     <LoadingSpinner size={5} />
