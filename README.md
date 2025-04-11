@@ -14,7 +14,7 @@ This project is a modern full-stack web application starter built with **Next.js
 
 ## 🔧 Features
 
-- ✅ Clean folder structure (frontend in `app/`, backend in `server/`)
+- ✅ Clean folder structure (frontend in `client/`, backend in `server/`)
 - ✅ Full user authentication flow (register/login with JWT)
 - ✅ MongoDB integration using Mongoose
 - ✅ Protected routes and dashboard logic
