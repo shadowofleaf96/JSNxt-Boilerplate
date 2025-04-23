@@ -1,6 +1,6 @@
 const Testimonials: React.FC = () => {
   return (
-    <div id="testimonials" className="relative z-10 mt-32 bg-gray-900 pb-20 sm:mt-56 sm:pb-24 xl:pb-0">
+    <div id="testimonials" className="relative z-10 mt-12 bg-gray-900 pb-2 sm:mt-16 sm:pb-4 xl:pb-0">
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
         <div className="absolute top-[calc(50%-36rem)] left-[calc(50%-19rem)] transform-gpu blur-3xl">
           <div

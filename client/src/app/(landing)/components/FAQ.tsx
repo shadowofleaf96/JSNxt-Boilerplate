@@ -22,7 +22,7 @@ const FAQ: React.FC = () => {
   ];
 
   return (
-    <div id="faq" className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
+    <div id="faq" className="mx-auto mt-24 max-w-7xl pb-4 sm:pb-8 px-6 sm:mt-48 lg:px-8 ">
       <div className="mx-auto max-w-4xl">
         <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
           Frequently Asked Questions
