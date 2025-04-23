@@ -1,6 +1,9 @@
 const User = require("../models/Users");
 const Blacklist = require("../models/Blacklist");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const sendEmail = require("../middleware/sendEmail");
+const BACKEND_URL = process.env.BACKEND_URL;
 
 exports.createUser = async (req, res) => {
   try {
@@ -39,10 +42,10 @@ exports.createUser = async (req, res) => {
 
 exports.registerUser = async (req, res) => {
   try {
-    const { name, username, email, password } = req.body;
-    const avatar = req.file
-      ? req.file.path
-      : "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
+    const { email, password, username } = req.body;
+
+    const avatar =
+      "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png";
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -54,11 +57,12 @@ exports.registerUser = async (req, res) => {
 
     const emailToken = crypto.randomBytes(64).toString("hex");
 
+    const generatedUsername = username || `user_${Date.now()}`;
+
     const newUser = new User({
-      name,
-      username,
       email,
       password,
+      username: generatedUsername,
       avatar,
       role: "user",
       status: "active",
@@ -68,13 +72,13 @@ exports.registerUser = async (req, res) => {
 
     await newUser.save();
 
-    const verifyLink = `${BACKEND_URL}/api/auth/verify-email?token=${emailToken}`;
+    const verifyLink = `${BACKEND_URL}/api/auth/verify-email/${emailToken}`;
     await sendEmail({
       to: email,
-      subject: "JSNxt - Verify your email",
+      subject: "JSNXT - Verify your email",
       html: `
-        <h3>Hi ${name},</h3>
-        <p>Thank you for registering. Please verify your email address by clicking the link below:</p>
+        <h3>Welcome!</h3>
+        <p>Thank you for registering. Please verify your email by clicking the link below:</p>
         <a href="${verifyLink}">Verify Email</a>
       `,
     });
@@ -95,7 +99,7 @@ exports.registerUser = async (req, res) => {
 
 exports.verifyEmail = async (req, res) => {
   try {
-    const { token } = req.query;
+    const { token } = req.params;
 
     const user = await User.findOne({ emailToken: token });
     if (!user) {
@@ -125,15 +129,19 @@ exports.verifyEmail = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { identifier, password } = req.body;
 
-    const user = await User.findOne({ username }).select("+password");
+    const user = await User.findOne({
+      $or: [
+        { email: identifier, role: "user" }, 
+        { username: identifier, role: "admin" }, 
+      ],
+    }).select("+password");
 
     if (!user) {
       return res.status(401).json({
         status: "failed",
-        message:
-          "Invalid username or password. Please try again with the correct credentials.",
+        message: "Invalid credentials. Please try again.",
       });
     }
 
@@ -141,7 +149,9 @@ exports.login = async (req, res) => {
       return res.status(401).json({
         status: "failed",
         message:
-          "This account is inactive, please try again later or use an active account instead",
+          user.role === "admin"
+            ? "Admin account is inactive. Contact superadmin."
+            : "User account is inactive. Please contact support.",
       });
     }
 
@@ -150,20 +160,18 @@ exports.login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({
         status: "failed",
-        message:
-          "Invalid username or password. Please try again with the correct credentials.",
+        message: "Invalid credentials. Please try again.",
       });
     }
 
     const token = user.generateAccessJWT();
-
     const { password: _, ...user_data } = user._doc;
 
     res.status(200).json({
       status: "success",
       data: user_data,
       token,
-      message: "You have successfully logged in.",
+      message: `Successfully logged in as ${user.role}`,
     });
   } catch (err) {
     res.status(500).json({

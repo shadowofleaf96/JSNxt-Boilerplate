@@ -15,7 +15,7 @@ const sendEmail = async ({ to, subject, html }) => {
   });
 
   await transporter.sendMail({
-    from: `"JSNxt Email Provider" <${process.env.EMAIL_USER}>`,
+    from: `"JSNXT Email Provider" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,

@@ -13,7 +13,6 @@ connectDB();
 
 const port = process.env.PORT || 5000;
 const allowedOrigins = [
-  "http://localhost:4173",
   "http://localhost:3000",
   "https://shopify-admin-panel.onrender.com",
 ];
@@ -59,7 +58,7 @@ app.use(
     frameguard: { action: "deny" },
     noSniff: true,
     hsts: {
-      maxAge: 31536000, // 1 year
+      maxAge: 31536000,
       includeSubDomains: true,
     },
   })

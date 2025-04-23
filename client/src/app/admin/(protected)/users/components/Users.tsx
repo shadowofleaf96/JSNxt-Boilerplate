@@ -8,22 +8,13 @@ import { FaRegTrashCan, FaPlus } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
 import LoadingSpinner from "../../../../../components/Utils/LoadingSpinner";
 import AddUserForm from "./UsersForm";
+import { User } from "../../../../../types/user";
 import { toast } from "react-toastify";
 import Error from "../../../components/Error/Error";
 import ConfirmationModal from "../../../components/Utils/ConfirmationModal";
 import AxiosConfig from "../../../../../components/Utils/AxiosConfig";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-interface User {
-  _id: string;
-  username: string;
-  email: string;
-  role: string;
-  status: string;
-  avatar: string;
-  name: string;
-}
 
 interface SortConfig {
   key: keyof User | null;

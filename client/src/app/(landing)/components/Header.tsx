@@ -58,12 +58,13 @@ const Header: React.FC = () => {
     }
   };
   const navigation = [
-    { name: "Docs", href: "#docs" },
     { name: "Features", href: "#features" },
-    { name: "Stack", href: "#stack" },
+    { name: "Testimonials", href: "#testimonials" },
+    { name: "Pricing", href: "#pricing" },
+    { name: "FAQ", href: "#faq" },
     {
       name: "GitHub",
-      href: "https://github.com/shadowofleaf96/JSNxt-Boilerplate",
+      href: "https://github.com/shadowofleaf96/JSNXT-Boilerplate",
     },
   ];
 
@@ -74,7 +75,7 @@ const Header: React.FC = () => {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5">
+          <Link href="/" className="-m-1.5 p-1.5" prefetch={true}>
             <span className="sr-only">Your Company</span>
             <img alt="" src="/jsnxt-logo-white.webp" className="h-16 w-auto" />
           </Link>
@@ -96,6 +97,7 @@ const Header: React.FC = () => {
             <Link
               key={item.name}
               href={item.href}
+              prefetch={true}
               className="text-sm font-semibold text-white"
             >
               {item.name}
@@ -144,7 +146,11 @@ const Header: React.FC = () => {
               )}
             </div>
           ) : (
-            <Link href="/login" className="text-sm font-semibold text-white">
+            <Link
+              href="/login"
+              prefetch={true}
+              className="text-sm font-semibold text-white"
+            >
               Log in <span aria-hidden="true">&rarr;</span>
             </Link>
           )}
@@ -159,7 +165,7 @@ const Header: React.FC = () => {
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
           <div className="flex items-center justify-between">
-            <Link href="/" className="-m-1.5 p-1.5">
+            <Link href="/" prefetch={true} className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <img
                 alt=""
@@ -195,6 +201,7 @@ const Header: React.FC = () => {
                   <>
                     <Link
                       href="/"
+                      prefetch={true}
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
                     >
                       Profile
@@ -209,6 +216,7 @@ const Header: React.FC = () => {
                 ) : (
                   <Link
                     href="/login"
+                    prefetch={true}
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
                   >
                     Log in

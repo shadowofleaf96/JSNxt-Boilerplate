@@ -57,7 +57,7 @@ const Pricing: React.FC = () => {
   }
 
   return (
-    <div className="relative isolate mt-32 bg-white px-6 sm:mt-56 lg:px-8">
+    <div id="pricing" className="relative isolate mt-32 bg-white px-6 sm:mt-56 lg:px-8">
       <div
         aria-hidden="true"
         className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl"
@@ -73,7 +73,7 @@ const Pricing: React.FC = () => {
       <div className="mx-auto max-w-2xl sm:text-center">
         <h2 className="text-base font-semibold text-gray-600">Pricing</h2>
         <p className="mt-2 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl sm:text-balance">
-          Choose the right plan for your JSNxt project
+          Choose the right plan for your JSNXT project
         </p>
         <p className="mt-6 text-lg text-gray-600">
           Flexible plans to suit your needs, whether you're just starting or

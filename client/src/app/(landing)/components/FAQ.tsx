@@ -10,9 +10,9 @@ import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 const FAQ: React.FC = () => {
   const faqs = [
     {
-      question: "What’s the best thing about JSNxt?",
+      question: "What’s the best thing about JSNXT?",
       answer:
-        "It’s flexible, fast, and scalable. JSNxt combines the power of Next.js and Express.js into one full-stack solution.",
+        "It’s flexible, fast, and scalable. JSNXT combines the power of Next.js and Express.js into one full-stack solution.",
     },
     {
       question: "Is this suitable for production?",
@@ -22,7 +22,7 @@ const FAQ: React.FC = () => {
   ];
 
   return (
-    <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
+    <div id="faq" className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
       <div className="mx-auto max-w-4xl">
         <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
           Frequently Asked Questions

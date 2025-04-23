@@ -7,16 +7,8 @@ import Error from "../../../components/Error/Error";
 import { FaUserClock, FaUsers } from "react-icons/fa6";
 import LoadingSpinner from "../../../../../components/Utils/LoadingSpinner";
 import { toast } from "react-toastify";
+import { User } from "../../../../../types/user";
 import AxiosConfig from "../../../../../components/Utils/AxiosConfig";
-
-interface User {
-  name?: string;
-  email?: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  lastActive?: string;
-}
 
 interface UserStats {
   totalUsers: number;
@@ -41,29 +33,39 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await AxiosConfig.get<{ users: User[] }>("/users/getallusers");
+        const res = await AxiosConfig.get<{ users: User[] }>(
+          "/users/getallusers"
+        );
         const users = res.data.users || [];
 
-        const activeUsers = users.filter((user) => user.status === "active").length;
+        const activeUsers = users.filter(
+          (user) => user.status === "active"
+        ).length;
 
-        const usersByMonth: Record<string, number> = users.reduce((acc, user) => {
-          const createdAt = new Date(user.createdAt);
-          const month = createdAt.toLocaleString("default", {
-            month: "short",
-            year: "numeric",
-          });
-          if (!acc[month]) acc[month] = 0;
-          acc[month]++;
-          return acc;
-        }, {} as Record<string, number>);
+        const usersByMonth: Record<string, number> = users.reduce(
+          (acc, user) => {
+            const createdAt = new Date(user.createdAt);
+            const month = createdAt.toLocaleString("default", {
+              month: "short",
+              year: "numeric",
+            });
+            if (!acc[month]) acc[month] = 0;
+            acc[month]++;
+            return acc;
+          },
+          {} as Record<string, number>
+        );
 
-        const usersArray: UsersDataItem[] = Object.keys(usersByMonth).map((month) => ({
-          month,
-          count: usersByMonth[month],
-        }));
+        const usersArray: UsersDataItem[] = Object.keys(usersByMonth).map(
+          (month) => ({
+            month,
+            count: usersByMonth[month],
+          })
+        );
 
         const sortedByActivity = [...users].sort(
-          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          (a, b) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
         );
         setRecentUser(sortedByActivity[0]);
 
@@ -120,13 +122,17 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen p-8">
-      <h1 className="text-xl font-medium text-gray-800 mb-6">Users Dashboard</h1>
+      <h1 className="text-xl font-medium text-gray-800 mb-6">
+        Users Dashboard
+      </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
           <div>
             <h3 className="text-sm font-medium text-gray-700">Total Users</h3>
-            <p className="text-2xl font-bold text-black">{userStats.totalUsers}</p>
+            <p className="text-2xl font-bold text-black">
+              {userStats.totalUsers}
+            </p>
           </div>
           <FaUsers size={30} className="text-black" />
         </div>
@@ -134,7 +140,9 @@ const Dashboard: React.FC = () => {
         <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
           <div>
             <h3 className="text-sm font-medium text-gray-700">Active Users</h3>
-            <p className="text-2xl font-bold text-green-600">{userStats.activeUsers}</p>
+            <p className="text-2xl font-bold text-green-600">
+              {userStats.activeUsers}
+            </p>
           </div>
           <FaUsers size={30} className="text-green-500" />
         </div>
@@ -142,7 +150,9 @@ const Dashboard: React.FC = () => {
         {recentUser && (
           <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
             <div>
-              <h3 className="text-sm font-medium text-gray-700">Recently Active</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                Recently Active
+              </h3>
               <p className="text-md font-semibold text-gray-600">
                 {recentUser.name || recentUser.email}
               </p>
@@ -161,8 +171,13 @@ const Dashboard: React.FC = () => {
         )}
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-md mt-12" style={{ height: "400px" }}>
-        <h2 className="text-xl font-medium mb-4">User Registrations by Month</h2>
+      <div
+        className="bg-white p-6 rounded-xl shadow-md mt-12"
+        style={{ height: "400px" }}
+      >
+        <h2 className="text-xl font-medium mb-4">
+          User Registrations by Month
+        </h2>
         <Bar data={userChartData} options={chartOptions} />
       </div>
     </div>

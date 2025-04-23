@@ -1,6 +1,6 @@
 const Testimonials: React.FC = () => {
   return (
-    <div className="relative z-10 mt-32 bg-gray-900 pb-20 sm:mt-56 sm:pb-24 xl:pb-0">
+    <div id="testimonials" className="relative z-10 mt-32 bg-gray-900 pb-20 sm:mt-56 sm:pb-24 xl:pb-0">
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
         <div className="absolute top-[calc(50%-36rem)] left-[calc(50%-19rem)] transform-gpu blur-3xl">
           <div
@@ -38,16 +38,17 @@ const Testimonials: React.FC = () => {
             </svg>
             <blockquote className="text-xl/8 font-semibold text-white sm:text-2xl/9">
               <p>
-                As a web development creator, I simplify the project setup
-                process by focusing on clear structures, intuitive designs, and
-                reusable components. Whether it's a small project or large
-                application, my goal is to make development efficient, helping
-                developers focus on creating great projects.
+                JSNXT has been a game-changer for my development workflow. As
+                someone who constantly spins up new projects, having a
+                well-structured Next.js/Express.js boilerplate with integrated
+                authentication, API handlers, and a clean component architecture
+                has saved me countless hours. It's the perfect foundation for
+                both rapid prototyping and production-grade applications.
               </p>
             </blockquote>
             <figcaption className="mt-8 text-base">
               <div className="font-semibold text-white">Shadow Of Leaf</div>
-              <div className="mt-1 text-gray-400">Creator of JSNxt</div>
+              <div className="mt-1 text-gray-400">Creator of JSNXT</div>
             </figcaption>
           </figure>
         </div>

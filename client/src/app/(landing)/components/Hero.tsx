@@ -38,8 +38,8 @@ const Hero: React.FC = () => {
               </div>
             </div>
             <div className="text-center">
-              <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-7xl">
-                Kickstart your next project with JSNxt
+              <h1 className="text-5xl font-semibold tracking-tight lg:leading-24 text-white sm:text-7xl">
+                Kickstart your next project with JSNXT
               </h1>
               <p className="mt-8 text-lg font-medium text-gray-400 sm:text-xl">
                 A modern and scalable boilerplate using Next.js, Express.js,
@@ -54,7 +54,7 @@ const Hero: React.FC = () => {
                   Read the Docs
                 </a>
                 <a
-                  href="https://github.com/shadowofleaf96/JSNxt-Boilerplate"
+                  href="https://github.com/shadowofleaf96/JSNXT-Boilerplate"
                   className="text-sm font-semibold text-white"
                 >
                   View on GitHub <span aria-hidden="true">→</span>

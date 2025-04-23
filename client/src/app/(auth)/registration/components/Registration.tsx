@@ -10,16 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 const registrationSchema = z.object({
-  username: z
-    .string()
-    .min(4, "Username must be at least 4 characters")
-    .max(20, "Username must be at most 20 characters")
-    .regex(/^[a-zA-Z0-9]+$/, "Only alphanumeric characters are allowed"),
+  email: z.string().email("Please enter a valid email address"),
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
     .max(50, "Password must be at most 50 characters"),
-  email: z.string().email("Please enter a valid email address"),
+  acceptPolicy: z.literal(true, {
+    errorMap: () => ({ message: "You must accept the privacy policy" }),
+  }),
 });
 
 const Registration: React.FC = () => {
@@ -50,7 +48,6 @@ const Registration: React.FC = () => {
     }
 
     const sanitizedData = {
-      username: DOMPurify.sanitize(data.username.trim()),
       password: DOMPurify.sanitize(data.password.trim()),
       email: DOMPurify.sanitize(data.email.trim()),
     };
@@ -116,28 +113,6 @@ const Registration: React.FC = () => {
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-gray-900"
-                >
-                  Username
-                </label>
-                <div className="mt-2">
-                  <input
-                    {...register("username")}
-                    id="username"
-                    type="text"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
-                  />
-                  {errors.username && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.username.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-900"
                 >
@@ -175,6 +150,39 @@ const Registration: React.FC = () => {
                   {errors.password && (
                     <p className="mt-1 text-sm text-red-600">
                       {errors.password.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-start">
+                <div className="flex h-5 items-center">
+                  <input
+                    {...register("acceptPolicy")}
+                    id="acceptPolicy"
+                    type="checkbox"
+                    required
+                    className="h-4 w-4 rounded border-gray-300 text-black accent-gray-700 focus:ring-black"
+                  />
+                </div>
+                <div className="ml-2 text-sm leading-6">
+                  <label
+                    htmlFor="acceptPolicy"
+                    className="font-medium text-gray-700"
+                  >
+                    I accept the{" "}
+                    <a
+                      href="/privacy-policy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 underline hover:text-gray-500"
+                    >
+                      privacy policy
+                    </a>
+                  </label>
+                  {errors.acceptPolicy && (
+                    <p className="text-sm text-red-600 mt-1">
+                      {errors.acceptPolicy.message as string}
                     </p>
                   )}
                 </div>

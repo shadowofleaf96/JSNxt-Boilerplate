@@ -120,7 +120,7 @@ const UsersForm: React.FC<UsersFormProps> = ({
         await AxiosConfig.put(`/users/${initialData._id}`, userData);
         toast.success("User updated successfully!");
       } else {
-        await AxiosConfig.post(`/users/register`, userData);
+        await AxiosConfig.post(`/users/create-user`, userData);
         toast.success("User added successfully!");
       }
       onClose();

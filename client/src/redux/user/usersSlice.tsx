@@ -1,28 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { User, CurrentUser } from "../../types/user";
 import AxiosConfig from "../../components/Utils/AxiosConfig";
-
-interface User {
-  name: string;
-  _id: string;
-  username: string;
-  email: string;
-  role: string;
-  status: string;
-  avatar: string;
-}
 
 interface UsersState {
   users: User[];
   loading: boolean;
   error: string | null;
   loggedInUser: string | null;
-  currentUser: {
-    name: ReactNode;
-    role: string;
-    _id: string;
-    username: string;
-    avatar: string;
-  } | null;
+  currentUser: CurrentUser | null;
 }
 
 const initialState: UsersState = {

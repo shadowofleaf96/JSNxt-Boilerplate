@@ -11,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "JSNxt Boilerplate",
+  title: "JSNXT Boilerplate",
   description: "This is a Simple Next.js/Express.js boilerplate",
 };
 

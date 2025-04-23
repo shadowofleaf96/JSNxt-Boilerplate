@@ -18,6 +18,21 @@ router.post(
     .isEmail()
     .withMessage("Enter a valid email address")
     .normalizeEmail(),
+  check("password")
+    .notEmpty()
+    .isLength({ min: 8 })
+    .withMessage("Must be at least 8 chars long"),
+  Validate,
+  userController.registerUser
+);
+router.get("/verify-email/:token", userController.verifyEmail);
+router.post(
+  "/create-user",
+  upload.single("avatar"),
+  check("email")
+    .isEmail()
+    .withMessage("Enter a valid email address")
+    .normalizeEmail(),
   check("username")
     .not()
     .isEmpty()
@@ -33,13 +48,13 @@ router.post(
 );
 router.post(
   "/login",
-  check("username")
+  check("identifier")
     .not()
     .isEmpty()
-    .withMessage("Username is required")
+    .withMessage("Email or username is required")
     .trim()
     .escape(),
-  check("password").not().isEmpty(),
+  check("password").not().isEmpty().withMessage("Password is required"),
   Validate,
   userController.login
 );

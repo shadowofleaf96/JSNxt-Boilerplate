@@ -48,7 +48,7 @@ export default function Sidebar({
         } md:translate-x-0 w-56 fixed md:relative h-screen bg-white border-r border-gray-300 z-50 transition-transform duration-300 ease-in-out flex flex-col`}
       >
         <div className="p-2 flex items-center justify-center">
-          <Link className="flex justify-center" href="/">
+          <Link href="/" prefetch={true} className="flex justify-center">
             <img
               className="max-h-16 w-auto object-contain"
               src="/jsnxt-logo-black.webp"
@@ -70,6 +70,7 @@ export default function Sidebar({
               <Link
                 key={item.name}
                 href={item.href}
+                prefetch={true}
                 onClick={() => isMobile && toggleSidebar()}
                 className={`flex items-center px-3 py-2.5 rounded-lg transition-colors ${
                   item.current
@@ -78,9 +79,7 @@ export default function Sidebar({
                 }`}
               >
                 <span
-                  className={`${
-                    item.current ? "text-black" : "text-gray-500"
-                  }`}
+                  className={`${item.current ? "text-black" : "text-gray-500"}`}
                 >
                   {item.icon}
                 </span>

@@ -1,13 +1,14 @@
 "use client";
+import Link from "next/link";
 import React from "react";
 
 const Footer: React.FC = () => {
   const footerNavigation = {
     solutions: [
-      { name: "Features", href: "#" },
-      { name: "Pricing", href: "#" },
-      { name: "Integrations", href: "#" },
-      { name: "API", href: "#" },
+      { name: "Features", href: "#features" },
+      { name: "Testimonials", href: "#testimonials" },
+      { name: "Pricing", href: "#pricing" },
+      { name: "FAQ", href: "#faq" },
     ],
     support: [
       { name: "Help Center", href: "#" },
@@ -27,10 +28,10 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="mt-24 bg-gray-900 text-white sm:mt-32">
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-32">
+    <footer className="bg-gray-900 text-white">
+      <div className="mx-auto max-w-7xl px-6 pt-16 pb-12 sm:pb-4 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <img alt="JSNxt" src="/jsnxt-logo-white.webp" className="h-26" />
+          <img alt="JSNXT" src="/jsnxt-logo-white.webp" className="h-26" />
           <div className="mt-8 flex flex-wrap gap-8 xl:col-span-2 xl:mt-0">
             {Object.entries(footerNavigation).map(([section, links]) => (
               <div key={section} className="min-w-[120px]">
@@ -38,12 +39,13 @@ const Footer: React.FC = () => {
                 <ul className="mt-4 space-y-2">
                   {links.map((item) => (
                     <li key={item.name}>
-                      <a
+                      <Link
                         href={item.href}
+                        prefetch={true}
                         className="text-sm text-gray-400 hover:text-white"
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -52,7 +54,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="mt-8 border-t border-gray-700 pt-4 text-sm text-gray-400 text-center">
-          © {new Date().getFullYear()} JSNxt. All rights reserved.
+          © {new Date().getFullYear()} JSNXT. All rights reserved.
         </div>
       </div>
     </footer>
