@@ -8,8 +8,10 @@ import DOMPurify from "dompurify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Link from "next/link";
 
 const registrationSchema = z.object({
+  name: z.string(),
   email: z.string().email("Please enter a valid email address"),
   password: z
     .string()
@@ -23,7 +25,6 @@ const registrationSchema = z.object({
 const Registration: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [attempts, setAttempts] = useState(0);
   const router = useRouter();
 
   const {
@@ -42,36 +43,22 @@ const Registration: React.FC = () => {
   }, []);
 
   const onSubmit = async (data: any) => {
-    if (attempts >= 3) {
-      toast.error("Too many attempts. Please try again later.");
-      return;
-    }
-
     const sanitizedData = {
-      password: DOMPurify.sanitize(data.password.trim()),
+      name: DOMPurify.sanitize(data.name.trim()),
       email: DOMPurify.sanitize(data.email.trim()),
+      password: DOMPurify.sanitize(data.password.trim()),
     };
 
     try {
       setLoading(true);
-      setError("");
+      await AxiosConfig.post(`/users/register`, sanitizedData);
 
-      const response = await AxiosConfig.post<{ token: string }>(
-        `/users/register`,
-        sanitizedData
-      );
-
-      localStorage.setItem("token", response.data.token);
-      router.push("/");
+      router.push("/verify-email");
     } catch (err: any) {
-      setAttempts((prev) => prev + 1);
-      const msg = "Registration failed. Please try again.";
+      console.log(err);
+      const msg = "Registration failed. Please try again." + err.response.data.message;
       toast.error(msg);
-      setError(msg);
       setLoading(false);
-      if (attempts >= 2) {
-        setTimeout(() => setAttempts(0), 30000);
-      }
     }
   };
 
@@ -100,17 +87,39 @@ const Registration: React.FC = () => {
             </h2>
             <p className="mt-2 text-sm text-gray-600">
               Already have an account?{" "}
-              <a
+              <Link
                 href="/login"
                 className="font-semibold text-gray-600 hover:text-gray-500"
               >
                 Sign in here
-              </a>
+              </Link>
             </p>
           </div>
 
           <div className="mt-10">
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-900"
+                >
+                  Name
+                </label>
+                <div className="mt-2">
+                  <input
+                    {...register("name")}
+                    id="name"
+                    type="name"
+                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
+                  />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
               <div>
                 <label
                   htmlFor="email"
@@ -171,14 +180,14 @@ const Registration: React.FC = () => {
                     className="font-medium text-gray-700"
                   >
                     I accept the{" "}
-                    <a
+                    <Link
                       href="/privacy-policy"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-600 underline hover:text-gray-500"
                     >
                       privacy policy
-                    </a>
+                    </Link>
                   </label>
                   {errors.acceptPolicy && (
                     <p className="text-sm text-red-600 mt-1">
@@ -193,14 +202,10 @@ const Registration: React.FC = () => {
               <div>
                 <button
                   type="submit"
-                  disabled={loading || attempts >= 3}
-                  className="flex w-full justify-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-60"
+                  disabled={loading}
+                  className="flex w-full justify-center rounded-md bg-black px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-60"
                 >
-                  {loading ? (
-                    <LoadingSpinner size={5} />
-                  ) : (
-                    `Register${attempts > 0 ? ` (${3 - attempts} left)` : ""}`
-                  )}
+                  {loading ? <LoadingSpinner size={5} /> : `Register`}
                 </button>
               </div>
             </form>

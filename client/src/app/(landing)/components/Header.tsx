@@ -111,12 +111,16 @@ const Header: React.FC = () => {
           ) : currentUser ? (
             <div className="relative" ref={dropdownRef}>
               <button
-                className="p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full hover:bg-gray-600 transition-colors cursor-pointer"
                 onClick={() => setShowDropdown((prev) => !prev)}
               >
                 <img
                   className="h-9 w-9 rounded-full object-cover ring-2 ring-white"
-                  src={`${backendUrl}/${currentUser.avatar}`}
+                  src={
+                    currentUser.avatar.startsWith("http")
+                      ? currentUser.avatar
+                      : `${backendUrl}/${currentUser.avatar}`
+                  }
                   alt="User Avatar"
                 />
               </button>
@@ -187,18 +191,19 @@ const Header: React.FC = () => {
             <div className="-my-6 divide-y divide-gray-500/25">
               <div className="space-y-2 py-6">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.href}
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800"
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
               <div className="py-6">
                 {currentUser ? (
                   <>
+                    <h1 className="text-white underline py-2.5">{currentUser.name}</h1>
                     <Link
                       href="/"
                       prefetch={true}

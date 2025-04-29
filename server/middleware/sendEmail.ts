@@ -1,13 +1,19 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
-const sendEmail = async ({ to, subject, html }) => {
+interface SendEmailParams {
+  to: string;
+  subject: string;
+  html: string;
+}
+
+const sendEmail = async ({ to, subject, html }: SendEmailParams): Promise<void> => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: process.env.EMAIL_USER as string,
+      pass: process.env.EMAIL_PASS as string,
     },
     tls: {
       rejectUnauthorized: false,
@@ -22,4 +28,4 @@ const sendEmail = async ({ to, subject, html }) => {
   });
 };
 
-module.exports = sendEmail;
+export default sendEmail;

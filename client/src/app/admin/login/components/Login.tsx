@@ -52,7 +52,7 @@ const Login: React.FC = () => {
         data: any;
         token: string;
       }>(`/users/login`, {
-        username: sanitizedUsername,
+        identifier: sanitizedUsername,
         password: sanitizedPassword,
       });
 
@@ -69,6 +69,7 @@ const Login: React.FC = () => {
       }
     } catch (err: any) {
       setLoading(false);
+      console.log(err)
       const message = "Invalid credentials. Please try again.";
       toast.error(message);
       setError(message);

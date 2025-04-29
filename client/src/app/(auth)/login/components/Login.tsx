@@ -6,10 +6,12 @@ import AxiosConfig from "../../../../components/Utils/AxiosConfig";
 import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
 import Link from "next/link";
 import DOMPurify from "dompurify";
+import ForgotPasswordModal from "../../forgot-password/components/ForgotPassword";
 import { toast } from "react-toastify";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
+  const [showForgotModal, setShowForgotModal] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -51,7 +53,7 @@ const Login: React.FC = () => {
         role: string;
         token: string;
       }>(`/users/login`, {
-        email: sanitizedEmail,
+        identifier: sanitizedEmail,
         password: sanitizedPassword,
       });
 
@@ -114,15 +116,15 @@ const Login: React.FC = () => {
                 <input
                   id="email"
                   name="email"
-                  type="text"
+                  type="email"
                   required
                   autoComplete="email"
-                  minLength={4}
-                  maxLength={20}
-                  pattern="[a-zA-Z0-9]+"
+                  minLength={5}
+                  maxLength={50}
+                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                   value={email}
                   onChange={(e) =>
-                    setEmail(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))
+                    setEmail(e.target.value.replace(/[^\w@.-]/g, ""))
                   }
                   className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600 sm:text-sm"
                 />
@@ -156,28 +158,14 @@ const Login: React.FC = () => {
               )}
 
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 accent-gray-600 text-gray-600 focus:ring-gray-600"
-                  />
-                  <label
-                    htmlFor="remember-me"
-                    className="text-sm text-gray-900"
-                  >
-                    Remember me
-                  </label>
-                </div>
-
                 <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-semibold text-gray-600 hover:text-gray-500"
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotModal(true)}
+                    className="font-semibold text-gray-600 hover:text-gray-500 cursor-pointer"
                   >
                     Forgot password?
-                  </a>
+                  </button>
                 </div>
               </div>
 
@@ -185,7 +173,7 @@ const Login: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-50"
+                  className="flex w-full justify-center rounded-md bg-black px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-50"
                 >
                   {loading ? <LoadingSpinner size={5} /> : "Sign In"}
                 </button>
@@ -201,6 +189,10 @@ const Login: React.FC = () => {
           className="absolute inset-0 size-full object-cover"
         />
       </div>
+      <ForgotPasswordModal
+        isOpen={showForgotModal}
+        onClose={() => setShowForgotModal(false)}
+      />
     </div>
   );
 };

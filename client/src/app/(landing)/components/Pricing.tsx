@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { HiCheck } from "react-icons/hi";
 
 const Pricing: React.FC = () => {
@@ -146,7 +147,7 @@ const Pricing: React.FC = () => {
                 </li>
               ))}
             </ul>
-            <a
+            <Link
               href={tier.href}
               className={classNames(
                 tier.featured
@@ -156,7 +157,7 @@ const Pricing: React.FC = () => {
               )}
             >
               Get started today
-            </a>
+            </Link>
           </div>
         ))}
       </div>

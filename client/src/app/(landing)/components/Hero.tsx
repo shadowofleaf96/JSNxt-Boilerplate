@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   FaNodeJs,
   FaReact,
@@ -9,7 +10,7 @@ import {
 const Hero: React.FC = () => {
   return (
     <main>
-      <div className="relative isolate overflow-hidden bg-gray-900 pt-14 pb-16 sm:pb-20">
+      <div className="relative isolate overflow-hidden min-h-screen bg-gray-900 pt-14 pb-20 sm:pb-24">
         <img
           alt=""
           src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2830&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"
@@ -32,9 +33,9 @@ const Hero: React.FC = () => {
             <div className="hidden sm:mb-8 sm:flex sm:justify-center">
               <div className="relative rounded-full px-3 py-1 text-sm text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
                 New: Now with MongoDB + Auth integration.{" "}
-                <a href="/changelog" className="font-semibold text-white">
+                <Link href="/changelog" className="font-semibold text-white">
                   See what’s new <span aria-hidden="true">&rarr;</span>
-                </a>
+                </Link>
               </div>
             </div>
             <div className="text-center">
@@ -47,18 +48,18 @@ const Hero: React.FC = () => {
                 structure and speed.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
-                <a
+                <Link
                   href="/docs"
                   className="rounded-md bg-gray-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
                 >
                   Read the Docs
-                </a>
-                <a
+                </Link>
+                <Link
                   href="https://github.com/shadowofleaf96/JSNXT-Boilerplate"
                   className="text-sm font-semibold text-white"
                 >
                   View on GitHub <span aria-hidden="true">→</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

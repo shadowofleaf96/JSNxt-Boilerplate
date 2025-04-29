@@ -47,10 +47,10 @@ export default function Sidebar({
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 w-56 fixed md:relative h-screen bg-white border-r border-gray-300 z-50 transition-transform duration-300 ease-in-out flex flex-col`}
       >
-        <div className="p-2 flex items-center justify-center">
+        <div className="relative p-2 flex items-center justify-center">
           <Link href="/" prefetch={true} className="flex justify-center">
             <img
-              className="max-h-16 w-auto object-contain"
+              className="max-h-16 w-auto flex justify-center object-contain"
               src="/jsnxt-logo-black.webp"
               alt="Brand Logo"
             />
@@ -58,7 +58,7 @@ export default function Sidebar({
           {isMobile && (
             <button
               onClick={toggleSidebar}
-              className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              className="absolute right-2 md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
             >
               <IoClose className="text-xl" />
             </button>
