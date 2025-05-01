@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import AxiosConfig from "../../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../components/utils/AxiosConfig";
 import { toast } from "react-toastify";
+import { useReCaptcha } from "next-recaptcha-v3";
 import { IoClose } from "react-icons/io5";
-import LoadingSpinner from "@/src/components/Utils/LoadingSpinner";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -16,19 +17,27 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   onClose,
 }) => {
   const [email, setEmail] = useState("");
+  const { executeRecaptcha } = useReCaptcha();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await AxiosConfig.post("/users/forgot-password", { email });
+      const recaptchaToken = await executeRecaptcha("form_submit");
+
+      await AxiosConfig.post("/users/forgot-password", {
+        email,
+        recaptchaToken,
+      });
       toast.success("Check your email for password reset instructions.");
       setEmail("");
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Error sending reset email. Please try again later.");
+      toast.error(
+        "Error sending reset email. Please try again later." + error.message
+      );
     } finally {
       setLoading(false);
     }
@@ -71,6 +80,27 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
           >
             {loading ? <LoadingSpinner size={5} /> : "Send Reset Link"}
           </button>
+          <p className="mt-6 text-xs text-gray-500 text-center">
+            This site is protected by reCAPTCHA and the Google{" "}
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-700 transition-colors"
+            >
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://policies.google.com/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-700 transition-colors"
+            >
+              Terms of Service
+            </a>{" "}
+            apply.
+          </p>
         </form>
       </div>
     </div>

@@ -2,17 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import AxiosConfig from "../../../../components/Utils/AxiosConfig";
-import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
+import AxiosConfig from "../../../../components/utils/AxiosConfig";
+import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
 import Link from "next/link";
+import { useReCaptcha } from "next-recaptcha-v3";
 import DOMPurify from "dompurify";
 import ForgotPasswordModal from "../../forgot-password/components/ForgotPassword";
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [password, setPassword] = useState("");
+  const { executeRecaptcha } = useReCaptcha();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -46,6 +49,8 @@ const Login: React.FC = () => {
       return;
     }
 
+    const recaptchaToken = await executeRecaptcha("form_submit");
+
     try {
       setLoading(true);
       const res = await AxiosConfig.post<{
@@ -55,6 +60,7 @@ const Login: React.FC = () => {
       }>(`/users/login`, {
         identifier: sanitizedEmail,
         password: sanitizedPassword,
+        recaptchaToken,
       });
 
       const respdata = res.data.data;
@@ -70,9 +76,26 @@ const Login: React.FC = () => {
       }
     } catch (err: any) {
       setLoading(false);
-      const message = "Invalid credentials. Please try again.";
+      const message = err?.response?.data?.message;
       toast.error(message);
       console.log(err);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    try {
+      const recaptchaToken = await executeRecaptcha("google_login");
+      const res = await AxiosConfig.post("/users/google-login", {
+        credential: credentialResponse.credential,
+        recaptchaToken,
+      });
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.data.role);
+      router.push("/");
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Google login failed");
+      console.log(err.response?.data?.message);
     }
   };
 
@@ -177,7 +200,54 @@ const Login: React.FC = () => {
                 >
                   {loading ? <LoadingSpinner size={5} /> : "Sign In"}
                 </button>
+                <div className="mt-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300" />
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="bg-white px-2 text-gray-500">
+                        Or continue with
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex w-full justify-center">
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={() => toast.error("Google login failed")}
+                      size="large"
+                      type="standard"
+                      shape="square"
+                      useOneTap
+                      ux_mode="popup"
+                      context="signin"
+                      use_fedcm_for_prompt={true}
+                    />
+                  </div>
+                </div>
               </div>
+              <p className="mt-6 text-xs text-gray-500 text-center">
+                This site is protected by reCAPTCHA and the Google{" "}
+                <a
+                  href="https://policies.google.com/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-gray-700 transition-colors"
+                >
+                  Privacy Policy
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://policies.google.com/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-gray-700 transition-colors"
+                >
+                  Terms of Service
+                </a>{" "}
+                apply.
+              </p>
             </form>
           </div>
         </div>

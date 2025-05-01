@@ -6,13 +6,13 @@ import { RootState, AppDispatch } from "../../../../../redux/store";
 import { fetchUsers } from "../../../../../redux/user/usersSlice";
 import { FaRegTrashCan, FaPlus } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
-import LoadingSpinner from "../../../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../../components/ui/LoadingSpinner";
 import AddUserForm from "./UsersForm";
 import { User } from "../../../../../types/user";
 import { toast } from "react-toastify";
 import Error from "../../../components/Error/Error";
 import ConfirmationModal from "../../../components/Utils/ConfirmationModal";
-import AxiosConfig from "../../../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../../components/utils/AxiosConfig";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -323,7 +323,11 @@ function Users() {
                       <div className="flex items-center">
                         <img
                           className="object-cover w-10 h-10 rounded-full mr-2"
-                          src={backendUrl + "/" + user.avatar}
+                          src={
+                            user.avatar.startsWith("http")
+                              ? user.avatar
+                              : `${backendUrl}/${user.avatar}`
+                          }
                           alt={user.username + " avatar"}
                         />
                         <div>
@@ -398,7 +402,7 @@ function Users() {
         <div className="flex items-center justify-between mt-6">
           <button
             onClick={handlePreviousPage}
-            className={`flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
+            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
               currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={currentPage === 1}
@@ -436,7 +440,7 @@ function Users() {
           </div>
           <button
             onClick={handleNextPage}
-            className={`flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
+            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
               currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={currentPage === totalPages}

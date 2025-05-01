@@ -10,7 +10,7 @@ const Verification = () => {
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
       <div className="py-8">
         <img
-          className="h-24 sm:h-24 mx-auto"
+          className="h-24 w-24 sm:h-24 mx-auto"
           src="/jsnxt-logo-black.webp"
           alt="Your Company"
           onError={(e) => {
@@ -25,7 +25,7 @@ const Verification = () => {
       </p>
       <button
         onClick={() => router.push("/login")}
-        className="px-6 py-2 rounded-md text-white bg-black hover:bg-gray-700"
+        className="px-6 py-3 rounded-md text-white bg-black hover:bg-gray-700"
       >
         Back to Login
       </button>

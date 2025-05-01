@@ -14,8 +14,12 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
-    if (!token || !allowedRoles.includes(role || "")) {
-      router.push("/login");
+    if (!token || !role || !allowedRoles.includes(role)) {
+      if (role === "admin") {
+        router.push("/admin/login");
+      } else {
+        router.push("/login");
+      }
     } else {
       setAuthorized(true);
     }

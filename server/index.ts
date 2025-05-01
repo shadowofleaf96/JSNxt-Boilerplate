@@ -1,21 +1,21 @@
 import "dotenv/config";
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
 import helmet from "helmet";
-import cookieParser from "cookie-parser";
 import path from "path";
 import connectDB from "./config/database";
+import useragent from "express-useragent";
+import hpp from "hpp";
 import userRoutes from "./routes/userRoutes";
+import { apiLimiter, sensitiveMethodsLimiter } from "./middleware/rateLimiting";
 
 const app = express();
+app.use(useragent.express());
 
 connectDB();
 
 const port = parseInt(process.env.PORT || "5000", 10);
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://shopify-admin-panel.onrender.com",
-];
+const allowedOrigins = ["http://localhost:3000", process.env.FRONTEND_URL];
 
 const corsOptions: CorsOptions = {
   origin: (
@@ -34,9 +34,6 @@ const corsOptions: CorsOptions = {
     "Origin",
     "X-Requested-With",
     "Accept",
-    "x-client-key",
-    "x-client-token",
-    "x-client-secret",
     "Authorization",
   ],
   credentials: true,
@@ -49,7 +46,7 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'"],
         imgSrc: ["'self'", "data:", "https:"],
         fontSrc: ["'self'"],
         objectSrc: ["'none'"],
@@ -67,8 +64,9 @@ app.use(
   })
 );
 
+app.use(hpp());
+
 app.disable("x-powered-by");
-app.use(cookieParser());
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -78,8 +76,16 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use("/api/users", userRoutes);
 
+app.use((req, res, next) => {
+  if (["POST", "PUT", "DELETE"].includes(req.method)) {
+    sensitiveMethodsLimiter(req, res, next);
+  } else {
+    apiLimiter(req, res, next);
+  }
+});
+
 app.get("/", (req: Request, res: Response) => {
-  res.redirect("https://shopify-admin-panel.onrender.com");
+  res.redirect(process.env.FRONTEND_URL);
 });
 
 app.listen(port, () => {

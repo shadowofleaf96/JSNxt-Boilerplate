@@ -5,10 +5,10 @@ import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import Error from "../../../components/Error/Error";
 import { FaUserClock, FaUsers } from "react-icons/fa6";
-import LoadingSpinner from "../../../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../../components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import { User } from "../../../../../types/user";
-import AxiosConfig from "../../../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../../components/utils/AxiosConfig";
 
 interface UserStats {
   totalUsers: number;

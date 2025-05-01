@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import LoadingSpinner from "../../../../../components/Utils/LoadingSpinner";
-import AxiosConfig from "../../../../../components/Utils/AxiosConfig";
+import LoadingSpinner from "../../../../../components/ui/LoadingSpinner";
+import AxiosConfig from "../../../../../components/utils/AxiosConfig";
 import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { z } from "zod";
@@ -326,7 +326,7 @@ const UsersForm: React.FC<UsersFormProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-blue-500 text-white py-2 font-light px-4 rounded transition-colors duration-200 hover:bg-blue-600"
+              className="bg-blue-500 text-white py-3 font-light px-4 rounded transition-colors duration-200 hover:bg-blue-600"
             >
               {isSubmitting ? (
                 <LoadingSpinner

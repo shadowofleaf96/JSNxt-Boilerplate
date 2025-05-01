@@ -1,15 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../../components/Utils/AxiosConfig";
+import { useReCaptcha } from "next-recaptcha-v3";
+import AxiosConfig from "../../../../components/utils/AxiosConfig";
 import DOMPurify from "dompurify";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const { executeRecaptcha } = useReCaptcha();
   const [error, setError] = useState<string>("");
   const router = useRouter();
 
@@ -48,12 +50,15 @@ const Login: React.FC = () => {
       setLoading(true);
       setError("");
 
+      const recaptchaToken = await executeRecaptcha("form_submit");
+
       const response = await AxiosConfig.post<{
         data: any;
         token: string;
       }>(`/users/login`, {
         identifier: sanitizedUsername,
         password: sanitizedPassword,
+        recaptchaToken,
       });
 
       const respdata = response.data.data;
@@ -69,7 +74,7 @@ const Login: React.FC = () => {
       }
     } catch (err: any) {
       setLoading(false);
-      console.log(err)
+      console.log(err);
       const message = "Invalid credentials. Please try again.";
       toast.error(message);
       setError(message);
@@ -141,7 +146,7 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-6 py-2.5 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 disabled:opacity-75 disabled:cursor-not-allowed"
+              className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 disabled:opacity-75 disabled:cursor-not-allowed"
             >
               {loading ? <LoadingSpinner size={6} /> : "Sign In"}
             </button>
@@ -156,6 +161,27 @@ const Login: React.FC = () => {
             <li>Keep your credentials private</li>
           </ul>
         </div>
+        <p className="mt-6 text-xs text-gray-500 text-center">
+          This site is protected by reCAPTCHA and the Google{" "}
+          <a
+            href="https://policies.google.com/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-gray-700 transition-colors"
+          >
+            Privacy Policy
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://policies.google.com/terms"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-gray-700 transition-colors"
+          >
+            Terms of Service
+          </a>{" "}
+          apply.
+        </p>
       </div>
     </div>
   );

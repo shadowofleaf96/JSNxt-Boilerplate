@@ -1,18 +1,18 @@
+import axios from "axios";
 import User from "../models/Users";
-import { UserDocument } from "../types/user.interface";
-import Blacklist from "../models/Blacklist";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
+import Blacklist from "../models/Blacklist";
 import * as crypto from "crypto";
+import { OAuth2Client } from "google-auth-library";
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 import sendEmail from "../middleware/sendEmail";
+import { generateUniqueUsername } from "../utils/generateUsername";
 
 const BACKEND_URL = process.env.BACKEND_URL;
 const FRONTEND_URL = process.env.FRONTEND_URL;
-const LOGO_URL = `${FRONTEND_URL}/jsnxt-logo-black.webp`;
-
-interface AuthenticatedRequest extends Request {
-  user?: UserDocument;
-}
+const LOGO_URL = process.env.LOGO_URL;
+const secretKey = process.env.RECAPTCHA_SECRET_KEY;
 
 export const createUser = async (
   req: Request,
@@ -21,6 +21,7 @@ export const createUser = async (
   try {
     const { name, username, password, email, role, status } = req.body;
     const avatar = req.file ? req.file.path : null;
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       res.status(400).json({
@@ -31,27 +32,57 @@ export const createUser = async (
     }
 
     const newUser = new User({
+      authProvider: "local",
       name,
       username,
-      password: password,
+      password,
       email,
       role,
       status,
       avatar,
+      isVerified: true,
     });
+
     await newUser.save();
+
+    const loginPath = role === "admin" ? "/admin/login" : "/login";
+    const loginUrl = `${process.env.FRONTEND_URL}${loginPath}`;
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Welcome to JSNXT!",
+      html: `
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;border:1px solid #e0e0e0;border-radius:10px;background:#ffffff">
+          <div style="text-align:center;margin-bottom:20px">
+            <img src="${process.env.LOGO_URL}" alt="JSNXT Logo" style="width:80px;height:auto" />
+          </div>
+          <h2 style="color:#333333">Welcome, ${name}!</h2>
+          <p style="font-size:16px;color:#555555">
+            Your account has been successfully created. You can now log in using your credentials.
+          </p>
+          <div style="margin:30px 0;text-align:center">
+            <a href="${loginUrl}" style="background-color:#111;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold">Log In</a>
+          </div>
+          <p style="font-size:14px;color:#999999">
+            If you have any questions, feel free to contact our support team.
+          </p>
+        </div>
+      `,
+    };
+
+    await sendEmail(mailOptions);
+
     res.status(200).json({
       status: "success",
-      message:
-        "Thank you for registering with us. Your account has been successfully created.",
+      message: "User created and welcome email sent successfully.",
     });
-    return;
   } catch (err) {
+    console.error("Error creating user:", err);
     res.status(500).json({
       status: "error",
       message: "Internal Server Error",
     });
-    return;
   }
 };
 
@@ -60,42 +91,58 @@ export const registerUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { email, password, username, name } = req.body;
+    const { email, password, username, name, recaptchaToken } = req.body;
 
-    const avatar = "public/images/userIcon.png";
+    const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      res.status(400).json({
-        status: "failed",
-        message: "It seems you already have an account. Please log in.",
+    try {
+      const response = await axios.post(verificationURL);
+      const { success, score } = response.data as {
+        success: boolean;
+        score: number;
+      };
+
+      if (!success || score < 0.5) {
+        res.status(403).json({ message: "reCAPTCHA verification failed." });
+        return;
+      }
+
+      const avatar = "public/images/userIcon.png";
+
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        res.status(400).json({
+          status: "failed",
+          message: "It seems you already have an account. Please log in.",
+        });
+        return;
+      }
+
+      const emailToken = crypto.randomBytes(64).toString("hex");
+
+      const generatedUsername =
+        username || (await generateUniqueUsername(name));
+
+      const newUser = new User({
+        authProvider: "local",
+        email,
+        name,
+        password,
+        username: generatedUsername,
+        avatar,
+        role: "user",
+        status: "active",
+        emailToken,
+        isVerified: false,
       });
-      return;
-    }
 
-    const emailToken = crypto.randomBytes(64).toString("hex");
+      await newUser.save();
 
-    const generatedUsername = username || `user_${Date.now()}`;
-
-    const newUser = new User({
-      email,
-      name,
-      password,
-      username: generatedUsername,
-      avatar,
-      role: "user",
-      status: "active",
-      emailToken,
-      isVerified: false,
-    });
-
-    await newUser.save();
-
-    const verifyLink = `${BACKEND_URL}/api/users/verify-email/${emailToken}`;
-    await sendEmail({
-      to: email,
-      subject: "JSNXT - Verify your email",
-      html: `
+      const verifyLink = `${BACKEND_URL}/api/users/verify-email/${emailToken}`;
+      await sendEmail({
+        to: email,
+        subject: "JSNXT - Verify your email",
+        html: `
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;border:1px solid #e0e0e0;border-radius:10px;background:#ffffff">
           <div style="text-align:center;margin-bottom:20px">
             <img src="${LOGO_URL}" alt="JSNXT Logo" style="width:80px;height:auto" />
@@ -110,20 +157,24 @@ export const registerUser = async (
           <p style="font-size:14px;color:#999999">If you did not request this, please ignore this email.</p>
         </div>
       `,
-    });
+      });
 
-    res.status(201).json({
-      status: "success",
-      message:
-        "Registration successful. Please check your email to verify your account.",
-    });
-    return;
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      status: "error",
-      message: "Internal server error",
-    });
+      res.status(201).json({
+        status: "success",
+        message:
+          "Registration successful. Please check your email to verify your account.",
+      });
+      return;
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        status: "error",
+        message: "Internal server error",
+      });
+      return;
+    }
+  } catch (error) {
+    res.status(500).json({ message: "reCAPTCHA verification error." });
     return;
   }
 };
@@ -159,14 +210,14 @@ export const verifyEmail = async (
             You're all set to explore JSNXT. We’re excited to have you onboard!
           </p>
           <div style="margin:30px 0;text-align:center">
-            <a href="${FRONTEND_URL}/dashboard" style="background-color:#111;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold">Go to Dashboard</a>
+            <a href="${FRONTEND_URL}" style="background-color:#111;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold">Go to Home</a>
           </div>
           <p style="font-size:14px;color:#999999">If you have any questions, feel free to contact our support team.</p>
         </div>
       `,
     });
 
-    res.redirect(`${FRONTEND_URL}/email-verified?token=${loginToken}`);
+    res.redirect(`${FRONTEND_URL}/email-verified/${loginToken}`);
     return;
   } catch (err) {
     console.error(err);
@@ -175,62 +226,202 @@ export const verifyEmail = async (
   }
 };
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const googleAuth = async (req: Request, res: Response) => {
   try {
-    const { identifier, password } = req.body;
+    const ua = req.useragent;
+    const ipAddress =
+      req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    const { credential, recaptchaToken } = req.body;
 
-    const user = await User.findOne({
-      $or: [
-        { email: identifier, role: "user" },
-        { username: identifier, role: "admin" },
-      ],
-    }).select("+password");
+    const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
+    const response = await axios.post(verificationURL);
+
+    const { success, score } = response.data as {
+      success: boolean;
+      score: number;
+    };
+
+    if (!success || score < 0.5) {
+      res.status(403).json({ message: "reCAPTCHA verification failed" });
+      return;
+    }
+
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload?.email_verified) {
+      res.status(400).json({ message: "Email not verified by Google" });
+      return;
+    }
+
+    let user = await User.findOne({
+      $or: [{ email: payload.email }, { googleId: payload.sub }],
+    });
+
+    if (user?.authProvider === "local") {
+      res.status(409).json({
+        message: "Email already registered with password",
+      });
+      return;
+    }
+
+    const generatedUsername = await generateUniqueUsername(payload.name);
 
     if (!user) {
-      res.status(401).json({
-        status: "failed",
-        message: "Invalid credentials. Please try again.",
+      user = await User.create({
+        email: payload.email,
+        name: payload.name,
+        username: generatedUsername,
+        avatar: payload.picture,
+        authProvider: "google",
+        googleId: payload.sub,
+        role: "user",
+        status: "active",
+        isVerified: true,
       });
-      return;
-    }
-
-    if (user.status === "inactive") {
-      res.status(401).json({
-        status: "failed",
-        message:
-          user.role === "admin"
-            ? "Admin account is inactive. Contact superadmin."
-            : "User account is inactive. Please contact support.",
-      });
-      return;
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      res.status(401).json({
-        status: "failed",
-        message: "Invalid credentials. Please try again.",
-      });
-      return;
     }
 
     const token = user.generateAccessJWT();
-    const { password: _, ...user_data } = user.toObject();
+    const { password: _, ...userData } = user.toObject();
 
-    res.status(200).json({
+    await sendEmail({
+      to: user.email,
+      subject: "JSNXT - New Login Detected",
+      html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0;">
+        <div style="text-align: center;">
+          <img src="${LOGO_URL}" alt="JSNXT Logo" style="width: 100px; margin-bottom: 20px;" />
+          <h2>New Login Detected</h2>
+        </div>
+        <p>We noticed a new login to your JSNXT account with the following details:</p>
+        <ul>
+          <li><strong>IP Address:</strong> ${ipAddress}</li>
+          <li><strong>Browser:</strong> ${ua.browser}</li>
+          <li><strong>Platform:</strong> ${ua.platform}</li>
+          <li><strong>Time:</strong> ${new Date().toLocaleString()}</li>
+        </ul>
+        <p>If this was you, no further action is needed. If you suspect any unauthorized access, please reset your password immediately.</p>
+        <hr />
+        <p style="font-size: 12px; color: #888;">&copy; ${new Date().getFullYear()} JSNXT. All rights reserved.</p>
+      </div>
+    `,
+    });
+
+    res.json({
       status: "success",
-      data: user_data,
+      data: userData,
       token,
-      message: `Successfully logged in as ${user.role}`,
     });
+  } catch (error) {
+    console.error("Google auth error:", error);
+    res.status(500).json({ message: "Google authentication failed" });
     return;
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-    });
+  }
+};
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const ua = req.useragent;
+    const ipAddress =
+      req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    const { identifier, password, recaptchaToken } = req.body;
+
+    const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
+
+    try {
+      const response = await axios.post(verificationURL);
+      const { success, score } = response.data as {
+        success: boolean;
+        score: number;
+      };
+
+      if (!success || score < 0.5) {
+        res.status(403).json({ message: "reCAPTCHA verification failed." });
+        return;
+      }
+
+      const user = await User.findOne({
+        $or: [
+          { email: identifier, role: "user" },
+          { username: identifier, role: "admin" },
+        ],
+      }).select("+password");
+
+      if (!user) {
+        res.status(401).json({
+          status: "failed",
+          message: "Invalid credentials. Please try again.",
+        });
+        return;
+      }
+
+      if (user.status === "inactive") {
+        res.status(401).json({
+          status: "failed",
+          message:
+            user.role === "admin"
+              ? "Admin account is inactive. Contact superadmin."
+              : "User account is inactive. Please contact support.",
+        });
+        return;
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        res.status(401).json({
+          status: "failed",
+          message: "Invalid credentials. Please try again.",
+        });
+        return;
+      }
+
+      const token = user.generateAccessJWT();
+      const { password: _, ...user_data } = user.toObject();
+
+      await sendEmail({
+        to: user.email,
+        subject: "JSNXT - New Login Detected",
+        html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0;">
+          <div style="text-align: center;">
+            <img src="${LOGO_URL}" alt="JSNXT Logo" style="width: 100px; margin-bottom: 20px;" />
+            <h2>New Login Detected</h2>
+          </div>
+          <p>We noticed a new login to your JSNXT account with the following details:</p>
+          <ul>
+            <li><strong>IP Address:</strong> ${ipAddress}</li>
+            <li><strong>Browser:</strong> ${ua.browser}</li>
+            <li><strong>Platform:</strong> ${ua.platform}</li>
+            <li><strong>Time:</strong> ${new Date().toLocaleString()}</li>
+          </ul>
+          <p>If this was you, no further action is needed. If you suspect any unauthorized access, please reset your password immediately.</p>
+          <hr />
+          <p style="font-size: 12px; color: #888;">&copy; ${new Date().getFullYear()} JSNXT. All rights reserved.</p>
+        </div>
+      `,
+      });
+
+      res.status(200).json({
+        status: "success",
+        data: user_data,
+        token,
+        message: `Successfully logged in as ${user.role}`,
+      });
+      return;
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        status: "error",
+        message: "Internal Server Error",
+      });
+      return;
+    }
+  } catch (error) {
+    res.status(500).json({ message: "reCAPTCHA verification error." });
     return;
   }
 };
@@ -286,10 +477,14 @@ export const getUserInfo = async (
 
 export const profile = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = req.user;
+    if (!req.user) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
     res.status(200).json({
       status: "success",
-      user,
+      user: req.user,
     });
     return;
   } catch (err) {
@@ -401,24 +596,51 @@ export const forgotPassword = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { email } = req.body;
+    const { email, recaptchaToken } = req.body;
     const user = await User.findOne({ email });
-    if (!user) {
-      res.status(404).json({ message: "No user with that email." });
-      return;
-    }
+    const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
 
-    const resetToken = crypto.randomBytes(32).toString("hex");
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpire = new Date(Date.now() + 3600000);
-    await user.save();
+    try {
+      const response = await axios.post(verificationURL);
+      const { success, score } = response.data as {
+        success: boolean;
+        score: number;
+      };
 
-    const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
+      if (!success || score < 0.5) {
+        res.status(403).json({ message: "reCAPTCHA verification failed." });
+        return;
+      }
 
-    await sendEmail({
-      to: email,
-      subject: "JSNXT - Reset your password",
-      html: `
+      if (!user) {
+        res.status(404).json({ message: "No user with that email." });
+        return;
+      }
+
+      if (user.authProvider === "google") {
+        res.status(404).json({
+          message:
+            "This account uses Google login. Please sign in with Google.",
+        });
+        return;
+      }
+
+      const resetToken = crypto.randomBytes(32).toString("hex");
+      const hashedToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+
+      user.resetPasswordToken = hashedToken;
+      user.resetPasswordExpire = Date.now() + 3600000;
+      await user.save();
+
+      const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
+
+      await sendEmail({
+        to: email,
+        subject: "JSNXT - Reset your password",
+        html: `
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;border:1px solid #e0e0e0;border-radius:10px;background:#ffffff">
           <div style="text-align:center;margin-bottom:20px">
             <img src="${LOGO_URL}" alt="JSNXT Logo" style="width:80px;height:auto" />
@@ -433,13 +655,17 @@ export const forgotPassword = async (
           <p style="font-size:14px;color:#999999">If you did not request a password reset, you can safely ignore this email.</p>
         </div>
       `,
-    });
+      });
 
-    res.status(200).json({ message: "Password reset email sent." });
-    return;
+      res.status(200).json({ message: "Password reset email sent." });
+      return;
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error." });
+      return;
+    }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error." });
+    res.status(500).json({ message: "reCAPTCHA verification error." });
     return;
   }
 };
@@ -505,18 +731,32 @@ export const resetPassword = async (
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = req.user;
-    res.clearCookie("jwt");
-    res.status(200).json({
-      status: "success",
-      message: `Successfully logged out from ${user?.role}`,
-    });
-    return;
+    const authHeader = req.headers["authorization"];
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      res.status(401).json({ message: "No user is currently logged in." });
+      return;
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      res.status(401).json({ message: "No user is currently logged in." });
+      return;
+    }
+
+    const existingToken = await Blacklist.findOne({ token });
+    if (existingToken) {
+      res.status(401).json({ message: "The session is already terminated." });
+      return;
+    }
+
+    const newBlacklist = new Blacklist({ token });
+    await newBlacklist.save();
+
+    res.status(200).json({ message: "You have successfully logged out." });
   } catch (err) {
     res.status(500).json({
       status: "error",
       message: "Internal Server Error",
     });
-    return;
   }
 };

@@ -1,7 +1,9 @@
 import "../styles/index.css";
 import { Poppins } from "next/font/google";
-import { ReduxProvider } from "../components/Utils/ReduxProvider";
-import ToastProvider from "../components/Utils/ToastProvider";
+import { ReduxProvider } from "../components/utils/ReduxProvider";
+import { ReCaptchaProvider } from "next-recaptcha-v3";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import ToastProvider from "../components/ui/ToastProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -31,7 +33,13 @@ export default function RootLayout({
       </head>
       <body className={poppins.variable}>
         <ReduxProvider>
-          <ToastProvider>{children}</ToastProvider>
+          <ReCaptchaProvider
+            reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+          >
+            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+              <ToastProvider>{children}</ToastProvider>
+            </GoogleOAuthProvider>
+          </ReCaptchaProvider>
         </ReduxProvider>
       </body>
     </html>

@@ -8,14 +8,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { fetchCurrentUser } from "../../../redux/user/usersSlice";
 import { FiLogOut, FiUser } from "react-icons/fi";
-import AxiosConfig from "../../../components/Utils/AxiosConfig";
-import LoadingSpinner from "../../../components/Utils/LoadingSpinner";
+import { useRouter } from "next/navigation";
+import { googleLogout } from "@react-oauth/google";
+import AxiosConfig from "../../../components/utils/AxiosConfig";
+import LoadingSpinner from "../../../components/ui/LoadingSpinner";
+import { toast } from "react-toastify";
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   const { currentUser, loading } = useSelector(
     (state: RootState) => state.users
@@ -51,10 +55,15 @@ const Header: React.FC = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      googleLogout();
       localStorage.removeItem("token");
-      window.location.reload();
-    } catch (error) {
+      localStorage.removeItem("role");
+      location.reload();
+    } catch (error: any) {
+      toast.error(error);
       console.error(error);
+    } finally {
+      setLogoutLoading(false);
     }
   };
   const navigation = [
@@ -203,7 +212,9 @@ const Header: React.FC = () => {
               <div className="py-6">
                 {currentUser ? (
                   <>
-                    <h1 className="text-white underline py-2.5">{currentUser.name}</h1>
+                    <h1 className="text-white underline py-2.5">
+                      {currentUser.name}
+                    </h1>
                     <Link
                       href="/"
                       prefetch={true}

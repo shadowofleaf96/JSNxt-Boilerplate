@@ -4,6 +4,7 @@ const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const AxiosConfig = axios.create({
   baseURL: `${backendUrl}/api`,
+  withCredentials: true,
 });
 
 AxiosConfig.interceptors.request.use(

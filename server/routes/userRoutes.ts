@@ -21,6 +21,7 @@ router.post(
 router.post("/forgot-password", userController.forgotPassword);
 router.put("/reset-password/:token", userController.resetPassword);
 router.post("/login", userController.login);
+router.post("/google-login", userController.googleAuth);
 router.put(
   "/:id",
   upload.single("avatar"),

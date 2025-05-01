@@ -1,14 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../components/utils/AxiosConfig";
 import DOMPurify from "dompurify";
+import { useReCaptcha } from "next-recaptcha-v3";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import Modal from "../../../../components/ui/Modal";
 
 const registrationSchema = z.object({
   name: z.string(),
@@ -24,7 +26,9 @@ const registrationSchema = z.object({
 
 const Registration: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { executeRecaptcha } = useReCaptcha();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const error = "";
   const router = useRouter();
 
   const {
@@ -51,12 +55,18 @@ const Registration: React.FC = () => {
 
     try {
       setLoading(true);
-      await AxiosConfig.post(`/users/register`, sanitizedData);
+      const recaptchaToken = await executeRecaptcha("form_submit");
+
+      await AxiosConfig.post(`/users/register`, {
+        sanitizedData,
+        recaptchaToken,
+      });
 
       router.push("/verify-email");
     } catch (err: any) {
       console.log(err);
-      const msg = "Registration failed. Please try again." + err.response.data.message;
+      const msg =
+        "Registration failed. Please try again." + err?.response?.data?.message;
       toast.error(msg);
       setLoading(false);
     }
@@ -180,14 +190,13 @@ const Registration: React.FC = () => {
                     className="font-medium text-gray-700"
                   >
                     I accept the{" "}
-                    <Link
-                      href="/privacy-policy"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(true)}
                       className="text-gray-600 underline hover:text-gray-500"
                     >
                       privacy policy
-                    </Link>
+                    </button>
                   </label>
                   {errors.acceptPolicy && (
                     <p className="text-sm text-red-600 mt-1">
@@ -208,10 +217,61 @@ const Registration: React.FC = () => {
                   {loading ? <LoadingSpinner size={5} /> : `Register`}
                 </button>
               </div>
+              <p className="mt-6 text-xs text-gray-500 text-center">
+                This site is protected by reCAPTCHA and the Google{" "}
+                <a
+                  href="https://policies.google.com/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-gray-700 transition-colors"
+                >
+                  Privacy Policy
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://policies.google.com/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-gray-700 transition-colors"
+                >
+                  Terms of Service
+                </a>{" "}
+                apply.
+              </p>
             </form>
           </div>
         </div>
       </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h2 className="text-xl font-bold mb-4">Privacy Policy</h2>
+        <p className="mb-2">
+          This Privacy Policy describes how we collect, use, and disclose your
+          personal information when you use our services.
+        </p>
+        <p className="mb-2">
+          <strong>Information Collection:</strong> We collect information you
+          provide directly to us, such as when you create an account, and
+          information automatically collected when you use our services.
+        </p>
+        <p className="mb-2">
+          <strong>Use of Information:</strong> We use your information to
+          provide, maintain, and improve our services, communicate with you, and
+          for other purposes described in this policy.
+        </p>
+        <p className="mb-2">
+          <strong>Sharing of Information:</strong> We may share your information
+          with third parties as described in this policy, including service
+          providers and as required by law.
+        </p>
+        <p className="mb-2">
+          <strong>Your Choices:</strong> You have choices regarding your
+          information, including accessing, correcting, or deleting your
+          personal information.
+        </p>
+        <p className="mb-2">
+          For more details, please refer to our full privacy policy.
+        </p>
+      </Modal>
     </div>
   );
 };

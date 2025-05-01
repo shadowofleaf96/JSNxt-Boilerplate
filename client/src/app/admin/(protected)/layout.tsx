@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Layout/Navbar";
 import Sidebar from "../components/Layout/Sidebar";
-import ProtectedRoute from "../../../components/Utils/ProtectedRoute";
+import ProtectedRoute from "../../../components/utils/ProtectedRoute";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

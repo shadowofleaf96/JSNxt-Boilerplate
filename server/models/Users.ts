@@ -4,25 +4,45 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import Joi from "joi";
 import { UserDocument } from "../types/user.interface";
+import { resetPassword } from "@/controllers/userController";
 
 dotenv.config();
 
 export const UserJoiSchema = Joi.object({
   _id: Joi.any().strip(),
+  authProvider: Joi.string().valid("local", "google").required(),
+  googleId: Joi.string().optional(),
   avatar: Joi.string().required(),
   name: Joi.string().optional(),
   username: Joi.string().min(3).max(30).required(),
-  password: Joi.string().min(8).required(),
   email: Joi.string().email().required(),
+  password: Joi.when("authProvider", {
+    is: "local",
+    then: Joi.string().min(8).required(),
+    otherwise: Joi.string().optional().allow(""),
+  }),
   role: Joi.string().valid("admin", "user").required(),
   status: Joi.string().valid("active", "inactive").required(),
   lastActive: Joi.date().optional(),
   emailToken: Joi.string().allow(null, "").optional(),
   isVerified: Joi.boolean().optional(),
+  resetPasswordToken: Joi.string().allow(null, "").optional(),
+  resetPasswordExpire: Joi.date().allow(null, "").optional(),
 });
 
 const UserSchema: Schema<UserDocument> = new Schema<UserDocument>(
   {
+    authProvider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
+      required: true,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
     avatar: {
       type: String,
       required: true,
@@ -38,7 +58,9 @@ const UserSchema: Schema<UserDocument> = new Schema<UserDocument>(
     },
     password: {
       type: String,
-      required: true,
+      required: function () {
+        return this.authProvider === "local";
+      },
     },
     email: {
       type: String,
@@ -64,6 +86,14 @@ const UserSchema: Schema<UserDocument> = new Schema<UserDocument>(
     isVerified: {
       type: Boolean,
       default: false,
+    },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+    },
+    resetPasswordExpire: {
+      type: Number,
+      required: false,
     },
   },
   {

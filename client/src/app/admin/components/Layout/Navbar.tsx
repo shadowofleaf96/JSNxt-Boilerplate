@@ -6,9 +6,9 @@ import { AppDispatch, RootState } from "../../../../redux/store";
 import { fetchCurrentUser } from "../../../../redux/user/usersSlice";
 import { FiUser, FiLogOut } from "react-icons/fi";
 import { IoMenu } from "react-icons/io5";
-import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../../components/Utils/AxiosConfig";
+import AxiosConfig from "../../../../components/utils/AxiosConfig";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -66,6 +66,7 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
       );
 
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
       router.push("/admin/login");
     } catch (err: any) {
       toast.error(err.response?.data?.message || "An error occurred");
@@ -122,7 +123,11 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
               >
                 <img
                   className="h-9 w-9 rounded-full object-cover ring-2 ring-white"
-                  src={`${backendUrl}/${currentUser.avatar}`}
+                  src={
+                    currentUser.avatar.startsWith("http")
+                      ? currentUser.avatar
+                      : `${backendUrl}/${currentUser.avatar}`
+                  }
                   alt="User Avatar"
                 />
               </button>

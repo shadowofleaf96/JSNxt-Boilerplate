@@ -1,12 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { UserDocument } from "../types/user.interface";
 
-interface AuthenticatedRequest extends Request {
-  user?: UserDocument;
-}
-
 const VerifyRole = (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): void => {

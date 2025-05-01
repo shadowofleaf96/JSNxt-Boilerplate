@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
-import LoadingSpinner from "../../../../components/Utils/LoadingSpinner";
+import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
 
 const customStyles: Modal.Styles = {
   content: {
@@ -54,13 +54,13 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     <div className="mt-6 flex justify-end gap-4">
       <button
         onClick={onRequestClose}
-        className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+        className="px-4 py-3 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
       >
         Cancel
       </button>
       <button
         onClick={onConfirm}
-        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+        className="px-4 py-3 bg-red-500 text-white rounded hover:bg-red-600"
         disabled={isLoading}
       >
         {isLoading ? <LoadingSpinner size={6} /> : "Delete"}
