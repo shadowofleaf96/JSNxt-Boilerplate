@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import * as userController from "../controllers/userController";
-import upload from "../middleware/multer";
+import { uploadAvatar } from "../middleware/multer";
 import Verify from "../middleware/verify";
 import VerifyRole from "../middleware/verifyRole";
 const router = express.Router();
@@ -10,10 +10,10 @@ router.get("/getallusers", userController.getAllUsers);
 router.get("/profile", Verify, userController.profile);
 router.get("/verify-email/:token", userController.verifyEmail);
 router.post("/logout", userController.logout);
-router.post("/register", upload.single("avatar"), userController.registerUser);
+router.post("/register", uploadAvatar, userController.registerUser);
 router.post(
   "/create-user",
-  upload.single("avatar"),
+  uploadAvatar,
   Verify,
   VerifyRole,
   userController.createUser
@@ -24,7 +24,7 @@ router.post("/login", userController.login);
 router.post("/google-login", userController.googleAuth);
 router.put(
   "/:id",
-  upload.single("avatar"),
+  uploadAvatar,
   Verify,
   VerifyRole,
   userController.updateUser

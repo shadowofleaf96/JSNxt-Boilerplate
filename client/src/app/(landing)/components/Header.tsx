@@ -8,25 +8,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { fetchCurrentUser } from "../../../redux/user/usersSlice";
 import { FiLogOut, FiUser } from "react-icons/fi";
-import { useRouter } from "next/navigation";
 import { googleLogout } from "@react-oauth/google";
 import AxiosConfig from "../../../components/utils/AxiosConfig";
 import LoadingSpinner from "../../../components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
 
-  const { currentUser, loading } = useSelector(
-    (state: RootState) => state.users
-  );
+  const { currentUser, loading } = useSelector((state: RootState) => {
+    return state.users as { currentUser: any; loading: boolean };
+  });
   const [logoutLoading, setLogoutLoading] = useState(false);
-
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -62,8 +59,6 @@ const Header: React.FC = () => {
     } catch (error: any) {
       toast.error(error);
       console.error(error);
-    } finally {
-      setLogoutLoading(false);
     }
   };
   const navigation = [
@@ -77,6 +72,8 @@ const Header: React.FC = () => {
     },
   ];
 
+  const isRegularUser = currentUser?.role === "user";
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -84,9 +81,19 @@ const Header: React.FC = () => {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5" prefetch={true}>
+          <Link href="/" className="-m-1.5 p-1.5" prefetch={false}>
             <span className="sr-only">Your Company</span>
-            <img alt="" src="/jsnxt-logo-white.webp" className="h-16 w-auto" />
+            <Image
+              width={1200}
+              height={800}
+              priority
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,..."
+              sizes="(max-width: 768px) 100vw, 50vw"
+              alt="Logo"
+              src="/jsnxt-logo-white.webp"
+              className="h-16 w-auto"
+            />
           </Link>
         </div>
 
@@ -106,7 +113,7 @@ const Header: React.FC = () => {
             <Link
               key={item.name}
               href={item.href}
-              prefetch={true}
+              prefetch={false}
               className="text-sm font-semibold text-white"
             >
               {item.name}
@@ -117,19 +124,21 @@ const Header: React.FC = () => {
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {loading ? (
             <LoadingSpinner size={5} />
-          ) : currentUser ? (
+          ) : currentUser && isRegularUser ? (
             <div className="relative" ref={dropdownRef}>
               <button
                 className="p-1.5 rounded-full hover:bg-gray-600 transition-colors cursor-pointer"
                 onClick={() => setShowDropdown((prev) => !prev)}
               >
-                <img
+                <Image
+                  width={1200}
+                  height={800}
+                  priority
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,..."
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="h-9 w-9 rounded-full object-cover ring-2 ring-white"
-                  src={
-                    currentUser.avatar.startsWith("http")
-                      ? currentUser.avatar
-                      : `${backendUrl}/${currentUser.avatar}`
-                  }
+                  src={currentUser.avatar}
                   alt="User Avatar"
                 />
               </button>
@@ -161,7 +170,7 @@ const Header: React.FC = () => {
           ) : (
             <Link
               href="/login"
-              prefetch={true}
+              prefetch={false}
               className="text-sm font-semibold text-white"
             >
               Log in <span aria-hidden="true">&rarr;</span>
@@ -178,10 +187,16 @@ const Header: React.FC = () => {
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
           <div className="flex items-center justify-between">
-            <Link href="/" prefetch={true} className="-m-1.5 p-1.5">
+            <Link href="/" prefetch={false} className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img
-                alt=""
+              <Image
+                alt="Background Image"
+                width={1200}
+                height={800}
+                priority
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,..."
+                sizes="(max-width: 768px) 100vw, 50vw"
                 src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
                 className="h-8 w-auto"
               />
@@ -210,14 +225,14 @@ const Header: React.FC = () => {
                 ))}
               </div>
               <div className="py-6">
-                {currentUser ? (
+                {currentUser && isRegularUser ? (
                   <>
                     <h1 className="text-white underline py-2.5">
                       {currentUser.name}
                     </h1>
                     <Link
                       href="/"
-                      prefetch={true}
+                      prefetch={false}
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
                     >
                       Profile
@@ -232,7 +247,7 @@ const Header: React.FC = () => {
                 ) : (
                   <Link
                     href="/login"
-                    prefetch={true}
+                    prefetch={false}
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
                   >
                     Log in

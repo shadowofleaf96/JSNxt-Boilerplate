@@ -1,5 +1,6 @@
 export interface User {
   _id: string;
+  authProvider: "local" | "google";
   avatar: string;
   username: string;
   name: string;
@@ -12,9 +13,9 @@ export interface User {
 }
 
 export interface CurrentUser {
+  _id: string;
+  avatar: string;
   name: string;
   role: string;
-  _id: string;
   username: string;
-  avatar: string;
 }

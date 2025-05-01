@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Verification = () => {
   const router = useRouter();
@@ -9,10 +10,16 @@ const Verification = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
       <div className="py-8">
-        <img
+        <Image
           className="h-24 w-24 sm:h-24 mx-auto"
           src="/jsnxt-logo-black.webp"
           alt="Your Company"
+          width={1200}
+          height={800}
+          priority
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,..."
+          sizes="(max-width: 768px) 100vw, 50vw"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "/fallback-logo.png";
           }}

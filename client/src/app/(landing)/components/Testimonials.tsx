@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const Testimonials: React.FC = () => {
   return (
     <div id="testimonials" className="relative z-10 mt-12 bg-gray-900 pb-2 sm:mt-16 sm:pb-4 xl:pb-0">
@@ -15,8 +17,14 @@ const Testimonials: React.FC = () => {
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-x-8 gap-y-10 px-6 sm:gap-y-8 lg:px-8 xl:flex-row xl:items-stretch">
         <div className="-mt-8 w-full max-w-2xl xl:-mb-8 xl:w-96 xl:flex-none">
           <div className="relative aspect-2/1 h-full md:-mx-8 xl:mx-0 xl:aspect-auto">
-            <img
-              alt=""
+            <Image
+              width={1200}
+              height={800}
+              priority
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,..."
+              sizes="(max-width: 768px) 100vw, 50vw"
+              alt="Background Image"
               src="https://raw.githubusercontent.com/shadowofleaf96/PortFolio-NextJS/refs/heads/main/public/images/Profile%20Skecth%20Art.webp"
               className="absolute inset-0 size-full rounded-2xl bg-gray-800 object-cover shadow-2xl"
             />

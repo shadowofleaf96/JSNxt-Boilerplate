@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useReCaptcha } from "next-recaptcha-v3";
 import AxiosConfig from "../../../../components/utils/AxiosConfig";
 import DOMPurify from "dompurify";
+import Image from "next/image";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -85,7 +86,13 @@ const Login: React.FC = () => {
     <div className="h-screen m-auto flex items-center">
       <div className="w-full max-w-sm p-6 mx-auto bg-white rounded-lg shadow-md">
         <div className="flex justify-center mx-auto">
-          <img
+          <Image
+            width={1200}
+            height={800}
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,..."
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="w-auto h-24 sm:h-24"
             src="/jsnxt-logo-black.webp"
             alt="Company Logo"

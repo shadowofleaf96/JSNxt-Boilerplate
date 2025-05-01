@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 interface ErrorProps {
@@ -9,7 +10,13 @@ interface ErrorProps {
 const Error: React.FC<ErrorProps> = ({ error }) => {
   return (
     <div className="flex flex-col mt-24 items-center h-screen mx-auto">
-      <img
+      <Image
+        width={1200}
+        height={800}
+        priority
+        placeholder="blur"
+        blurDataURL="data:image/png;base64,..."
+        sizes="(max-width: 768px) 100vw, 50vw"
         className="h-auto w-52 object-cover"
         src="/error.webp"
         alt="errorImg"

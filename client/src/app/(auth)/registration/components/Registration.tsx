@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import Modal from "../../../../components/ui/Modal";
+import Image from "next/image";
 
 const registrationSchema = z.object({
   name: z.string(),
@@ -58,7 +59,7 @@ const Registration: React.FC = () => {
       const recaptchaToken = await executeRecaptcha("form_submit");
 
       await AxiosConfig.post(`/users/register`, {
-        sanitizedData,
+        ...sanitizedData,
         recaptchaToken,
       });
 
@@ -75,8 +76,14 @@ const Registration: React.FC = () => {
   return (
     <div className="flex min-h-screen flex-1">
       <div className="relative hidden w-0 flex-1 lg:block">
-        <img
-          alt=""
+        <Image
+          width={1200}
+          height={800}
+          priority
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,..."
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Background Image"
           src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
           className="absolute inset-0 size-full object-cover"
         />
@@ -84,10 +91,16 @@ const Registration: React.FC = () => {
       <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <img
+            <Image
               className="h-24 sm:h-24 mx-auto"
               src="/jsnxt-logo-black.webp"
               alt="Your Company"
+              width={1200}
+              height={800}
+              priority
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,..."
+              sizes="(max-width: 768px) 100vw, 50vw"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/fallback-logo.png";
               }}
@@ -120,6 +133,7 @@ const Registration: React.FC = () => {
                     {...register("name")}
                     id="name"
                     type="name"
+                    placeholder="John Doe"
                     className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
                   />
                   {errors.name && (
@@ -142,6 +156,7 @@ const Registration: React.FC = () => {
                     {...register("email")}
                     id="email"
                     type="email"
+                    placeholder="you@example.com"
                     className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
                   />
                   {errors.email && (
@@ -164,6 +179,7 @@ const Registration: React.FC = () => {
                     {...register("password")}
                     id="password"
                     type="password"
+                    placeholder="••••••••"
                     className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
                   />
                   {errors.password && (

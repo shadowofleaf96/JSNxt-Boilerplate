@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useReCaptcha } from "next-recaptcha-v3";
 import { IoClose } from "react-icons/io5";
 import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import Image from "next/image";
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -56,7 +57,15 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
           <IoClose size={24} />
         </button>
         <div className="flex justify-center mb-6">
-          <img src="/jsnxt-logo-black.webp" alt="Logo" className="h-16 w-16" />
+          <Image src="/jsnxt-logo-black.webp"
+            width={1200}
+            height={800}
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,..."
+            sizes="(max-width: 768px) 100vw, 50vw"
+            alt="Logo"
+            className="h-16 w-16" />
         </div>
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Forgot your password?

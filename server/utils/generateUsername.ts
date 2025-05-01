@@ -8,6 +8,7 @@ import User from "../models/Users";
  * @returns A unique username string.
  */
 export async function generateUniqueUsername(name: string): Promise<string> {
+  console.log("Generating username for:", name);
   const baseUsername = name
     .toLowerCase()
     .trim()

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "tsx watch index.ts",
     "build": "tsc",
-    "start": "tsx index.ts"
+    "start": "tsx index.ts",
+    "migrate:avatars": "tsx utils/migrateAvatars.ts"
   },
   "dependencies": {
     "@shopify/admin-api-client": "^0.2.9",
@@ -31,6 +32,7 @@
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.1",
+    "sharp": "^0.34.1",
     "zod": "^3.24.3"
   },
   "devDependencies": {

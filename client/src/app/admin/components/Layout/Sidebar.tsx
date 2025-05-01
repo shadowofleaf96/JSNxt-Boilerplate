@@ -4,6 +4,7 @@ import { FaHome, FaUser } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -43,13 +44,18 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-56 fixed md:relative h-screen bg-white border-r border-gray-300 z-50 transition-transform duration-300 ease-in-out flex flex-col`}
+        className={`${isOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0 w-56 fixed md:relative h-screen bg-white border-r border-gray-300 z-50 transition-transform duration-300 ease-in-out flex flex-col`}
       >
         <div className="relative p-2 flex items-center justify-center">
           <Link href="/" prefetch={true} className="flex justify-center">
-            <img
+            <Image
+              width={1200}
+              height={800}
+              priority
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,..."
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="max-h-16 w-auto flex justify-center object-contain"
               src="/jsnxt-logo-black.webp"
               alt="Brand Logo"
@@ -70,13 +76,12 @@ export default function Sidebar({
               <Link
                 key={item.name}
                 href={item.href}
-                prefetch={true}
+                prefetch={false}
                 onClick={() => isMobile && toggleSidebar()}
-                className={`flex items-center px-3 py-2.5 rounded-lg transition-colors ${
-                  item.current
-                    ? "bg-blue-50 text-black"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
+                className={`flex items-center px-3 py-2.5 rounded-lg transition-colors ${item.current
+                  ? "bg-blue-50 text-black"
+                  : "text-gray-600 hover:bg-gray-100"
+                  }`}
               >
                 <span
                   className={`${item.current ? "text-black" : "text-gray-500"}`}

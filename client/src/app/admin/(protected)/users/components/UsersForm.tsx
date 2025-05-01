@@ -8,8 +8,11 @@ import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "@/src/types/user";
+import Image from "next/image";
 
 const userSchema = z.object({
+  authProvider: z.enum(["local", "google"]),
   avatar: z
     .any()
     .refine((files) => {
@@ -41,19 +44,10 @@ const userSchema = z.object({
   status: z.enum(["active", "inactive"]),
 });
 
-interface UserData {
-  _id?: string;
-  name: string;
-  username: string;
-  role: string;
-  email: string;
-  status: string;
-}
-
 interface UsersFormProps {
   onClose: () => void;
   refreshUsers: () => void;
-  initialData?: UserData | null;
+  initialData?: User | null;
   isEditMode?: boolean;
 }
 
@@ -64,6 +58,7 @@ const UsersForm: React.FC<UsersFormProps> = ({
   isEditMode = false,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const {
@@ -72,9 +67,11 @@ const UsersForm: React.FC<UsersFormProps> = ({
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
+      authProvider: "local",
       avatar: null,
       name: "",
       username: "",
@@ -87,9 +84,18 @@ const UsersForm: React.FC<UsersFormProps> = ({
 
   useEffect(() => {
     if (initialData) {
+      reset({
+        ...initialData,
+        authProvider: initialData.authProvider || "local",
+        status: initialData.status as "active" | "inactive",
+        password: ""
+      });
+      if (initialData.avatar) {
+        setImagePreview(initialData.avatar);
+      }
+      setValue("avatar", initialData.avatar || "");
       setValue("username", initialData.username || "");
       setValue("name", initialData.name || "");
-      setValue("password", "");
       setValue("role", initialData.role || "admin");
       setValue("email", initialData.email || "");
       setValue(
@@ -97,7 +103,7 @@ const UsersForm: React.FC<UsersFormProps> = ({
         (initialData.status as "active" | "inactive") || "active"
       );
     }
-  }, [initialData, setValue]);
+  }, [initialData, setValue, reset]);
 
   const onSubmit = async (data: Record<string, any>) => {
     setIsSubmitting(true);
@@ -172,9 +178,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
                 id="username"
                 placeholder="Example: Admin"
                 {...register("username")}
-                className={`border ${
-                  errors.username ? "border-red-500" : "border-gray-300"
-                } bg-white p-2 rounded w-full`}
+                className={`border ${errors.username ? "border-red-500" : "border-gray-300"
+                  } bg-white p-2 rounded w-full`}
               />
               {errors.username && (
                 <p className="text-red-500 text-sm">
@@ -182,25 +187,34 @@ const UsersForm: React.FC<UsersFormProps> = ({
                 </p>
               )}
             </div>
-            <div className="w-1/2">
-              <label htmlFor="password" className="block mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                placeholder="Example: 123456"
-                {...register("password")}
-                className={`border ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } bg-white p-2 rounded w-full`}
-              />
-              {errors.password && (
-                <p className="text-red-500 text-sm">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
+
+            {(!isEditMode || watch("authProvider") === "local") && (
+              <div className="w-1/2">
+                <label htmlFor="password" className="block mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder={isEditMode ? "Leave blank to keep unchanged" : "Enter password"}
+                  {...register("password", {
+                    required: !isEditMode && "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters"
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "Password must be less than 20 characters"
+                    }
+                  })}
+                  className={`border ${errors.password ? "border-red-500" : "border-gray-300"} bg-white p-2 rounded w-full`}
+                />
+                {errors.password && (
+                  <p className="text-red-500 text-sm">{errors.password.message}</p>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="mb-4">
@@ -212,9 +226,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
               id="email"
               placeholder="Example: example@example.com"
               {...register("email")}
-              className={`border ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              } bg-white p-2 rounded w-full`}
+              className={`border ${errors.email ? "border-red-500" : "border-gray-300"
+                } bg-white p-2 rounded w-full`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -231,9 +244,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
                 id="name"
                 placeholder="Example: John Doe"
                 {...register("name")}
-                className={`border ${
-                  errors.name ? "border-red-500" : "border-gray-300"
-                } bg-white p-2 rounded w-full`}
+                className={`border ${errors.name ? "border-red-500" : "border-gray-300"
+                  } bg-white p-2 rounded w-full`}
               />
               {errors.name && (
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -246,9 +258,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
               <select
                 id="role"
                 {...register("role")}
-                className={`border ${
-                  errors.role ? "border-red-500" : "border-gray-300"
-                } bg-white p-2 rounded w-full`}
+                className={`border ${errors.role ? "border-red-500" : "border-gray-300"
+                  } bg-white p-2 rounded w-full`}
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
@@ -269,9 +280,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
               <select
                 id="status"
                 {...register("status")}
-                className={`border ${
-                  errors.status ? "border-red-500" : "border-gray-300"
-                } bg-white p-2 rounded w-full`}
+                className={`border ${errors.status ? "border-red-500" : "border-gray-300"
+                  } bg-white p-2 rounded w-full`}
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -284,37 +294,96 @@ const UsersForm: React.FC<UsersFormProps> = ({
 
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium">Avatar</label>
-            <div className="relative">
-              <input
-                type="file"
-                id="avatar"
-                accept="image/*"
-                {...register("avatar")}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              <label
-                htmlFor="avatar"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            <div className="flex items-center gap-4">
+              <div className="relative flex-shrink-0">
+                <input
+                  type="file"
+                  id="avatar"
+                  accept="image/*"
+                  {...register("avatar", {
+                    onChange: (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setImagePreview(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }
+                  })}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <label
+                  htmlFor="avatar"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeWidth="2"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                  />
-                </svg>
-                Choose File
-              </label>
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeWidth="2"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                    />
+                  </svg>
+                  Choose File
+                </label>
+              </div>
 
-              <span className="ml-2 text-sm text-gray-500">
-                {watch("avatar")?.[0]?.name || "No file chosen"}
-              </span>
+              <div className="flex items-center gap-2">
+                {imagePreview ? (
+                  <div className="relative">
+                    <Image
+                      width={1200}
+                      height={800}
+                      priority
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,..."
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      src={imagePreview}
+                      alt="New avatar preview"
+                      className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                    />
+                    <span className="absolute -bottom-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                      </svg>
+                    </span>
+                  </div>
+                ) : initialData?.avatar ? (
+                  <Image
+                    width={1200}
+                    height={800}
+                    priority
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,..."
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    src={initialData?.avatar}
+                    alt="Current avatar"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/default-avatar.png';
+                    }}
+                  />
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                )}
+
+                <span className="text-sm text-gray-500">
+                  {watch("avatar")?.[0]?.name || "No file chosen"}
+                </span>
+              </div>
             </div>
+
             {errors.avatar && (
               <p className="mt-1 text-sm text-red-500">
                 {errors.avatar?.message?.toString()}
@@ -342,14 +411,14 @@ const UsersForm: React.FC<UsersFormProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-light py-2 px-4 ml-4"
+              className="bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-light py-3 px-4 ml-4"
             >
               Close
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

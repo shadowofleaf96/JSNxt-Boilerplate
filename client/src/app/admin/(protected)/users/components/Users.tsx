@@ -13,8 +13,7 @@ import { toast } from "react-toastify";
 import Error from "../../../components/Error/Error";
 import ConfirmationModal from "../../../components/Utils/ConfirmationModal";
 import AxiosConfig from "../../../../../components/utils/AxiosConfig";
-
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+import Image from "next/image";
 
 interface SortConfig {
   key: keyof User | null;
@@ -250,6 +249,15 @@ function Users() {
                 <th
                   scope="col"
                   className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 cursor-pointer"
+                  onClick={() => handleSort("authProvider")}
+                >
+                  Auth Provider
+                  {sortConfig.key === "authProvider" &&
+                    (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 cursor-pointer"
                   onClick={() => handleSort("username")}
                 >
                   Username
@@ -321,21 +329,26 @@ function Users() {
                     </td>
                     <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap">
                       <div className="flex items-center">
-                        <img
+                        <Image
                           className="object-cover w-10 h-10 rounded-full mr-2"
-                          src={
-                            user.avatar.startsWith("http")
-                              ? user.avatar
-                              : `${backendUrl}/${user.avatar}`
-                          }
+                          width={1200}
+                          height={800}
+                          priority
+                          placeholder="blur"
+                          blurDataURL="data:image/png;base64,..."
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          src={user.avatar}
                           alt={user.username + " avatar"}
                         />
                         <div>
                           <h2 className="font-medium text-gray-800">
-                            {user.username}
+                            {user.authProvider}
                           </h2>
                         </div>
                       </div>
+                    </td>
+                    <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap">
+                      {user.username}
                     </td>
                     <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap">
                       {user.name}
@@ -343,30 +356,27 @@ function Users() {
                     <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap">
                       {user.email}
                     </td>
-                    <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    <td className="px-4 py-4 text-sm capitalize text-gray-800 whitespace-nowrap">
                       {user.role}
                     </td>
                     <td className="px-4 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                       <div
-                        className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${
-                          user.status === "active"
-                            ? "bg-emerald-100/60"
-                            : "bg-red-100/60"
-                        }`}
+                        className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${user.status === "active"
+                          ? "bg-emerald-100/60"
+                          : "bg-red-100/60"
+                          }`}
                       >
                         <span
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            user.status === "active"
-                              ? "bg-emerald-500"
-                              : "bg-red-500"
-                          }`}
+                          className={`h-1.5 w-1.5 rounded-full ${user.status === "active"
+                            ? "bg-emerald-500"
+                            : "bg-red-500"
+                            }`}
                         ></span>
                         <span
-                          className={`text-sm font-normal ${
-                            user.status === "active"
-                              ? "text-emerald-500"
-                              : "text-red-500"
-                          }`}
+                          className={`text-sm font-normal ${user.status === "active"
+                            ? "text-emerald-500"
+                            : "text-red-500"
+                            }`}
                         >
                           {user.status.charAt(0).toUpperCase() +
                             user.status.slice(1)}
@@ -402,9 +412,8 @@ function Users() {
         <div className="flex items-center justify-between mt-6">
           <button
             onClick={handlePreviousPage}
-            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
-              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             disabled={currentPage === 1}
           >
             <svg
@@ -428,11 +437,10 @@ function Users() {
               <button
                 key={index + 1}
                 onClick={() => setCurrentPage(index + 1)}
-                className={`px-2 py-1 text-sm rounded-md ${
-                  currentPage === index + 1
-                    ? "text-black bg-blue-100"
-                    : "text-gray-500 hover:bg-gray-100"
-                }`}
+                className={`px-2 py-1 text-sm rounded-md ${currentPage === index + 1
+                  ? "text-black bg-blue-100"
+                  : "text-gray-500 hover:bg-gray-100"
+                  }`}
               >
                 {index + 1}
               </button>
@@ -440,9 +448,8 @@ function Users() {
           </div>
           <button
             onClick={handleNextPage}
-            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
-              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             disabled={currentPage === totalPages}
           >
             <span>Next</span>

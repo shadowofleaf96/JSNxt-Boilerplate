@@ -10,6 +10,7 @@ import DOMPurify from "dompurify";
 import ForgotPasswordModal from "../../forgot-password/components/ForgotPassword";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
+import Image from "next/image";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -33,7 +34,7 @@ const Login: React.FC = () => {
 
   const validateCredentials = () => {
     if (!email || !password) return false;
-    if (email.length < 4 || email.length > 20) return false;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
     if (password.length < 8 || password.length > 50) return false;
     return true;
   };
@@ -45,7 +46,15 @@ const Login: React.FC = () => {
     const sanitizedPassword = sanitizeInput(password);
 
     if (!validateCredentials()) {
-      setError("Invalid credentials format");
+      if (!email) {
+        setError("Email is required");
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setError("Please enter a valid email address");
+      } else if (!password) {
+        setError("Password is required");
+      } else if (password.length < 8) {
+        setError("Password must be at least 8 characters");
+      }
       return;
     }
 
@@ -104,8 +113,14 @@ const Login: React.FC = () => {
       <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <img
+            <Image
               className="h-24 sm:h-24 mx-auto"
+              width={1200}
+              height={800}
+              priority
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,..."
+              sizes="(max-width: 768px) 100vw, 50vw"
               src="../../../jsnxt-logo-black.webp"
               alt="Your Company"
               onError={(e) => {
@@ -119,7 +134,7 @@ const Login: React.FC = () => {
               Not a member?{" "}
               <Link
                 href="/registration"
-                prefetch={true}
+                prefetch={false}
                 className="font-semibold text-gray-600 hover:text-gray-500"
               >
                 Register your account
@@ -141,14 +156,12 @@ const Login: React.FC = () => {
                   name="email"
                   type="email"
                   required
+                  placeholder="you@example.com"
                   autoComplete="email"
                   minLength={5}
-                  maxLength={50}
-                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                  maxLength={320}
                   value={email}
-                  onChange={(e) =>
-                    setEmail(e.target.value.replace(/[^\w@.-]/g, ""))
-                  }
+                  onChange={(e) => setEmail(e.target.value)}
                   className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600 sm:text-sm"
                 />
               </div>
@@ -165,6 +178,7 @@ const Login: React.FC = () => {
                   name="password"
                   type="password"
                   required
+                  placeholder="••••••••"
                   autoComplete="current-password"
                   minLength={8}
                   maxLength={50}
@@ -253,8 +267,14 @@ const Login: React.FC = () => {
         </div>
       </div>
       <div className="relative hidden w-0 flex-1 lg:block">
-        <img
-          alt=""
+        <Image
+          width={1200}
+          height={800}
+          priority
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,..."
+          sizes="(max-width: 768px) 100vw, 50vw"
+          alt="Background"
           src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
           className="absolute inset-0 size-full object-cover"
         />

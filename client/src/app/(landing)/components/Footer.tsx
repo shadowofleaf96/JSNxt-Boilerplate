@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -31,7 +32,16 @@ const Footer: React.FC = () => {
     <footer className="bg-gray-900 text-white">
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-12 sm:pb-4 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <img alt="JSNXT" src="/jsnxt-logo-white.webp" className="h-26" />
+          <Image alt="JSNXT"
+            src="/jsnxt-logo-white.webp"
+            className="h-26"
+            width={1200}
+            height={800}
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,..."
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
           <div className="mt-8 flex flex-wrap gap-8 xl:col-span-2 xl:mt-0">
             {Object.entries(footerNavigation).map(([section, links]) => (
               <div key={section} className="min-w-[120px]">
@@ -41,7 +51,7 @@ const Footer: React.FC = () => {
                     <li key={item.name}>
                       <Link
                         href={item.href}
-                        prefetch={true}
+                        prefetch={false}
                         className="text-sm text-gray-400 hover:text-white"
                       >
                         {item.name}

@@ -9,8 +9,7 @@ import { IoMenu } from "react-icons/io5";
 import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import AxiosConfig from "../../../../components/utils/AxiosConfig";
-
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+import Image from "next/image";
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -121,13 +120,15 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
               >
-                <img
+                <Image
+                  width={1200}
+                  height={800}
+                  priority
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,..."
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="h-9 w-9 rounded-full object-cover ring-2 ring-white"
-                  src={
-                    currentUser.avatar.startsWith("http")
-                      ? currentUser.avatar
-                      : `${backendUrl}/${currentUser.avatar}`
-                  }
+                  src={currentUser.avatar}
                   alt="User Avatar"
                 />
               </button>
