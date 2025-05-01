@@ -45,7 +45,7 @@ const Registration: React.FC = () => {
     if (token && role === "user") {
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
   const onSubmit = async (data: any) => {
     const sanitizedData = {

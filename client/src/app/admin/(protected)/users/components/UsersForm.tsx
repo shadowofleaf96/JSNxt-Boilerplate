@@ -131,25 +131,25 @@ const UsersForm: React.FC<UsersFormProps> = ({
       }
       onClose();
       refreshUsers();
-    } catch (error) {
-      toast.error("An error occurred. Please try again.");
+    } catch (error: any) {
+      toast.error("An error occurred. Please try again." + error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      onClose();
-    }
-  };
 
   useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [onClose]);
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black/75 z-50">

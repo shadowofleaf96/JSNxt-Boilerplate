@@ -23,7 +23,7 @@ const Login: React.FC = () => {
     if (token && role === "admin") {
       router.push("/admin/dashboard");
     }
-  }, []);
+  }, [router]);
 
   const sanitizeInput = (input: string): string => {
     return DOMPurify.sanitize(input.trim());
@@ -87,12 +87,6 @@ const Login: React.FC = () => {
       <div className="w-full max-w-sm p-6 mx-auto bg-white rounded-lg shadow-md">
         <div className="flex justify-center mx-auto">
           <Image
-            width={1200}
-            height={800}
-            priority
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,..."
-            sizes="(max-width: 768px) 100vw, 50vw"
             className="w-auto h-24 sm:h-24"
             src="/jsnxt-logo-black.webp"
             alt="Company Logo"
@@ -164,7 +158,7 @@ const Login: React.FC = () => {
           <p>For security reasons, please:</p>
           <ul className="list-disc list-inside text-left mt-2">
             <li>Use a strong password</li>
-            <li>Don't reuse passwords</li>
+            <li>Don&apos;t reuse passwords</li>
             <li>Keep your credentials private</li>
           </ul>
         </div>

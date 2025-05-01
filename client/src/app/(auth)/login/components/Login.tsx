@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     if (token && role === "user") {
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
   const sanitizeInput = (input: string) => DOMPurify.sanitize(input.trim());
 

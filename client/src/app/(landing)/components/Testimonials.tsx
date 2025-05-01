@@ -50,7 +50,7 @@ const Testimonials: React.FC = () => {
                 someone who constantly spins up new projects, having a
                 well-structured Next.js/Express.js boilerplate with integrated
                 authentication, API handlers, and a clean component architecture
-                has saved me countless hours. It's the perfect foundation for
+                has saved me countless hours. It&apos;s the perfect foundation for
                 both rapid prototyping and production-grade applications.
               </p>
             </blockquote>

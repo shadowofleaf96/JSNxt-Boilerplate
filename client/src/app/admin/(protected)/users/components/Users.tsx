@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../../../redux/store";
 import { fetchUsers } from "../../../../../redux/user/usersSlice";
@@ -42,13 +42,13 @@ function Users() {
   const loggedInUserId = "sampleLoggedInUserId";
   const itemsPerPage = 5;
 
-  const fetchNewUsers = () => {
+  const fetchNewUsers = useCallback(() => {
     dispatch(fetchUsers());
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     fetchNewUsers();
-  }, [dispatch]);
+  }, [dispatch, fetchNewUsers]);
 
   const handleAddUser = () => {
     setEditingUser(null);
@@ -95,8 +95,8 @@ function Users() {
       toast.success("User deleted successfully");
       setIsLoading(false);
       closeModal();
-    } catch (error) {
-      toast.error("Error deleting user");
+    } catch (error: any) {
+      toast.error("Error deleting user: " + error);
       setIsLoading(false);
     }
   };
@@ -141,8 +141,8 @@ function Users() {
       closeModal();
       toast.success("Users deleted successfully");
       setIsLoading(false);
-    } catch (error) {
-      toast.error("Error deleting users");
+    } catch (error: any) {
+      toast.error("Error deleting users: " + error);
       setIsLoading(false);
     }
   };
