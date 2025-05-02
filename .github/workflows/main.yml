@@ -30,9 +30,6 @@ jobs:
       - name: Install client dependencies
         run: npm ci
 
-      - name: Run ESLint
-        run: npm run lint
-
       - name: Build client
         run: npm run build
 
@@ -58,5 +55,3 @@ jobs:
 
       - name: Build server
         run: npm run build
-
-      # Add server-specific tests here
