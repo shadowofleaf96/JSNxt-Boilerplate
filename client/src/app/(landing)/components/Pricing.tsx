@@ -77,7 +77,7 @@ const Pricing: React.FC = () => {
           Choose the right plan for your JSNXT project
         </p>
         <p className="mt-6 text-lg text-gray-600">
-          Flexible plans to suit your needs, whether you're just starting or
+          Flexible plans to suit your needs, whether you&apos;re just starting or
           scaling up.
         </p>
       </div>
