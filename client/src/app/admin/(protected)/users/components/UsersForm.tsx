@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
-import AxiosConfig from "@/src/components/utils/AxiosConfig";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@/src/types/user";
+import { User } from "@/types/user";
 import Image from "next/image";
 
 const userSchema = z.object({

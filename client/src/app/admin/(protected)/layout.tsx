@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import Navbar from "@/src/app/admin/components/Layout/Navbar";
-import Sidebar from "@/src/app/admin/components/Layout/Sidebar";
-import ProtectedRoute from "@/src/components/utils/ProtectedRoute";
+import Navbar from "@/app/admin/components/Layout/Navbar";
+import Sidebar from "@/app/admin/components/Layout/Sidebar";
+import ProtectedRoute from "@/components/utils/ProtectedRoute";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

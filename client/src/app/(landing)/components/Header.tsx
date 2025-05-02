@@ -5,12 +5,12 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { HiBars3, HiXMark } from "react-icons/hi2";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/src/redux/store";
-import { fetchCurrentUser } from "@/src/redux/user/usersSlice";
+import { AppDispatch, RootState } from "@/redux/store";
+import { fetchCurrentUser } from "@/redux/user/usersSlice";
 import { FiLogOut, FiUser } from "react-icons/fi";
 import { googleLogout } from "@react-oauth/google";
-import AxiosConfig from "@/src/components/utils/AxiosConfig";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import AxiosConfig from "@/components/utils/AxiosConfig";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import Image from "next/image";
 

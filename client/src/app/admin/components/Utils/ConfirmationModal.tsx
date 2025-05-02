@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const customStyles: Modal.Styles = {
   content: {

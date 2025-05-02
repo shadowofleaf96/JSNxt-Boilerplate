@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import AxiosConfig from "@/src/components/utils/AxiosConfig";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import { toast } from "react-toastify";
 import { useReCaptcha } from "next-recaptcha-v3";
 import { IoClose } from "react-icons/io5";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Image from "next/image";
 
 interface ForgotPasswordModalProps {

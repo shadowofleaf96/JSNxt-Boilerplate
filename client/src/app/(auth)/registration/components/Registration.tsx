@@ -1,16 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "@/src/components/utils/AxiosConfig";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import DOMPurify from "dompurify";
 import { useReCaptcha } from "next-recaptcha-v3";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
-import Modal from "@/src/components/ui/Modal";
+import Modal from "@/components/ui/Modal";
 import Image from "next/image";
 
 const registrationSchema = z.object({

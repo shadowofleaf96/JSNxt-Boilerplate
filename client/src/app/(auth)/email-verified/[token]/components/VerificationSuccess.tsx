@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic";
 import React, { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Image from "next/image";
 
 const VerificationSuccess = () => {

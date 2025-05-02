@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import AxiosConfig from "@/src/components/utils/AxiosConfig";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import AxiosConfig from "@/components/utils/AxiosConfig";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Link from "next/link";
 import { useReCaptcha } from "next-recaptcha-v3";
 import DOMPurify from "dompurify";
-import ForgotPasswordModal from "@/src/app/(auth)/forgot-password/components/ForgotPassword";
+import ForgotPasswordModal from "@/app/(auth)/forgot-password/components/ForgotPassword";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";

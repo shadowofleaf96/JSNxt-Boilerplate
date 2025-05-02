@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import { useReCaptcha } from "next-recaptcha-v3";
-import AxiosConfig from "@/src/components/utils/AxiosConfig";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import DOMPurify from "dompurify";
 import Image from "next/image";
 

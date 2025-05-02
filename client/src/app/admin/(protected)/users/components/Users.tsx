@@ -2,17 +2,17 @@
 
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/src/redux/store";
-import { fetchUsers } from "@/src/redux/user/usersSlice";
+import { RootState, AppDispatch } from "@/redux/store";
+import { fetchUsers } from "@/redux/user/usersSlice";
 import { FaRegTrashCan, FaPlus } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
-import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import AddUserForm from "./UsersForm";
-import { User } from "@/src/types/user";
+import { User } from "@/types/user";
 import { toast } from "react-toastify";
-import Error from "@/src/app/admin/components/Error/Error";
-import ConfirmationModal from "@/src/app/admin/components/Utils/ConfirmationModal";
-import AxiosConfig from "@/src/components/utils/AxiosConfig";
+import Error from "@/app/admin/components/Error/Error";
+import ConfirmationModal from "@/app/admin/components/Utils/ConfirmationModal";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import Image from "next/image";
 
 interface SortConfig {
