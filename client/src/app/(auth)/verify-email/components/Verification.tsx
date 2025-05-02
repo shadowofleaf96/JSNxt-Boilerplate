@@ -11,15 +11,14 @@ const Verification = () => {
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
       <div className="py-8">
         <Image
-          className="h-24 w-24 sm:h-24 mx-auto"
-          src="/jsnxt-logo-black.webp"
-          alt="Your Company"
-          width={1200}
-          height={800}
-          priority
+          className="md:w-32 w-20 h-auto mx-auto"
+          width={0}
+          height={0}
           placeholder="blur"
           blurDataURL="data:image/png;base64,..."
           sizes="(max-width: 768px) 100vw, 50vw"
+          src="/jsnxt-logo-black.webp"
+          alt="Your Company"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "/fallback-logo.png";
           }}

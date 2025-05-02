@@ -1,9 +1,9 @@
-import "../styles/index.css";
+import "@/src/styles/index.css";
 import { Poppins } from "next/font/google";
-import { ReduxProvider } from "../components/utils/ReduxProvider";
+import { ReduxProvider } from "@/src/components/utils/ReduxProvider";
 import { ReCaptchaProvider } from "next-recaptcha-v3";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import ToastProvider from "../components/ui/ToastProvider";
+import ToastProvider from "@/src/components/ui/ToastProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],

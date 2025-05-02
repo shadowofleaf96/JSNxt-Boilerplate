@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import LoadingSpinner from "../../../../../components/ui/LoadingSpinner";
-import AxiosConfig from "../../../../../components/utils/AxiosConfig";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
 import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { z } from "zod";
@@ -88,7 +88,7 @@ const UsersForm: React.FC<UsersFormProps> = ({
         ...initialData,
         authProvider: initialData.authProvider || "local",
         status: initialData.status as "active" | "inactive",
-        password: ""
+        password: "",
       });
       if (initialData.avatar) {
         setImagePreview(initialData.avatar);
@@ -138,7 +138,6 @@ const UsersForm: React.FC<UsersFormProps> = ({
     }
   };
 
-
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
@@ -178,8 +177,9 @@ const UsersForm: React.FC<UsersFormProps> = ({
                 id="username"
                 placeholder="Example: Admin"
                 {...register("username")}
-                className={`border ${errors.username ? "border-red-500" : "border-gray-300"
-                  } bg-white p-2 rounded w-full`}
+                className={`border ${
+                  errors.username ? "border-red-500" : "border-gray-300"
+                } bg-white p-2 rounded w-full`}
               />
               {errors.username && (
                 <p className="text-red-500 text-sm">
@@ -196,22 +196,30 @@ const UsersForm: React.FC<UsersFormProps> = ({
                 <input
                   type="password"
                   id="password"
-                  placeholder={isEditMode ? "Leave blank to keep unchanged" : "Enter password"}
+                  placeholder={
+                    isEditMode
+                      ? "Leave blank to keep unchanged"
+                      : "Enter password"
+                  }
                   {...register("password", {
                     required: !isEditMode && "Password is required",
                     minLength: {
                       value: 6,
-                      message: "Password must be at least 6 characters"
+                      message: "Password must be at least 6 characters",
                     },
                     maxLength: {
                       value: 20,
-                      message: "Password must be less than 20 characters"
-                    }
+                      message: "Password must be less than 20 characters",
+                    },
                   })}
-                  className={`border ${errors.password ? "border-red-500" : "border-gray-300"} bg-white p-2 rounded w-full`}
+                  className={`border ${
+                    errors.password ? "border-red-500" : "border-gray-300"
+                  } bg-white p-2 rounded w-full`}
                 />
                 {errors.password && (
-                  <p className="text-red-500 text-sm">{errors.password.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
             )}
@@ -226,8 +234,9 @@ const UsersForm: React.FC<UsersFormProps> = ({
               id="email"
               placeholder="Example: example@example.com"
               {...register("email")}
-              className={`border ${errors.email ? "border-red-500" : "border-gray-300"
-                } bg-white p-2 rounded w-full`}
+              className={`border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } bg-white p-2 rounded w-full`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -244,8 +253,9 @@ const UsersForm: React.FC<UsersFormProps> = ({
                 id="name"
                 placeholder="Example: John Doe"
                 {...register("name")}
-                className={`border ${errors.name ? "border-red-500" : "border-gray-300"
-                  } bg-white p-2 rounded w-full`}
+                className={`border ${
+                  errors.name ? "border-red-500" : "border-gray-300"
+                } bg-white p-2 rounded w-full`}
               />
               {errors.name && (
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -258,8 +268,9 @@ const UsersForm: React.FC<UsersFormProps> = ({
               <select
                 id="role"
                 {...register("role")}
-                className={`border ${errors.role ? "border-red-500" : "border-gray-300"
-                  } bg-white p-2 rounded w-full`}
+                className={`border ${
+                  errors.role ? "border-red-500" : "border-gray-300"
+                } bg-white p-2 rounded w-full`}
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
@@ -280,8 +291,9 @@ const UsersForm: React.FC<UsersFormProps> = ({
               <select
                 id="status"
                 {...register("status")}
-                className={`border ${errors.status ? "border-red-500" : "border-gray-300"
-                  } bg-white p-2 rounded w-full`}
+                className={`border ${
+                  errors.status ? "border-red-500" : "border-gray-300"
+                } bg-white p-2 rounded w-full`}
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -310,7 +322,7 @@ const UsersForm: React.FC<UsersFormProps> = ({
                         };
                         reader.readAsDataURL(file);
                       }
-                    }
+                    },
                   })}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
@@ -338,9 +350,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
                 {imagePreview ? (
                   <div className="relative">
                     <Image
-                      width={1200}
-                      height={800}
-                      priority
+                      width={0}
+                      height={0}
                       placeholder="blur"
                       blurDataURL="data:image/png;base64,..."
                       sizes="(max-width: 768px) 100vw, 50vw"
@@ -349,17 +360,25 @@ const UsersForm: React.FC<UsersFormProps> = ({
                       className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
                     />
                     <span className="absolute -bottom-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        className="w-3 h-3"
+                      >
                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                        <path
+                          fillRule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     </span>
                   </div>
                 ) : initialData?.avatar ? (
                   <Image
-                    width={1200}
-                    height={800}
-                    priority
+                    width={0}
+                    height={0}
                     placeholder="blur"
                     blurDataURL="data:image/png;base64,..."
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -367,13 +386,25 @@ const UsersForm: React.FC<UsersFormProps> = ({
                     alt="Current avatar"
                     className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/default-avatar.png';
+                      (e.target as HTMLImageElement).src =
+                        "/default-avatar.png";
                     }}
                   />
                 ) : (
                   <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-8 w-8 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
                     </svg>
                   </div>
                 )}
@@ -417,8 +448,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
             </button>
           </div>
         </form>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 

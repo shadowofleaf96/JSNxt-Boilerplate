@@ -25,9 +25,8 @@ const VerificationSuccess = () => {
       <div className="py-8">
         <Image
           className="h-24 w-24 mx-auto py-4"
-          width={1200}   
-          height={800}   
-          priority
+          width={0}   
+          height={0}   
           placeholder="blur"
           blurDataURL="data:image/png;base64,..."
           sizes="(max-width: 768px) 100vw, 50vw"

@@ -2,13 +2,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../redux/store";
-import { fetchCurrentUser } from "../../../../redux/user/usersSlice";
+import { AppDispatch, RootState } from "@/src/redux/store";
+import { fetchCurrentUser } from "@/src/redux/user/usersSlice";
 import { FiUser, FiLogOut } from "react-icons/fi";
 import { IoMenu } from "react-icons/io5";
-import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../../components/utils/AxiosConfig";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
 import Image from "next/image";
 
 interface NavbarProps {
@@ -121,9 +121,8 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
                 className="p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
               >
                 <Image
-                  width={1200}
-                  height={800}
-                  priority
+                  width={0}
+                  height={0}
                   placeholder="blur"
                   blurDataURL="data:image/png;base64,..."
                   sizes="(max-width: 768px) 100vw, 50vw"

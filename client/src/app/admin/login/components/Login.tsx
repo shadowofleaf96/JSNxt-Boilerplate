@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import { useReCaptcha } from "next-recaptcha-v3";
-import AxiosConfig from "../../../../components/utils/AxiosConfig";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
 import DOMPurify from "dompurify";
 import Image from "next/image";
 
@@ -88,6 +88,12 @@ const Login: React.FC = () => {
         <div className="flex justify-center mx-auto">
           <Image
             className="w-auto h-24 sm:h-24"
+            width={0}
+            height={0}
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,..."
+            sizes="(max-width: 768px) 100vw, 50vw"
             src="/jsnxt-logo-black.webp"
             alt="Company Logo"
             onError={(e) => {

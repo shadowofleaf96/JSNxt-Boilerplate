@@ -2,7 +2,10 @@ import Image from "next/image";
 
 const Testimonials: React.FC = () => {
   return (
-    <div id="testimonials" className="relative z-10 mt-12 bg-gray-900 pb-2 sm:mt-16 sm:pb-4 xl:pb-0">
+    <div
+      id="testimonials"
+      className="relative z-10 mt-12 bg-gray-900 pb-2 sm:mt-16 sm:pb-4 xl:pb-0"
+    >
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
         <div className="absolute top-[calc(50%-36rem)] left-[calc(50%-19rem)] transform-gpu blur-3xl">
           <div
@@ -18,9 +21,8 @@ const Testimonials: React.FC = () => {
         <div className="-mt-8 w-full max-w-2xl xl:-mb-8 xl:w-96 xl:flex-none">
           <div className="relative aspect-2/1 h-full md:-mx-8 xl:mx-0 xl:aspect-auto">
             <Image
-              width={1200}
-              height={800}
-              priority
+              width={0}
+              height={0}
               placeholder="blur"
               blurDataURL="data:image/png;base64,..."
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -50,8 +52,8 @@ const Testimonials: React.FC = () => {
                 someone who constantly spins up new projects, having a
                 well-structured Next.js/Express.js boilerplate with integrated
                 authentication, API handlers, and a clean component architecture
-                has saved me countless hours. It&apos;s the perfect foundation for
-                both rapid prototyping and production-grade applications.
+                has saved me countless hours. It&apos;s the perfect foundation
+                for both rapid prototyping and production-grade applications.
               </p>
             </blockquote>
             <figcaption className="mt-8 text-base">

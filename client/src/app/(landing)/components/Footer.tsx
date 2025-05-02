@@ -32,12 +32,12 @@ const Footer: React.FC = () => {
     <footer className="bg-gray-900 text-white">
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-12 sm:pb-4 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <Image alt="JSNXT"
+          <Image
+            alt="JSNXT"
             src="/jsnxt-logo-white.webp"
-            className="h-26"
-            width={1200}
-            height={800}
-            priority
+            className="h-auto w-28"
+            width={0}
+            height={0}
             placeholder="blur"
             blurDataURL="data:image/png;base64,..."
             sizes="(max-width: 768px) 100vw, 50vw"

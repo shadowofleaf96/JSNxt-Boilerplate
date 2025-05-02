@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../../../components/utils/AxiosConfig";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
 import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 import Image from "next/image";
 
@@ -33,9 +33,7 @@ const ResetPasswordPage: React.FC = () => {
       toast.success("Password reset successfully.");
       router.push("/login");
     } catch (err: any) {
-      setError(
-        err?.response?.data?.message || "Error resetting password."
-      );
+      setError(err?.response?.data?.message || "Error resetting password.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -50,9 +48,8 @@ const ResetPasswordPage: React.FC = () => {
             src="/jsnxt-logo-black.webp"
             alt="Logo"
             className="h-16 w-16"
-            width={1200}
-            height={800}
-            priority
+            width={0}
+            height={0}
             placeholder="blur"
             blurDataURL="data:image/png;base64,..."
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -94,9 +91,7 @@ const ResetPasswordPage: React.FC = () => {
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-red-600 text-center">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
 
           <button
             type="submit"

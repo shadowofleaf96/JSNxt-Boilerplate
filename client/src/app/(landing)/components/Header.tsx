@@ -5,12 +5,12 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { HiBars3, HiXMark } from "react-icons/hi2";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/store";
-import { fetchCurrentUser } from "../../../redux/user/usersSlice";
+import { AppDispatch, RootState } from "@/src/redux/store";
+import { fetchCurrentUser } from "@/src/redux/user/usersSlice";
 import { FiLogOut, FiUser } from "react-icons/fi";
 import { googleLogout } from "@react-oauth/google";
-import AxiosConfig from "../../../components/utils/AxiosConfig";
-import LoadingSpinner from "../../../components/ui/LoadingSpinner";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import Image from "next/image";
 
@@ -82,11 +82,10 @@ const Header: React.FC = () => {
       >
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5" prefetch={false}>
-            <span className="sr-only">Your Company</span>
+            <span className="sr-only">JSNXT</span>
             <Image
-              width={1200}
-              height={800}
-              priority
+              width={0}
+              height={0}
               placeholder="blur"
               blurDataURL="data:image/png;base64,..."
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -131,9 +130,8 @@ const Header: React.FC = () => {
                 onClick={() => setShowDropdown((prev) => !prev)}
               >
                 <Image
-                  width={1200}
-                  height={800}
-                  priority
+                  width={0}
+                  height={0}
                   placeholder="blur"
                   blurDataURL="data:image/png;base64,..."
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -188,16 +186,15 @@ const Header: React.FC = () => {
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
           <div className="flex items-center justify-between">
             <Link href="/" prefetch={false} className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
+              <span className="sr-only">JSNXT</span>
               <Image
                 alt="Background Image"
-                width={1200}
-                height={800}
-                priority
+                width={0}
+                height={0}
                 placeholder="blur"
                 blurDataURL="data:image/png;base64,..."
                 sizes="(max-width: 768px) 100vw, 50vw"
-                src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                src="/jsnxt-logo-black.webp"
                 className="h-8 w-auto"
               />
             </Link>

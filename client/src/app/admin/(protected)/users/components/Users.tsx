@@ -2,17 +2,17 @@
 
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../../../../redux/store";
-import { fetchUsers } from "../../../../../redux/user/usersSlice";
+import { RootState, AppDispatch } from "@/src/redux/store";
+import { fetchUsers } from "@/src/redux/user/usersSlice";
 import { FaRegTrashCan, FaPlus } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
-import LoadingSpinner from "../../../../../components/ui/LoadingSpinner";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 import AddUserForm from "./UsersForm";
-import { User } from "../../../../../types/user";
+import { User } from "@/src/types/user";
 import { toast } from "react-toastify";
-import Error from "../../../components/Error/Error";
-import ConfirmationModal from "../../../components/Utils/ConfirmationModal";
-import AxiosConfig from "../../../../../components/utils/AxiosConfig";
+import Error from "@/src/app/admin/components/Error/Error";
+import ConfirmationModal from "@/src/app/admin/components/Utils/ConfirmationModal";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
 import Image from "next/image";
 
 interface SortConfig {
@@ -331,9 +331,8 @@ function Users() {
                       <div className="flex items-center">
                         <Image
                           className="object-cover w-10 h-10 rounded-full mr-2"
-                          width={1200}
-                          height={800}
-                          priority
+                          width={0}
+                          height={0}
                           placeholder="blur"
                           blurDataURL="data:image/png;base64,..."
                           sizes="(max-width: 768px) 100vw, 50vw"
@@ -361,22 +360,25 @@ function Users() {
                     </td>
                     <td className="px-4 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                       <div
-                        className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${user.status === "active"
-                          ? "bg-emerald-100/60"
-                          : "bg-red-100/60"
-                          }`}
+                        className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${
+                          user.status === "active"
+                            ? "bg-emerald-100/60"
+                            : "bg-red-100/60"
+                        }`}
                       >
                         <span
-                          className={`h-1.5 w-1.5 rounded-full ${user.status === "active"
-                            ? "bg-emerald-500"
-                            : "bg-red-500"
-                            }`}
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            user.status === "active"
+                              ? "bg-emerald-500"
+                              : "bg-red-500"
+                          }`}
                         ></span>
                         <span
-                          className={`text-sm font-normal ${user.status === "active"
-                            ? "text-emerald-500"
-                            : "text-red-500"
-                            }`}
+                          className={`text-sm font-normal ${
+                            user.status === "active"
+                              ? "text-emerald-500"
+                              : "text-red-500"
+                          }`}
                         >
                           {user.status.charAt(0).toUpperCase() +
                             user.status.slice(1)}
@@ -412,8 +414,9 @@ function Users() {
         <div className="flex items-center justify-between mt-6">
           <button
             onClick={handlePreviousPage}
-            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
+              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={currentPage === 1}
           >
             <svg
@@ -437,10 +440,11 @@ function Users() {
               <button
                 key={index + 1}
                 onClick={() => setCurrentPage(index + 1)}
-                className={`px-2 py-1 text-sm rounded-md ${currentPage === index + 1
-                  ? "text-black bg-blue-100"
-                  : "text-gray-500 hover:bg-gray-100"
-                  }`}
+                className={`px-2 py-1 text-sm rounded-md ${
+                  currentPage === index + 1
+                    ? "text-black bg-blue-100"
+                    : "text-gray-500 hover:bg-gray-100"
+                }`}
               >
                 {index + 1}
               </button>
@@ -448,8 +452,9 @@ function Users() {
           </div>
           <button
             onClick={handleNextPage}
-            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+            className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
+              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={currentPage === totalPages}
           >
             <span>Next</span>

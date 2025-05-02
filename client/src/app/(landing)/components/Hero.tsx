@@ -13,9 +13,8 @@ const Hero: React.FC = () => {
     <main>
       <div className="relative isolate overflow-hidden min-h-screen bg-gray-900 pt-14 pb-20 sm:pb-24">
         <Image
-          width={1200}
-          height={800}
-          priority
+          width={0}
+          height={0}
           placeholder="blur"
           blurDataURL="data:image/png;base64,..."
           sizes="(max-width: 768px) 100vw, 50vw"

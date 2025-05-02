@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import AxiosConfig from "../../../../components/utils/AxiosConfig";
-import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 import Link from "next/link";
 import { useReCaptcha } from "next-recaptcha-v3";
 import DOMPurify from "dompurify";
-import ForgotPasswordModal from "../../forgot-password/components/ForgotPassword";
+import ForgotPasswordModal from "@/src/app/(auth)/forgot-password/components/ForgotPassword";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
@@ -114,15 +114,14 @@ const Login: React.FC = () => {
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <Image
-              className="h-24 sm:h-24 mx-auto"
-              width={1200}
-              height={800}
-              priority
+              className="md:w-32 w-20 h-auto mx-auto"
+              width={0}
+              height={0}
               placeholder="blur"
               blurDataURL="data:image/png;base64,..."
               sizes="(max-width: 768px) 100vw, 50vw"
-              src="../../../jsnxt-logo-black.webp"
-              alt="Your Company"
+              src="/jsnxt-logo-black.webp"
+              alt="JSNXT"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/fallback-logo.png";
               }}
@@ -268,9 +267,8 @@ const Login: React.FC = () => {
       </div>
       <div className="relative hidden w-0 flex-1 lg:block">
         <Image
-          width={1200}
-          height={800}
-          priority
+          width={0}
+          height={0}
           placeholder="blur"
           blurDataURL="data:image/png;base64,..."
           sizes="(max-width: 768px) 100vw, 50vw"

@@ -1,16 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../../../../components/ui/LoadingSpinner";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "../../../../components/utils/AxiosConfig";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
 import DOMPurify from "dompurify";
 import { useReCaptcha } from "next-recaptcha-v3";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
-import Modal from "../../../../components/ui/Modal";
+import Modal from "@/src/components/ui/Modal";
 import Image from "next/image";
 
 const registrationSchema = z.object({
@@ -77,9 +77,8 @@ const Registration: React.FC = () => {
     <div className="flex min-h-screen flex-1">
       <div className="relative hidden w-0 flex-1 lg:block">
         <Image
-          width={1200}
-          height={800}
-          priority
+          width={0}
+          height={0}
           placeholder="blur"
           blurDataURL="data:image/png;base64,..."
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -92,15 +91,14 @@ const Registration: React.FC = () => {
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <Image
-              className="h-24 sm:h-24 mx-auto"
-              src="/jsnxt-logo-black.webp"
-              alt="Your Company"
-              width={1200}
-              height={800}
-              priority
+              className="md:w-32 w-20 h-auto mx-auto"
+              width={0}
+              height={0}
               placeholder="blur"
               blurDataURL="data:image/png;base64,..."
               sizes="(max-width: 768px) 100vw, 50vw"
+              src="/jsnxt-logo-black.webp"
+              alt="Your Company"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/fallback-logo.png";
               }}

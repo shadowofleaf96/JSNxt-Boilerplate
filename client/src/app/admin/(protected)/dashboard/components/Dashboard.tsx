@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import Error from "../../../components/Error/Error";
+import Error from "@/src/app/admin/components/Error/Error";
 import { FaUserClock, FaUsers } from "react-icons/fa6";
-import LoadingSpinner from "../../../../../components/ui/LoadingSpinner";
+import LoadingSpinner from "@/src/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import { User } from "../../../../../types/user";
-import AxiosConfig from "../../../../../components/utils/AxiosConfig";
+import { User } from "@/src/types/user";
+import AxiosConfig from "@/src/components/utils/AxiosConfig";
 
 interface UserStats {
   totalUsers: number;
