@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
-import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Image from "next/image";
 

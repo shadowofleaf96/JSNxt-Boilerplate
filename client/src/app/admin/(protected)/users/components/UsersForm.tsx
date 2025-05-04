@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { z } from "zod";

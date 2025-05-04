@@ -8,7 +8,7 @@ import { FiUser, FiLogOut } from "react-icons/fi";
 import { IoMenu } from "react-icons/io5";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
-import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import Image from "next/image";
 
 interface NavbarProps {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import AxiosConfig from "@/components/utils/AxiosConfig.tsx.tsx";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import { toast } from "react-toastify";
 import { useReCaptcha } from "next-recaptcha-v3";
 import { IoClose } from "react-icons/io5";

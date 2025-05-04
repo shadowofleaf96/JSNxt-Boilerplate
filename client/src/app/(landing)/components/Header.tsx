@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { fetchCurrentUser } from "@/redux/user/usersSlice";
 import { FiLogOut, FiUser } from "react-icons/fi";
 import { googleLogout } from "@react-oauth/google";
-import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import Image from "next/image";

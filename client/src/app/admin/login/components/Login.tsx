@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import { useReCaptcha } from "next-recaptcha-v3";
-import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
+import AxiosConfig from "@/components/utils/AxiosConfig";
 import DOMPurify from "dompurify";
 import Image from "next/image";
 
