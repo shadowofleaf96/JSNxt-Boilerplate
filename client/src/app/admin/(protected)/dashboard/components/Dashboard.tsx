@@ -8,7 +8,7 @@ import { FaUserClock, FaUsers } from "react-icons/fa6";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { toast } from "react-toastify";
 import { User } from "@/types/user";
-import AxiosConfig from "@/components/utils/AxiosConfig";
+import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
 
 interface UserStats {
   totalUsers: number;

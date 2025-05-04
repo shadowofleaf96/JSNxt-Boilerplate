@@ -12,7 +12,7 @@ import { User } from "@/types/user";
 import { toast } from "react-toastify";
 import Error from "@/app/admin/components/Error/Error";
 import ConfirmationModal from "@/app/admin/components/Utils/ConfirmationModal";
-import AxiosConfig from "@/components/utils/AxiosConfig";
+import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
 import Image from "next/image";
 
 interface SortConfig {

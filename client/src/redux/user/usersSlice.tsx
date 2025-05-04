@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { User, CurrentUser } from "@/types/user";
-import AxiosConfig from "@/components/utils/AxiosConfig";
+import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
 
 interface UsersState {
   users: User[];

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import AxiosConfig from "@/components/utils/AxiosConfig";
+import AxiosConfig from "@/components/utils/AxiosConfig.tsx";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Link from "next/link";
 import { useReCaptcha } from "next-recaptcha-v3";
