@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type ProtectedRouteProps = {
@@ -8,6 +8,7 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
@@ -15,7 +16,7 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
     const role = localStorage.getItem("role");
 
     if (!token || !role || !allowedRoles.includes(role)) {
-      if (role === "admin") {
+      if (pathname.startsWith("/admin")) {
         router.push("/admin/login");
       } else {
         router.push("/login");
@@ -23,7 +24,7 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
     } else {
       setAuthorized(true);
     }
-  }, [router, allowedRoles]);
+  }, [router, allowedRoles, pathname]);
 
   return authorized ? <>{children}</> : null;
 };
