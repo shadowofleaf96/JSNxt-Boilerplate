@@ -30,11 +30,6 @@ jobs:
       - name: Install client dependencies
         run: npm ci
 
-      - name: Clear Next.js cache
-        run: |
-          cd client
-          rm -rf .next
-
       - name: Build client
         run: npm run build
 
