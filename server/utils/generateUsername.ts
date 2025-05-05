@@ -8,7 +8,6 @@ import User from "../models/Users";
  * @returns A unique username string.
  */
 export async function generateUniqueUsername(name: string): Promise<string> {
-  console.log("Generating username for:", name);
   const baseUsername = name
     .toLowerCase()
     .trim()
@@ -18,7 +17,7 @@ export async function generateUniqueUsername(name: string): Promise<string> {
   let username = baseUsername;
   let counter = 1;
 
-  while (await User.exists({ username })) {
+  while (await User.findOne({ where: { username } })) {
     username = `${baseUsername}_${counter}`;
     counter++;
   }
