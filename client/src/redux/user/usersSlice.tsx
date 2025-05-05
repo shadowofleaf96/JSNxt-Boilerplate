@@ -76,7 +76,7 @@ export const usersSlice = createSlice({
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
         state.currentUser = action.payload;
-        state.loggedInUser = action.payload._id;
+        state.loggedInUser = action.payload.id;
       })
       .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.loading = false;

@@ -1,55 +1,60 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import Joi from 'joi';
-import sequelize from '../config/database';
-import { UserDocument } from '@/types/user.interface';
+import { DataTypes, Model, Optional } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import Joi from "joi";
+import sequelize from "../config/database";
+import { UserDocument } from "@/types/user.interface";
 
-interface UserCreationAttributes extends Optional<UserDocument, 'id' | 'lastActive' | 'isVerified'> {}
+interface UserCreationAttributes
+  extends Optional<UserDocument, "id" | "lastActive" | "isVerified"> {}
 
 export const UserJoiSchema = Joi.object({
-  authProvider: Joi.string().valid('local', 'google').required(),
+  authProvider: Joi.string().valid("local", "google").required(),
   googleId: Joi.string().optional(),
   avatar: Joi.string().required(),
   name: Joi.string().optional(),
   username: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
-  password: Joi.when('authProvider', {
-    is: 'local',
+  password: Joi.when("authProvider", {
+    is: "local",
     then: Joi.string().min(8).required(),
-    otherwise: Joi.string().optional().allow(''),
+    otherwise: Joi.string().optional().allow(""),
   }),
-  role: Joi.string().valid('admin', 'user').required(),
-  status: Joi.string().valid('active', 'inactive').required(),
-  emailToken: Joi.string().allow(null, '').optional(),
+  role: Joi.string().valid("admin", "user").required(),
+  status: Joi.string().valid("active", "inactive").required(),
+  emailToken: Joi.string().allow(null, "").optional(),
   isVerified: Joi.boolean().optional(),
-  resetPasswordToken: Joi.string().allow(null, '').optional(),
+  resetPasswordToken: Joi.string().allow(null, "").optional(),
   resetPasswordExpire: Joi.number().allow(null).optional(),
 });
 
-class User extends Model<UserDocument, UserCreationAttributes> implements UserDocument {
-  public id!: number;
-  public authProvider!: 'local' | 'google';
-  public googleId?: string;
-  public avatar!: string;
-  public name?: string;
-  public username!: string;
-  public email!: string;
-  public password?: string;
-  public role!: 'admin' | 'user';
-  public status!: 'active' | 'inactive';
-  public lastActive!: Date;
-  public emailToken?: string | null;
-  public isVerified!: boolean;
-  public resetPasswordToken?: string | null;
-  public resetPasswordExpire?: number | null;
+class User
+  extends Model<UserDocument, UserCreationAttributes>
+  implements UserDocument
+{
+  declare id: string;
+  declare authProvider: "local" | "google";
+  declare googleId?: string;
+  declare avatar: string;
+  declare name?: string;
+  declare username: string;
+  declare email: string;
+  declare password?: string;
+  declare role: "admin" | "user";
+  declare status: "active" | "inactive";
+  declare lastActive: Date;
+  declare emailToken?: string | null;
+  declare isVerified: boolean;
+  declare resetPasswordToken?: string | null;
+  declare resetPasswordExpire?: number | null;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   public async generateAccessJWT(): Promise<string> {
     return jwt.sign({ id: this.id }, process.env.SECRET_ACCESS_TOKEN!, {
-      expiresIn: '10d'
+      expiresIn: "10d",
     });
   }
 
@@ -61,93 +66,111 @@ class User extends Model<UserDocument, UserCreationAttributes> implements UserDo
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false,
     },
     authProvider: {
-      type: DataTypes.ENUM('local', 'google'),
+      type: DataTypes.ENUM("local", "google"),
       allowNull: false,
-      defaultValue: 'local'
+      defaultValue: "local",
     },
     googleId: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
     avatar: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
     username: {
       type: DataTypes.STRING(30),
-      unique: 'unique_username_constraint',
-      allowNull: false
+      unique: "unique_username_constraint",
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
-      unique: 'unique_email_constraint',
-      allowNull: false
+      unique: "unique_email_constraint",
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
     role: {
-      type: DataTypes.ENUM('admin', 'user'),
-      allowNull: false
+      type: DataTypes.ENUM("admin", "user"),
+      allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM('active', 'inactive'),
-      allowNull: false
+      type: DataTypes.ENUM("active", "inactive"),
+      allowNull: false,
     },
     lastActive: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
     },
     emailToken: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
     resetPasswordToken: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
     resetPasswordExpire: {
       type: DataTypes.BIGINT,
-      allowNull: true
-    }
+      allowNull: true,
+    },
   },
   {
     sequelize,
-    modelName: 'User',
-    tableName: 'users',
+    modelName: "User",
+    tableName: "Users",
     timestamps: true,
     hooks: {
       beforeCreate: async (user: User) => {
-        if (user.authProvider === 'local' && user.password) {
+        if (user.authProvider === "local" && user.password) {
           const salt = await bcrypt.genSalt(12);
           user.password = await bcrypt.hash(user.password, salt);
         }
-        const { error } = UserJoiSchema.validate(user);
+
+        const dataToValidate = {
+          authProvider: user.authProvider,
+          googleId: user.googleId,
+          avatar: user.avatar,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          role: user.role,
+          status: user.status,
+          emailToken: user.emailToken,
+          isVerified: user.isVerified,
+          resetPasswordToken: user.resetPasswordToken,
+          resetPasswordExpire: user.resetPasswordExpire,
+        };
+
+        const { error } = UserJoiSchema.validate(dataToValidate);
         if (error) throw error;
       },
       beforeUpdate: async (user: User) => {
-        if (user.changed('password') && user.password) {
+        if (user.changed("password") && user.password) {
           const salt = await bcrypt.genSalt(12);
           user.password = await bcrypt.hash(user.password, salt);
         }
-      }
-    }
+      },
+    },
   }
 );
 

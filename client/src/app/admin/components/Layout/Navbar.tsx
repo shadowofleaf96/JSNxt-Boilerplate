@@ -118,7 +118,7 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full border-2 border-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
               >
                 <Image
                   width={0}

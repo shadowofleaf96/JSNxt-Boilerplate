@@ -122,8 +122,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
     });
 
     try {
-      if (isEditMode && initialData?._id) {
-        await AxiosConfig.put(`/users/${initialData._id}`, userData);
+      if (isEditMode && initialData?.id) {
+        await AxiosConfig.put(`/users/${initialData.id}`, userData);
         toast.success("User updated successfully!");
       } else {
         await AxiosConfig.post(`/users/create-user`, userData);
@@ -132,7 +132,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
       onClose();
       refreshUsers();
     } catch (error: any) {
-      toast.error("An error occurred. Please try again." + error);
+      console.log(error)
+      toast.error("An error occurred. Please try again." + error.message);
     } finally {
       setIsSubmitting(false);
     }

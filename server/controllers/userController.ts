@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import Blacklist from "../models/Blacklist";
 import * as crypto from "crypto";
-import { OAuth2Client } from "google-auth-library";
+import { auth, OAuth2Client } from "google-auth-library";
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 import sendEmail from "../middleware/sendEmail";
 import { generateUniqueUsername } from "../utils/generateUsername";
@@ -45,7 +45,7 @@ export const createUser = async (
       avatarUrl = getPublicUrl(req.file.path);
     }
 
-    const newUser = new User({
+    await User.create({
       authProvider: "local",
       name,
       username,
@@ -56,8 +56,6 @@ export const createUser = async (
       avatar: avatarUrl,
       isVerified: true,
     });
-
-    await newUser.save();
 
     const loginPath = role === "admin" ? "/admin/login" : "/login";
     const loginUrl = `${process.env.FRONTEND_URL}${loginPath}`;
@@ -125,11 +123,13 @@ export const registerUser = async (
 
       if (req.file) {
         avatarUrl = getPublicUrl(req.file.path);
+      } else {
+        avatarUrl = `${process.env.BACKEND_URL}/public/images/userIcon.png`;
       }
 
       const emailToken = crypto.randomBytes(64).toString("hex");
 
-      const newUser = new User({
+      const newUser = await User.create({
         authProvider: "local",
         email,
         name,
@@ -141,8 +141,6 @@ export const registerUser = async (
         emailToken,
         isVerified: false,
       });
-
-      await newUser.save();
 
       const verifyLink = `${BACKEND_URL}/api/users/verify-email/${emailToken}`;
 
@@ -195,7 +193,7 @@ export const verifyEmail = async (
     user.status = "active";
     await user.save();
 
-    const loginToken = user.generateAccessJWT();
+    const loginToken = await user.generateAccessJWT();
 
     await sendEmail({
       to: user.email,
@@ -276,7 +274,7 @@ export const googleAuth = async (req: Request, res: Response) => {
       });
     }
 
-    const token = user.generateAccessJWT();
+    const token = await user.generateAccessJWT();
     const { password: _, ...userData } = user.get({ plain: true });
 
     if (isNewUser) {
@@ -411,12 +409,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const token = user.generateAccessJWT();
+    const token = await user.generateAccessJWT();
     const { password: _, ...user_data } = user.get({ plain: true });
 
     await sendEmail({
       to: user_data.email,
-      subject: "JSNXT - Verify your email",
+      subject: "JSNXT - New Login Detected",
       html: getLoginAlertTemplate({
         logoUrl: LOGO_URL,
         ipAddress: ipAddress[0],

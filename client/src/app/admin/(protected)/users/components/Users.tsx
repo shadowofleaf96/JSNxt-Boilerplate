@@ -56,7 +56,7 @@ function Users() {
   };
 
   const handleEditUser = (user: User) => {
-    if (user._id === loggedInUserId) {
+    if (user.id === loggedInUserId) {
       toast.error("You cannot edit the currently logged-in user.");
       return;
     }
@@ -113,7 +113,7 @@ function Users() {
     setSelectedUsers((prev) =>
       prev.length === currentItems.length
         ? []
-        : currentItems.map((user) => user._id)
+        : currentItems.map((user) => user.id)
     );
   };
 
@@ -318,13 +318,13 @@ function Users() {
                 </tr>
               ) : (
                 currentItems.map((user) => (
-                  <tr key={user._id}>
+                  <tr key={user.id}>
                     <td className="px-4 py-4 text-sm text-gray-700 whitespace-nowrap">
                       <input
                         type="checkbox"
                         className="text-black border-gray-300 rounded"
-                        onChange={() => handleCheckboxChange(user._id)}
-                        checked={selectedUsers.includes(user._id)}
+                        onChange={() => handleCheckboxChange(user.id)}
+                        checked={selectedUsers.includes(user.id)}
                       />
                     </td>
                     <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap">
@@ -390,7 +390,7 @@ function Users() {
                         <div className="h-auto w-auto">
                           <button
                             className="text-red-600 transition-colors duration-200 hover:text-red-500 focus:outline-none"
-                            onClick={() => openModal(user._id)}
+                            onClick={() => openModal(user.id)}
                           >
                             <FaRegTrashCan size={22} />
                           </button>

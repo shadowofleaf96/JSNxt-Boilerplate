@@ -8,7 +8,7 @@ export interface UserDTO {
 }
 
 export interface UserDocument {
-  id: number;
+  id: string;
   authProvider: 'local' | 'google';
   googleId?: string;
   avatar: string;
