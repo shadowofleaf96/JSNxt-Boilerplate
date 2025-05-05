@@ -42,9 +42,7 @@ jobs:
 
       - name: Build client
         run: npm run build
-        env:
-          NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
-
+        
   server:
     name: Server Checks
     runs-on: ubuntu-latest
