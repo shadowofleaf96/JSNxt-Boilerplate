@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
 import helmet from "helmet";
 import path from "path";
-import connectDB from "./config/database";
+import { connectDB } from "./config/database";
 import useragent from "express-useragent";
 import hpp from "hpp";
 import userRoutes from "./routes/userRoutes";

@@ -1,180 +1,154 @@
-import mongoose, { Document, Schema } from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import Joi from "joi";
-import { UserDocument } from "../types/user.interface";
-import { resetPassword } from "@/controllers/userController";
+import { DataTypes, Model, Optional } from 'sequelize';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import Joi from 'joi';
+import sequelize from '../config/database';
+import { UserDocument } from '@/types/user.interface';
 
-dotenv.config();
+interface UserCreationAttributes extends Optional<UserDocument, 'id' | 'lastActive' | 'isVerified'> {}
 
 export const UserJoiSchema = Joi.object({
-  _id: Joi.any().strip(),
-  authProvider: Joi.string().valid("local", "google").required(),
+  authProvider: Joi.string().valid('local', 'google').required(),
   googleId: Joi.string().optional(),
   avatar: Joi.string().required(),
   name: Joi.string().optional(),
   username: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
-  password: Joi.when("authProvider", {
-    is: "local",
+  password: Joi.when('authProvider', {
+    is: 'local',
     then: Joi.string().min(8).required(),
-    otherwise: Joi.string().optional().allow(""),
+    otherwise: Joi.string().optional().allow(''),
   }),
-  role: Joi.string().valid("admin", "user").required(),
-  status: Joi.string().valid("active", "inactive").required(),
-  lastActive: Joi.date().optional(),
-  emailToken: Joi.string().allow(null, "").optional(),
+  role: Joi.string().valid('admin', 'user').required(),
+  status: Joi.string().valid('active', 'inactive').required(),
+  emailToken: Joi.string().allow(null, '').optional(),
   isVerified: Joi.boolean().optional(),
-  resetPasswordToken: Joi.string().allow(null, "").optional(),
-  resetPasswordExpire: Joi.date().allow(null, "").optional(),
+  resetPasswordToken: Joi.string().allow(null, '').optional(),
+  resetPasswordExpire: Joi.number().allow(null).optional(),
 });
 
-const UserSchema: Schema<UserDocument> = new Schema<UserDocument>(
+class User extends Model<UserDocument, UserCreationAttributes> implements UserDocument {
+  public id!: number;
+  public authProvider!: 'local' | 'google';
+  public googleId?: string;
+  public avatar!: string;
+  public name?: string;
+  public username!: string;
+  public email!: string;
+  public password?: string;
+  public role!: 'admin' | 'user';
+  public status!: 'active' | 'inactive';
+  public lastActive!: Date;
+  public emailToken?: string | null;
+  public isVerified!: boolean;
+  public resetPasswordToken?: string | null;
+  public resetPasswordExpire?: number | null;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+
+  public async generateAccessJWT(): Promise<string> {
+    return jwt.sign({ id: this.id }, process.env.SECRET_ACCESS_TOKEN!, {
+      expiresIn: '10d'
+    });
+  }
+
+  public validPassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password!);
+  }
+}
+
+User.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     authProvider: {
-      type: String,
-      enum: ["local", "google"],
-      default: "local",
-      required: true,
+      type: DataTypes.ENUM('local', 'google'),
+      allowNull: false,
+      defaultValue: 'local'
     },
     googleId: {
-      type: String,
-      unique: true,
-      sparse: true,
+      type: DataTypes.STRING,
+      allowNull: true
     },
     avatar: {
-      type: String,
-      required: true,
+      type: DataTypes.STRING,
+      allowNull: false
     },
     name: {
-      type: String,
-      required: false,
+      type: DataTypes.STRING,
+      allowNull: true
     },
     username: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: function () {
-        return this.authProvider === "local";
-      },
+      type: DataTypes.STRING(30),
+      unique: 'unique_username_constraint',
+      allowNull: false
     },
     email: {
-      type: String,
-      required: true,
-      unique: true,
+      type: DataTypes.STRING,
+      unique: 'unique_email_constraint',
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
     role: {
-      type: String,
-      required: true,
+      type: DataTypes.ENUM('admin', 'user'),
+      allowNull: false
     },
     status: {
-      type: String,
-      required: true,
+      type: DataTypes.ENUM('active', 'inactive'),
+      allowNull: false
     },
     lastActive: {
-      type: Date,
-      default: Date.now,
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
     },
     emailToken: {
-      type: String,
-      required: false,
+      type: DataTypes.STRING,
+      allowNull: true
     },
     isVerified: {
-      type: Boolean,
-      default: false,
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     },
     resetPasswordToken: {
-      type: String,
-      required: false,
+      type: DataTypes.STRING,
+      allowNull: true
     },
     resetPasswordExpire: {
-      type: Number,
-      required: false,
-    },
+      type: DataTypes.BIGINT,
+      allowNull: true
+    }
   },
   {
+    sequelize,
+    modelName: 'User',
+    tableName: 'users',
     timestamps: true,
-    versionKey: false,
-    collection: "User",
+    hooks: {
+      beforeCreate: async (user: User) => {
+        if (user.authProvider === 'local' && user.password) {
+          const salt = await bcrypt.genSalt(12);
+          user.password = await bcrypt.hash(user.password, salt);
+        }
+        const { error } = UserJoiSchema.validate(user);
+        if (error) throw error;
+      },
+      beforeUpdate: async (user: User) => {
+        if (user.changed('password') && user.password) {
+          const salt = await bcrypt.genSalt(12);
+          user.password = await bcrypt.hash(user.password, salt);
+        }
+      }
+    }
   }
 );
-
-UserSchema.pre<UserDocument>("save", async function (next) {
-  try {
-    const validated = await UserJoiSchema.validateAsync(this.toObject(), {
-      stripUnknown: true,
-      allowUnknown: true,
-    });
-
-    Object.assign(this, validated);
-
-    if (!this.isModified("password")) return next();
-
-    const salt = await bcrypt.genSalt(12);
-    this.password = await bcrypt.hash(this.password, salt);
-
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
-
-UserSchema.pre("findOneAndUpdate", async function (next) {
-  try {
-    const update = this.getUpdate() as Partial<UserDocument>;
-
-    if (update.password) {
-      const salt = await bcrypt.genSalt(12);
-      update.password = await bcrypt.hash(update.password, salt);
-    }
-
-    const validated = await UserJoiSchema.validateAsync(update, {
-      allowUnknown: true,
-      presence: "optional",
-    });
-    this.setUpdate(validated);
-
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
-
-UserSchema.pre("updateOne", async function (next) {
-  try {
-    const update = this.getUpdate() as Partial<UserDocument>;
-
-    if (update.password) {
-      const salt = await bcrypt.genSalt(12);
-      update.password = await bcrypt.hash(update.password, salt);
-    }
-
-    const validated = await UserJoiSchema.validateAsync(update, {
-      allowUnknown: true,
-      presence: "optional",
-    });
-    this.setUpdate(validated);
-
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
-
-UserSchema.methods.generateAccessJWT = function (): string {
-  const payload = {
-    id: this._id,
-  };
-
-  return jwt.sign(payload, process.env.SECRET_ACCESS_TOKEN as string, {
-    expiresIn: "10d",
-  });
-};
-
-const User = mongoose.model<UserDocument>("users", UserSchema);
 
 export default User;

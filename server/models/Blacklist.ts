@@ -1,22 +1,38 @@
-import mongoose, { Document, Schema } from "mongoose";
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../config/database';
 
-interface IBlacklist extends Document {
+interface BlacklistAttributes {
+  id?: number;
   token: string;
 }
 
-const BlacklistSchema: Schema<IBlacklist> = new Schema(
+class Blacklist extends Model<BlacklistAttributes> implements BlacklistAttributes {
+  public id!: number;
+  public token!: string;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+Blacklist.init(
   {
-    token: {
-      type: String,
-      required: true,
-      ref: "User",
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
     },
+    token: {
+      type: DataTypes.STRING(512),
+      allowNull: false,
+      unique: true
+    }
   },
   {
-    timestamps: true,
-    versionKey: false,
-    collection: "Blacklist",
+    sequelize,
+    modelName: 'Blacklist',
+    tableName: 'blacklists',
+    timestamps: true
   }
 );
 
-export default mongoose.model<IBlacklist>("Blacklist", BlacklistSchema);
+export default Blacklist;

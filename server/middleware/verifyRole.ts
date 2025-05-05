@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { UserDocument } from "../types/user.interface";
 
 const VerifyRole = (
   req: Request,

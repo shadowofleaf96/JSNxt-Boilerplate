@@ -17,6 +17,7 @@ import {
   passwordChangedTemplate,
   accountVerifiedTemplate,
 } from "../utils/emailTemplates";
+import { Op } from "sequelize";
 
 const BACKEND_URL = process.env.BACKEND_URL;
 const FRONTEND_URL = process.env.FRONTEND_URL;
@@ -31,7 +32,7 @@ export const createUser = async (
     const { name, username, password, email, role, status } = req.body;
     let avatarUrl = null;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       res.status(400).json({
         status: "failed",
@@ -109,7 +110,7 @@ export const registerUser = async (
         return;
       }
 
-      const existingUser = await User.findOne({ email });
+      const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         res.status(400).json({
           status: "failed",
@@ -183,7 +184,7 @@ export const verifyEmail = async (
 ): Promise<void> => {
   try {
     const { token } = req.params;
-    const user = await User.findOne({ emailToken: token });
+    const user = await User.findOne({ where: { emailToken: token } });
     if (!user) {
       res.status(400).send("Invalid or expired token.");
       return;
@@ -245,7 +246,9 @@ export const googleAuth = async (req: Request, res: Response) => {
     }
 
     let user = await User.findOne({
-      $or: [{ email: payload.email }, { googleId: payload.sub }],
+      where: {
+        [Op.or]: [{ email: payload.email }, { googleId: payload.sub }],
+      },
     });
 
     if (user?.authProvider === "local") {
@@ -274,7 +277,7 @@ export const googleAuth = async (req: Request, res: Response) => {
     }
 
     const token = user.generateAccessJWT();
-    const { password: _, ...userData } = user.toObject();
+    const { password: _, ...userData } = user.get({ plain: true });
 
     if (isNewUser) {
       await sendEmail({
@@ -354,11 +357,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const user = await User.findOne({
-      $or: [
-        { email: identifier, role: "user" },
-        { username: identifier, role: "admin" },
-      ],
-    }).select("+password +authProvider");
+      where: {
+        [Op.or]: [
+          { email: identifier, role: "user" },
+          { username: identifier, role: "admin" },
+        ],
+      },
+      attributes: { include: ["password", "authProvider"] },
+    });
 
     if (!user) {
       res.status(401).json({
@@ -382,7 +388,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     if (user.authProvider === "google") {
       res.status(401).json({
         status: "failed",
-        message: "This account was registered with Google. Please use Google Sign-In.",
+        message:
+          "This account was registered with Google. Please use Google Sign-In.",
       });
       return;
     }
@@ -405,7 +412,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const token = user.generateAccessJWT();
-    const { password: _, ...user_data } = user.toObject();
+    const { password: _, ...user_data } = user.get({ plain: true });
 
     await sendEmail({
       to: user_data.email,
@@ -438,7 +445,7 @@ export const getAllUsers = async (
   res: Response
 ): Promise<void> => {
   try {
-    const users = await User.find();
+    const users = await User.findAll();
     res.status(200).json({
       status: "success",
       users,
@@ -459,7 +466,7 @@ export const getUserInfo = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const existingUser = await User.findById(id);
+    const existingUser = await User.findByPk(id);
     if (!existingUser) {
       res.status(404).json({
         status: "failed",
@@ -515,7 +522,7 @@ export const updateUser = async (
       updates.avatar = getPublicUrl(req.file.path);
     }
 
-    const existingUser = await User.findById(id);
+    const existingUser = await User.findByPk(id);
     if (!existingUser) {
       res.status(404).json({
         status: "failed",
@@ -524,18 +531,20 @@ export const updateUser = async (
     }
 
     if (updates.email || updates.username) {
-      const userWithEmail = await User.findOne({ email: updates.email });
+      const userWithEmail = await User.findOne({
+        where: { email: updates.email },
+      });
       const userWithUsername = await User.findOne({
-        username: updates.username,
+        where: { username: updates.username },
       });
 
-      if (userWithEmail && userWithEmail._id.toString() !== id) {
+      if (userWithEmail && userWithEmail.id.toString() !== id) {
         res
           .status(400)
           .json({ message: "Email is already in use by another user" });
       }
 
-      if (userWithUsername && userWithUsername._id.toString() !== id) {
+      if (userWithUsername && userWithUsername.id.toString() !== id) {
         res
           .status(400)
           .json({ message: "Username is already in use by another user" });
@@ -546,9 +555,11 @@ export const updateUser = async (
       delete updates.password;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(id, updates, {
-      new: true,
+    await User.update(updates, {
+      where: { id },
     });
+
+    const updatedUser = await User.findByPk(id);
 
     if (!updatedUser) {
       res.status(500).json({
@@ -577,10 +588,14 @@ export const deleteUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
-    const existingUser = await User.findByIdAndDelete(id);
-    if (!existingUser) {
+    const deletedCount = await User.destroy({
+      where: { id },
+    });
+
+    if (deletedCount === 0) {
       res.status(404).json({
         status: "failed",
         message: "User not found",
@@ -608,7 +623,7 @@ export const forgotPassword = async (
 ): Promise<void> => {
   try {
     const { email, recaptchaToken } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
 
     try {
@@ -688,8 +703,10 @@ export const resetPassword = async (
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     const user = await User.findOne({
-      resetPasswordToken: hashedToken,
-      resetPasswordExpire: { $gt: Date.now() },
+      where: {
+        resetPasswordToken: hashedToken,
+        resetPasswordExpire: { [Op.gt]: Date.now() },
+      },
     });
 
     if (!user) {
@@ -735,7 +752,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const existingToken = await Blacklist.findOne({ token });
+    const existingToken = await Blacklist.findOne({ where: { token } });
     if (existingToken) {
       res.status(401).json({ message: "The session is already terminated." });
       return;
