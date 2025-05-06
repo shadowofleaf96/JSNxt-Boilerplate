@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
     const role = localStorage.getItem("role");
 
     if (!token || !role || !allowedRoles.includes(role)) {
-      if (pathname.startsWith("/admin")) {
+      if (pathname.includes("/admin")) {
         router.push("/admin/login");
       } else {
         router.push("/login");
