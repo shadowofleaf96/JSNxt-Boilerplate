@@ -10,3 +10,11 @@
 .grecaptcha-badge {
   visibility: hidden;
 }
+
+body[dir="rtl"] {
+  margin: 0 1rem 0 0;
+}
+
+body[dir="ltr"] {
+  margin: 0 0 0 1rem;
+}

@@ -1,0 +1,425 @@
+{
+  "faq": {
+    "title": "Foire aux questions",
+    "items": [
+      {
+        "question": "Quel est le meilleur atout de JSNXT ?",
+        "answer": "Il est flexible, rapide et évolutif. JSNXT combine la puissance de Next.js et Express.js dans une solution full-stack."
+      },
+      {
+        "question": "Est-ce adapté à la production ?",
+        "answer": "Absolument. Avec les routes API gérées par Express et le frontend avec Next.js, vous bénéficiez du SSR et de la logique backend au même endroit."
+      }
+    ]
+  },
+  "features": {
+    "subtitle": "Déployez plus rapidement avec JSNXT",
+    "title": "Fonctionnalités pour booster vos applications Next.js",
+    "items": [
+      {
+        "name": "Déploiement instantané.",
+        "description": "Déployez vos applications Next.js rapidement avec des workflows automatisés pour un processus de déploiement fluide.",
+        "icon": "HiCloudArrowUp"
+      },
+      {
+        "name": "Gestion d'état efficace.",
+        "description": "Intégrez la gestion d'état avec des outils comme Redux pour des applications évolutives et maintenables.",
+        "icon": "HiArrowPath"
+      },
+      {
+        "name": "Services d'authentification.",
+        "description": "Garantissez la sécurité de votre application avec des services d'authentification et une authentification par empreinte digitale.",
+        "icon": "HiFingerPrint"
+      },
+      {
+        "name": "API personnalisable.",
+        "description": "Construisez des API puissantes et flexibles avec Express.js pour gérer la logique backend et le flux de données de vos applications Next.js.",
+        "icon": "HiCog6Tooth"
+      },
+      {
+        "name": "Optimisation des performances.",
+        "description": "Améliorez les performances de votre application avec des fonctionnalités intégrées comme le rendu côté serveur et la génération de sites statiques.",
+        "icon": "HiChartBar"
+      },
+      {
+        "name": "Routage personnalisable.",
+        "description": "Contrôlez le routage dans votre application Next.js avec des routes dynamiques et une structure d'URL intuitive.",
+        "icon": "HiRss"
+      }
+    ]
+  },
+  "footer": {
+    "navigation": {
+      "solutions": {
+        "title": "Solutions",
+        "items": [
+          { "name": "Fonctionnalités", "href": "#features" },
+          { "name": "Témoignages", "href": "#testimonials" },
+          { "name": "Tarification", "href": "#pricing" },
+          { "name": "FAQ", "href": "#faq" }
+        ]
+      },
+      "support": {
+        "title": "Support",
+        "items": [
+          { "name": "Centre d'aide", "href": "#" },
+          { "name": "Contactez-nous", "href": "#" },
+          { "name": "État", "href": "#" }
+        ]
+      },
+      "company": {
+        "title": "Entreprise",
+        "items": [
+          { "name": "À propos", "href": "#" },
+          { "name": "Blog", "href": "#" },
+          { "name": "Carrières", "href": "#" }
+        ]
+      },
+      "legal": {
+        "title": "Légal",
+        "items": [
+          { "name": "Confidentialité", "href": "#" },
+          { "name": "Conditions", "href": "#" },
+          { "name": "Sécurité", "href": "#" }
+        ]
+      }
+    },
+    "copyright": "© {{year}} JSNXT. Tous droits réservés."
+  },
+  "header": {
+    "navigation": {
+      "features": "Fonctionnalités",
+      "testimonials": "Témoignages",
+      "pricing": "Tarification",
+      "faq": "FAQ",
+      "github": "GitHub"
+    },
+    "auth": {
+      "login": "Connexion",
+      "logout": "Déconnexion"
+    },
+    "profile": {
+      "title": "Profil"
+    },
+    "ariaLabels": {
+      "company": "JSNXT",
+      "logo": "Logo de l'entreprise",
+      "openMenu": "Ouvrir le menu principal",
+      "closeMenu": "Fermer le menu"
+    },
+    "errors": {
+      "noUser": "Aucun utilisateur n'est actuellement connecté."
+    }
+  },
+  "hero": {
+    "announcement": {
+      "text": "Nouveau : Maintenant avec intégration MongoDB + Authentification",
+      "link": "Voir les nouveautés"
+    },
+    "title": "Lancez votre prochain projet avec JSNXT",
+    "subtitle": "Un boilerplate moderne et évolutif utilisant Next.js, Express.js, TypeScript et Tailwind CSS — conçu pour les développeurs qui privilégient la structure et la vitesse.",
+    "cta": {
+      "docs": "Lire la documentation",
+      "github": "Voir sur GitHub"
+    }
+  },
+  "pricing": {
+    "title": "Tarification",
+    "heading": "Choisissez le bon plan pour votre projet JSNXT",
+    "subheading": "Des plans flexibles adaptés à vos besoins, que vous débutiez ou que vous développiez votre activité.",
+    "cta": "Commencer maintenant",
+    "tiers": [
+      {
+        "name": "Débutant",
+        "id": "tier-starter",
+        "href": "#",
+        "priceMonthly": "19€",
+        "description": "Parfait pour les projets personnels ou les petites applications, avec accès aux fonctionnalités essentielles.",
+        "features": [
+          "1 Projet",
+          "Jusqu'à 10 000 visites mensuelles",
+          "Analytiques de base",
+          "Support par email"
+        ],
+        "featured": false
+      },
+      {
+        "name": "Business",
+        "id": "tier-business",
+        "href": "#",
+        "priceMonthly": "49€",
+        "description": "Idéal pour les équipes en croissance et les entreprises ayant besoin de fonctionnalités avancées et d'un support prioritaire.",
+        "features": [
+          "Projets illimités",
+          "Jusqu'à 100 000 visites mensuelles",
+          "Analytiques avancées",
+          "Support email prioritaire",
+          "Domaine personnalisé",
+          "Intégration avec services tiers"
+        ],
+        "featured": true
+      },
+      {
+        "name": "Entreprise",
+        "id": "tier-enterprise",
+        "href": "#",
+        "priceMonthly": "99€",
+        "description": "Le plan le plus puissant avec infrastructure dédiée, intégrations personnalisées et support personnel.",
+        "features": [
+          "Projets illimités",
+          "Analytiques avancées avec rapports personnalisés",
+          "Intégrations personnalisées avec systèmes d'entreprise"
+        ],
+        "featured": false
+      }
+    ]
+  },
+  "testimonial": {
+    "text": "JSNXT a révolutionné mon flux de travail de développement. En tant que personne qui lance constamment de nouveaux projets, disposer d’un boilerplate bien structuré avec Next.js/Express.js, une authentification intégrée, des gestionnaires d’API et une architecture de composants claire m’a fait gagner un temps précieux. C’est la base idéale pour le prototypage rapide et les applications de niveau production.",
+    "author": "Shadow Of Leaf",
+    "title": "Créateur de JSNXT"
+  },
+  "notfound": {
+    "title": "Page non trouvée",
+    "description": "La page que vous recherchez n'existe pas. Voici quelques liens utiles :",
+    "goBack": "Retour"
+  },
+  "verificationSuccess": {
+    "title": "Email vérifié !",
+    "description": "Connexion automatique en cours..."
+  },
+  "forgot": {
+    "close": "Fermer la fenêtre",
+    "and": "et",
+    "title": "Mot de passe oublié ?",
+    "description": "Saisissez votre adresse email pour recevoir un lien de réinitialisation.",
+    "placeholder": "vous@example.com",
+    "button": "Envoyer le lien de réinitialisation",
+    "success": "Vérifiez votre email pour les instructions de réinitialisation du mot de passe.",
+    "error": "Erreur lors de l'envoi de l'e-mail. Veuillez réessayer plus tard. ",
+    "recaptcha": "Ce site est protégé par reCAPTCHA et la politique de",
+    "privacy": "confidentialité",
+    "terms": "conditions d'utilisation",
+    "apply": "s'appliquent."
+  },
+  "login": {
+    "title": "Connectez-vous à votre compte",
+    "registerPrompt": "Pas encore membre ?",
+    "registerLink": "Créez votre compte",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se connecter",
+    "orContinueWith": "Ou continuer avec",
+    "recaptchaDisclaimer": "Ce site est protégé par reCAPTCHA et les politiques de Google",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "errors": {
+      "emailRequired": "L'email est requis",
+      "invalidEmail": "Veuillez entrer une adresse email valide",
+      "passwordRequired": "Le mot de passe est requis",
+      "passwordMin": "Le mot de passe doit contenir au moins 8 caractères"
+    },
+    "googleLoginFailed": "La connexion avec Google a échoué",
+    "invalidCredentials": "Identifiants invalides. Veuillez réessayer."
+  },
+  "register": {
+    "create_account": "Créez votre compte",
+    "already_have_account": "Vous avez déjà un compte ?",
+    "sign_in_here": "Connectez-vous ici",
+    "name": "Nom",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "placeholder_name": "Jean Dupont",
+    "placeholder_email": "vous@exemple.com",
+    "placeholder_password": "••••••••",
+    "accept_policy": "J'accepte la",
+    "privacy_policy": "politique de confidentialité",
+    "submit": "S'inscrire",
+    "recaptcha_disclaimer": "Ce site est protégé par reCAPTCHA et la politique de confidentialité et les conditions d'utilisation de Google s'appliquent.",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "policy_title": "Politique de confidentialité",
+    "policy_content": {
+      "intro": "Cette politique décrit comment nous collectons, utilisons et divulguons vos informations personnelles lorsque vous utilisez nos services.",
+      "collection": "Nous collectons les informations que vous fournissez directement, ainsi que celles collectées automatiquement lors de l'utilisation.",
+      "use": "Nous utilisons vos informations pour fournir, maintenir et améliorer nos services, et pour vous contacter.",
+      "sharing": "Nous pouvons partager vos informations avec des tiers selon cette politique.",
+      "choices": "Vous pouvez accéder, corriger ou supprimer vos informations personnelles.",
+      "more": "Pour plus de détails, consultez notre politique complète."
+    }
+  },
+  "reset": {
+    "resetPassword": "Réinitialiser le mot de passe",
+    "enterNewPassword": "Entrez un nouveau mot de passe pour votre compte.",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordTooShort": "Le mot de passe doit comporter au moins 6 caractères.",
+    "passwordsDontMatch": "Les mots de passe ne correspondent pas.",
+    "passwordResetSuccess": "Réinitialisation du mot de passe réussie.",
+    "passwordResetError": "Erreur lors de la réinitialisation du mot de passe.",
+    "confirm": "Confirmer"
+  },
+  "verification": {
+    "logoAlt": "Votre entreprise",
+    "title": "Vérifiez votre adresse e-mail !",
+    "message": "Nous vous avons envoyé un e-mail de vérification. Veuillez vérifier votre boîte de réception et valider votre compte.",
+    "back": "Retour à la connexion"
+  },
+  "Dashboard": {
+    "title": "Tableau de bord des utilisateurs",
+    "totalUsers": "Utilisateurs totaux",
+    "activeUsers": "Utilisateurs actifs",
+    "recentlyActive": "Activité récente",
+    "lastActive": "Dernière activité :",
+    "usersRegistered": "Utilisateurs enregistrés",
+    "userRegistrationsByMonth": "Inscriptions des utilisateurs par mois",
+    "errorFetch": "Erreur lors de la récupération des données utilisateurs"
+  },
+  "users": {
+    "userDetails": "Détails de l'utilisateur",
+    "addUser": "Ajouter un utilisateur",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "authProvider": "Fournisseur d'authentification",
+    "username": "Nom d'utilisateur",
+    "name": "Nom",
+    "email": "Email",
+    "role": "Rôle",
+    "status": "Statut",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "confirmDeleteTitle": "Supprimer l'utilisateur",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
+    "confirmBulkDeleteTitle": "Supprimer des utilisateurs",
+    "confirmBulkDelete": "Êtes-vous sûr de vouloir supprimer les utilisateurs sélectionnés ?",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "deleteSuccess": "Utilisateur supprimé avec succès",
+    "bulkDeleteSuccess": "Utilisateurs supprimés avec succès",
+    "deleteError": "Erreur lors de la suppression de l'utilisateur",
+    "currentUserError": "Vous ne pouvez pas modifier l'utilisateur actuellement connecté"
+  },
+  "userForm": {
+    "form": {
+      "addUser": "Ajouter un utilisateur",
+      "editUser": "Modifier l'utilisateur"
+    },
+    "fields": {
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "email": "E-mail",
+      "name": "Nom",
+      "role": "Rôle",
+      "status": "Statut",
+      "avatar": "Avatar"
+    },
+    "placeholders": {
+      "username": "ex. johndoe",
+      "password": "Entrez le mot de passe",
+      "passwordUnchanged": "Laissez vide pour conserver",
+      "email": "ex. vous@example.com",
+      "name": "ex. Jean Dupont"
+    },
+    "buttons": {
+      "chooseFile": "Choisir le fichier",
+      "close": "Fermer",
+      "add": "Ajouter",
+      "update": "Mettre à jour"
+    },
+    "roles": {
+      "user": "Utilisateur",
+      "admin": "Administrateur",
+      "manager": "Gestionnaire",
+      "other": "Autre"
+    },
+    "statuses": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "notifications": {
+      "added": "Utilisateur ajouté avec succès !",
+      "updated": "Utilisateur mis à jour avec succès !"
+    },
+    "errors": {
+      "generic": "Une erreur est survenue. Veuillez réessayer. ",
+      "invalidFile": "Format de fichier invalide.",
+      "fileSize": "La taille doit être inférieure à 5 Mo.",
+      "nameMin": "Le nom doit comporter au moins 3 caractères.",
+      "nameMax": "Le nom doit comporter moins de 20 caractères.",
+      "usernameMin": "Le nom d'utilisateur doit comporter au moins 3 caractères.",
+      "usernameMax": "Le nom d'utilisateur doit comporter moins de 20 caractères.",
+      "passwordMin": "Le mot de passe doit comporter au moins 6 caractères.",
+      "passwordMax": "Le mot de passe doit comporter moins de 20 caractères.",
+      "invalidEmail": "Veuillez entrer un e-mail valide.",
+      "roleRequired": "Le rôle est requis."
+    },
+    "alt": {
+      "newAvatar": "Aperçu du nouvel avatar",
+      "currentAvatar": "Avatar actuel",
+      "noAvatar": "Pas d'avatar"
+    }
+  },
+  "navbar": {
+    "dashboard": "Tableau de bord",
+    "users": "Utilisateurs",
+    "placeholders": {
+      "search": "Rechercher..."
+    },
+    "buttons": {
+      "logout": "Se déconnecter",
+      "close": "Fermer le menu"
+    },
+    "errors": {
+      "notLoggedIn": "Aucun utilisateur n'est connecté.",
+      "generic": "Une erreur est survenue."
+    },
+    "alt": {
+      "userAvatar": "Avatar de l'utilisateur",
+      "logo": "Logo de la marque"
+    }
+  },
+  "confirmationModal": {
+    "confirm": {
+      "modalLabel": "Fenêtre de confirmation",
+      "title": "Confirmation de suppression",
+      "deleteSingle": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+      "deleteBulk": "Êtes-vous sûr de vouloir supprimer l’élément ou les éléments sélectionnés ?",
+      "deleteVariant": "Êtes-vous sûr de vouloir supprimer cette variante ?"
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    }
+  },
+  "adminLogin": {
+    "login": {
+      "title": "Connexion",
+      "submit": "Se connecter",
+      "securityPrompt": "Pour des raisons de sécurité, veuillez :",
+      "secureTip1": "* Utiliser un mot de passe fort",
+      "secureTip2": "* Ne pas réutiliser les mots de passe",
+      "secureTip3": "* Garder vos informations privées"
+    },
+    "fields": {
+      "username": "Nom d’utilisateur",
+      "password": "Mot de passe"
+    },
+    "errors": {
+      "invalidFormat": "Format des identifiants invalide",
+      "invalidCredentials": "Identifiants invalides. Veuillez réessayer."
+    },
+    "alt": {
+      "logo": "Logo de l’entreprise"
+    },
+    "recaptcha": {
+      "intro": "Ce site est protégé par reCAPTCHA et la politique de",
+      "privacy": "confidentialité",
+      "and": "et",
+      "terms": "conditions d’utilisation",
+      "apply": "s’appliquent."
+    }
+  }
+}
