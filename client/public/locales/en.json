@@ -1,0 +1,425 @@
+{
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      {
+        "question": "What’s the best thing about JSNXT?",
+        "answer": "It’s flexible, fast, and scalable. JSNXT combines the power of Next.js and Express.js into one full-stack solution."
+      },
+      {
+        "question": "Is this suitable for production?",
+        "answer": "Absolutely. With API routes handled via Express and frontend via Next.js, you get SSR and backend logic in one place."
+      }
+    ]
+  },
+  "features": {
+    "subtitle": "Deploy faster with JSNXT",
+    "title": "Features to boost your Next.js apps",
+    "items": [
+      {
+        "name": "Instant deployment.",
+        "description": "Deploy your Next.js apps quickly with automated workflows, ensuring a smooth deployment process.",
+        "icon": "HiCloudArrowUp"
+      },
+      {
+        "name": "Efficient state management.",
+        "description": "Integrate state management with tools like Redux for scalable and maintainable apps.",
+        "icon": "HiArrowPath"
+      },
+      {
+        "name": "Authentication services.",
+        "description": "Ensure your application’s security with authentication services and fingerprint authentication.",
+        "icon": "HiFingerPrint"
+      },
+      {
+        "name": "Customizable API.",
+        "description": "Build powerful and flexible APIs using Express.js to handle backend logic and data flow for your Next.js applications.",
+        "icon": "HiCog6Tooth"
+      },
+      {
+        "name": "Performance optimization.",
+        "description": "Boost your app's performance with built-in features like server-side rendering and static site generation.",
+        "icon": "HiChartBar"
+      },
+      {
+        "name": "Customizable routing.",
+        "description": "Take control of routing in your Next.js application with dynamic routes and an intuitive URL structure.",
+        "icon": "HiRss"
+      }
+    ]
+  },
+  "footer": {
+    "navigation": {
+      "solutions": {
+        "title": "Solutions",
+        "items": [
+          { "name": "Features", "href": "#features" },
+          { "name": "Testimonials", "href": "#testimonials" },
+          { "name": "Pricing", "href": "#pricing" },
+          { "name": "FAQ", "href": "#faq" }
+        ]
+      },
+      "support": {
+        "title": "Support",
+        "items": [
+          { "name": "Help Center", "href": "#" },
+          { "name": "Contact Us", "href": "#" },
+          { "name": "Status", "href": "#" }
+        ]
+      },
+      "company": {
+        "title": "Company",
+        "items": [
+          { "name": "About", "href": "#" },
+          { "name": "Blog", "href": "#" },
+          { "name": "Careers", "href": "#" }
+        ]
+      },
+      "legal": {
+        "title": "Legal",
+        "items": [
+          { "name": "Privacy", "href": "#" },
+          { "name": "Terms", "href": "#" },
+          { "name": "Security", "href": "#" }
+        ]
+      }
+    },
+    "copyright": "© {{year}} JSNXT. All rights reserved."
+  },
+  "header": {
+    "navigation": {
+      "features": "Features",
+      "testimonials": "Testimonials",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "github": "GitHub"
+    },
+    "auth": {
+      "login": "Log in",
+      "logout": "Logout"
+    },
+    "profile": {
+      "title": "Profile"
+    },
+    "ariaLabels": {
+      "company": "JSNXT",
+      "logo": "Company logo",
+      "openMenu": "Open main menu",
+      "closeMenu": "Close menu"
+    },
+    "errors": {
+      "noUser": "No user is currently logged in."
+    }
+  },
+  "hero": {
+    "announcement": {
+      "text": "New: Now with MongoDB + Auth integration.",
+      "link": "See what’s new"
+    },
+    "title": "Kickstart your next project with JSNXT",
+    "subtitle": "A modern and scalable boilerplate using Next.js, Express.js, TypeScript, and Tailwind CSS — built for developers who value structure and speed.",
+    "cta": {
+      "docs": "Read the Docs",
+      "github": "View on GitHub"
+    }
+  },
+  "pricing": {
+    "title": "Pricing",
+    "heading": "Choose the right plan for your JSNXT project",
+    "subheading": "Flexible plans to suit your needs, whether you're just starting or scaling up.",
+    "cta": "Get started today",
+    "tiers": [
+      {
+        "name": "Starter",
+        "id": "tier-starter",
+        "href": "#",
+        "priceMonthly": "$19",
+        "description": "Perfect for personal projects or small apps, with access to essential features.",
+        "features": [
+          "1 Project",
+          "Up to 10,000 monthly visits",
+          "Basic analytics",
+          "Email support"
+        ],
+        "featured": false
+      },
+      {
+        "name": "Business",
+        "id": "tier-business",
+        "href": "#",
+        "priceMonthly": "$49",
+        "description": "Ideal for growing teams and businesses that need advanced features and priority support.",
+        "features": [
+          "Unlimited Projects",
+          "Up to 100,000 monthly visits",
+          "Advanced analytics",
+          "Priority email support",
+          "Custom domain",
+          "Integration with third-party services"
+        ],
+        "featured": true
+      },
+      {
+        "name": "Enterprise",
+        "id": "tier-enterprise",
+        "href": "#",
+        "priceMonthly": "$99",
+        "description": "The most powerful plan with dedicated infrastructure, custom integrations, and personal support.",
+        "features": [
+          "Unlimited Projects",
+          "Advanced analytics with custom reports",
+          "Custom integrations with enterprise systems"
+        ],
+        "featured": false
+      }
+    ]
+  },
+  "testimonial": {
+    "text": "JSNXT has been a game-changer for my development workflow. As someone who constantly spins up new projects, having a well-structured Next.js/Express.js boilerplate with integrated authentication, API handlers, and a clean component architecture has saved me countless hours. It's the perfect foundation for both rapid prototyping and production-grade applications.",
+    "author": "Shadow Of Leaf",
+    "title": "Creator of JSNXT"
+  },
+  "notfound": {
+    "title": "Page not found",
+    "description": "The page you are looking for doesn't exist. Here are some helpful links:",
+    "goBack": "Go back"
+  },
+  "verificationSuccess": {
+    "title": "Email Verified!",
+    "description": "Logging you in automatically..."
+  },
+  "forgot": {
+    "close": "Close modal",
+    "and": "and",
+    "title": "Forgot your password?",
+    "description": "Enter your email address to receive a password reset link.",
+    "placeholder": "you@example.com",
+    "button": "Send Reset Link",
+    "success": "Check your email for password reset instructions.",
+    "error": "Error sending reset email. Please try again later. ",
+    "recaptcha": "This site is protected by reCAPTCHA and the Google",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "apply": "apply."
+  },
+  "login": {
+    "title": "Connectez-vous à votre compte",
+    "registerPrompt": "Pas encore membre ?",
+    "registerLink": "Créez votre compte",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se connecter",
+    "orContinueWith": "Ou continuer avec",
+    "recaptchaDisclaimer": "Ce site est protégé par reCAPTCHA et les politiques de Google",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "errors": {
+      "emailRequired": "L'email est requis",
+      "invalidEmail": "Veuillez entrer une adresse email valide",
+      "passwordRequired": "Le mot de passe est requis",
+      "passwordMin": "Le mot de passe doit contenir au moins 8 caractères"
+    },
+    "googleLoginFailed": "La connexion avec Google a échoué",
+    "invalidCredentials": "Identifiants invalides. Veuillez réessayer."
+  },
+  "register": {
+    "create_account": "Create your account",
+    "already_have_account": "Already have an account?",
+    "sign_in_here": "Sign in here",
+    "name": "Name",
+    "email": "Email address",
+    "password": "Password",
+    "placeholder_name": "John Doe",
+    "placeholder_email": "you@example.com",
+    "placeholder_password": "••••••••",
+    "accept_policy": "I accept the",
+    "privacy_policy": "privacy policy",
+    "submit": "Register",
+    "recaptcha_disclaimer": "This site is protected by reCAPTCHA and the Google",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "policy_title": "Privacy Policy",
+    "policy_content": {
+      "intro": "This Privacy Policy describes how we collect, use, and disclose your personal information when you use our services.",
+      "collection": "We collect information you provide directly to us, such as when you create an account, and information automatically collected when you use our services.",
+      "use": "We use your information to provide, maintain, and improve our services, communicate with you, and for other purposes described in this policy.",
+      "sharing": "We may share your information with third parties as described in this policy, including service providers and as required by law.",
+      "choices": "You have choices regarding your information, including accessing, correcting, or deleting your personal information.",
+      "more": "For more details, please refer to our full privacy policy."
+    }
+  },
+  "reset": {
+    "resetPassword": "Reset Password",
+    "enterNewPassword": "Enter a new password for your account.",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "passwordTooShort": "Password must be at least 6 characters long.",
+    "passwordsDontMatch": "Passwords do not match.",
+    "passwordResetSuccess": "Password reset successfully.",
+    "passwordResetError": "Error resetting password.",
+    "confirm": "Confirm"
+  },
+  "verification": {
+    "logoAlt": "Your Company",
+    "title": "Verify your email!",
+    "message": "We have sent you a verification email. Please check your inbox and verify your account.",
+    "back": "Back to Login"
+  },
+  "Dashboard": {
+    "title": "Users Dashboard",
+    "totalUsers": "Total Users",
+    "activeUsers": "Active Users",
+    "recentlyActive": "Recently Active",
+    "lastActive": "Last active:",
+    "usersRegistered": "Users Registered",
+    "userRegistrationsByMonth": "User Registrations by Month",
+    "errorFetch": "Error fetching user data"
+  },
+  "users": {
+    "userDetails": "User Details",
+    "addUser": "Add User",
+    "delete": "Delete",
+    "edit": "Edit",
+    "authProvider": "Auth Provider",
+    "username": "Username",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "previous": "Previous",
+    "next": "Next",
+    "confirmDeleteTitle": "Delete User",
+    "confirmDelete": "Are you sure you want to delete this user?",
+    "confirmBulkDeleteTitle": "Delete Users",
+    "confirmBulkDelete": "Are you sure you want to delete selected users?",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "deleteSuccess": "User deleted successfully",
+    "bulkDeleteSuccess": "Users deleted successfully",
+    "deleteError": "Error deleting user",
+    "currentUserError": "You cannot modify the currently logged-in user"
+  },
+  "userForm": {
+    "form": {
+      "addUser": "Add User",
+      "editUser": "Edit User"
+    },
+    "fields": {
+      "username": "Username",
+      "password": "Password",
+      "email": "Email",
+      "name": "Name",
+      "role": "Role",
+      "status": "Status",
+      "avatar": "Avatar"
+    },
+    "placeholders": {
+      "username": "e.g. johndoe",
+      "password": "Enter password",
+      "passwordUnchanged": "Leave blank to keep unchanged",
+      "email": "e.g. you@example.com",
+      "name": "e.g. John Doe"
+    },
+    "buttons": {
+      "chooseFile": "Choose File",
+      "close": "Close",
+      "add": "Add",
+      "update": "Update"
+    },
+    "roles": {
+      "user": "User",
+      "admin": "Admin",
+      "manager": "Manager",
+      "other": "Other"
+    },
+    "statuses": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "notifications": {
+      "added": "User added successfully!",
+      "updated": "User updated successfully!"
+    },
+    "errors": {
+      "generic": "An error occurred. Please try again. ",
+      "invalidFile": "Invalid file format.",
+      "fileSize": "File size should be less than 5MB.",
+      "nameMin": "Name must be at least 3 characters.",
+      "nameMax": "Name must be less than 20 characters.",
+      "usernameMin": "Username must be at least 3 characters.",
+      "usernameMax": "Username must be less than 20 characters.",
+      "passwordMin": "Password must be at least 6 characters.",
+      "passwordMax": "Password must be less than 20 characters.",
+      "invalidEmail": "Please enter a valid email.",
+      "roleRequired": "Role is required."
+    },
+    "alt": {
+      "newAvatar": "New avatar preview",
+      "currentAvatar": "Current avatar",
+      "noAvatar": "No avatar"
+    }
+  },
+  "navbar": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "placeholders": {
+      "search": "Search..."
+    },
+    "buttons": {
+      "logout": "Logout",
+      "close": "Close sidebar"
+    },
+    "errors": {
+      "notLoggedIn": "No user is currently logged in.",
+      "generic": "An error occurred."
+    },
+    "alt": {
+      "userAvatar": "User Avatar",
+      "logo": "Brand Logo"
+    }
+  },
+  "confirmationModal": {
+    "confirm": {
+      "modalLabel": "Confirmation Modal",
+      "title": "Delete Confirmation",
+      "deleteSingle": "Are you sure you want to delete this element?",
+      "deleteBulk": "Are you sure you want to delete the selected element or elements?",
+      "deleteVariant": "Are you sure you want to delete this variant?"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
+  },
+  "adminLogin": {
+    "login": {
+      "title": "Login",
+      "submit": "Sign In",
+      "securityPrompt": "For security reasons, please:",
+      "secureTip1": "* Use a strong password",
+      "secureTip2": "* Don't reuse passwords",
+      "secureTip3": "* Keep your credentials private"
+    },
+    "fields": {
+      "username": "Username",
+      "password": "Password"
+    },
+    "errors": {
+      "invalidFormat": "Invalid credentials format",
+      "invalidCredentials": "Invalid credentials. Please try again."
+    },
+    "alt": {
+      "logo": "Company Logo"
+    },
+    "recaptcha": {
+      "intro": "This site is protected by reCAPTCHA and the Google",
+      "privacy": "Privacy Policy",
+      "and": "and",
+      "terms": "Terms of Service",
+      "apply": "apply."
+    }
+  }
+}
