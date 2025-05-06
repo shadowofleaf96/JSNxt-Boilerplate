@@ -31,7 +31,7 @@ export default async function RootLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   const { resources } = await initTranslations(locale, i18nNamespaces);
@@ -45,25 +45,25 @@ export default async function RootLayout({
           }
         `}</style>
       </head>
-      <ReduxProvider>
-        <ReCaptchaProvider
-          reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
-        >
-          <GoogleOAuthProvider
-            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
+      <body className={poppins.variable}>
+        <ReduxProvider>
+          <ReCaptchaProvider
+            reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
           >
-            <TranslationProvider
-              locale={locale}
-              resources={resources}
-              namespaces={i18nNamespaces}
+            <GoogleOAuthProvider
+              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
             >
-              <body className={poppins.variable}>
+              <TranslationProvider
+                locale={locale}
+                resources={resources}
+                namespaces={i18nNamespaces}
+              >
                 <ToastProvider>{children}</ToastProvider>
-              </body>
-            </TranslationProvider>
-          </GoogleOAuthProvider>
-        </ReCaptchaProvider>
-      </ReduxProvider>
+              </TranslationProvider>
+            </GoogleOAuthProvider>
+          </ReCaptchaProvider>
+        </ReduxProvider>
+      </body>
     </html>
   );
 }
