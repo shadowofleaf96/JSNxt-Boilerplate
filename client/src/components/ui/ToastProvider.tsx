@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
-import { ToastContainer, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { ReactNode } from 'react';
+import { ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ToastProviderProps {
   children: ReactNode;

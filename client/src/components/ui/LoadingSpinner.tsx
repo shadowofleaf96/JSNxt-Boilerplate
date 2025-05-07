@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface LoadingSpinnerProps {
   size?: number;
@@ -7,7 +7,7 @@ interface LoadingSpinnerProps {
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 12,
-  className = "",
+  className = '',
 }) => {
   return (
     <svg

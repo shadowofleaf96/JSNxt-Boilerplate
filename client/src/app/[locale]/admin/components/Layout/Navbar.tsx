@@ -1,17 +1,17 @@
-"use client";
-import React, { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
-import { fetchCurrentUser } from "@/redux/user/usersSlice";
-import { FiUser, FiLogOut } from "react-icons/fi";
-import { IoMenu } from "react-icons/io5";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import { toast } from "react-toastify";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import Image from "next/image";
-import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
-import { useTranslation } from "next-i18next";
+'use client';
+import React, { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchCurrentUser } from '@/redux/user/usersSlice';
+import { FiUser, FiLogOut } from 'react-icons/fi';
+import { IoMenu } from 'react-icons/io5';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { toast } from 'react-toastify';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import Image from 'next/image';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
+import { useTranslation } from 'next-i18next';
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -44,29 +44,29 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
       }
     };
     if (dropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dropdownOpen]);
 
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error(t("navbar.errors.notLoggedIn"));
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error(t('navbar.errors.notLoggedIn'));
 
       await AxiosConfig.post(
         `/users/logout`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      router.push("/admin/login");
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      router.push('/admin/login');
     } catch (err: any) {
-      toast.error(err.response?.data?.message || t("navbar.errors.generic"));
+      toast.error(err.response?.data?.message || t('navbar.errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -107,7 +107,7 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
               <input
                 type="text"
                 className="w-full ps-10 pe-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                placeholder={t("navbar.placeholders.search")}
+                placeholder={t('navbar.placeholders.search')}
               />
             </div>
           </div>
@@ -119,8 +119,6 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
           {userLoading ? (
             <LoadingSpinner size={5} />
           ) : currentUser ? (
-
-            
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -131,7 +129,7 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
                   height={36}
                   className="h-9 w-9 rounded-full object-cover ring-2 ring-white"
                   src={currentUser.avatar}
-                  alt={t("navbar.alt.userAvatar")}
+                  alt={t('navbar.alt.userAvatar')}
                 />
               </button>
 
@@ -152,7 +150,7 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
                     ) : (
                       <>
                         <FiLogOut className="flex-shrink-0" />
-                        <span>{t("navbar.buttons.logout")}</span>
+                        <span>{t('navbar.buttons.logout')}</span>
                       </>
                     )}
                   </button>

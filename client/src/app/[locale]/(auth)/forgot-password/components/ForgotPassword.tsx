@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import { toast } from "react-toastify";
-import { useReCaptcha } from "next-recaptcha-v3";
-import { IoClose } from "react-icons/io5";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import Image from "next/image";
-import { useTranslation } from "react-i18next";
+import React, { useState } from 'react';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import { toast } from 'react-toastify';
+import { useReCaptcha } from 'next-recaptcha-v3';
+import { IoClose } from 'react-icons/io5';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const { executeRecaptcha } = useReCaptcha();
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
@@ -27,18 +27,18 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
     e.preventDefault();
     setLoading(true);
     try {
-      const recaptchaToken = await executeRecaptcha("form_submit");
+      const recaptchaToken = await executeRecaptcha('form_submit');
 
-      await AxiosConfig.post("/users/forgot-password", {
+      await AxiosConfig.post('/users/forgot-password', {
         email,
         recaptchaToken,
       });
-      toast.success(t("forgot.success"));
-      setEmail("");
+      toast.success(t('forgot.success'));
+      setEmail('');
       onClose();
     } catch (error: any) {
       console.error(error);
-      toast.error(t("forgot.error") + error.message);
+      toast.error(t('forgot.error') + error.message);
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
         <button
           onClick={onClose}
           className="absolute top-3 right-4 text-gray-500 hover:text-black text-2xl cursor-pointer"
-          aria-label={t("close")}
+          aria-label={t('close')}
         >
           <IoClose size={24} />
         </button>
@@ -69,16 +69,16 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
           />
         </div>
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          {t("forgot.title")}
+          {t('forgot.title')}
         </h2>
         <p className="text-sm text-center text-gray-600 mb-4">
-          {t("forgot.description")}
+          {t('forgot.description')}
         </p>
         <form onSubmit={handleSubmit} className="space-y-5">
           <input
             type="email"
             required
-            placeholder={t("forgot.placeholder")}
+            placeholder={t('forgot.placeholder')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition"
@@ -88,16 +88,16 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             disabled={loading}
             className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
           >
-            {loading ? <LoadingSpinner size={5} /> : t("forgot.button")}
+            {loading ? <LoadingSpinner size={5} /> : t('forgot.button')}
           </button>
           <p className="text-xs text-center text-gray-500 mt-6">
-            {t("register.recaptcha_disclaimer")}{" "}
+            {t('register.recaptcha_disclaimer')}{' '}
             <a href="https://policies.google.com/privacy" className="underline">
-              {t("register.privacy")}
-            </a>{" "}
-            &{" "}
+              {t('register.privacy')}
+            </a>{' '}
+            &{' '}
             <a href="https://policies.google.com/terms" className="underline">
-              {t("register.terms")}
+              {t('register.terms')}
             </a>
           </p>
         </form>

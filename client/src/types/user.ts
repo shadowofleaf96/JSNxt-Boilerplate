@@ -1,6 +1,6 @@
 export interface User {
   _id: string;
-  authProvider: "local" | "google";
+  authProvider: 'local' | 'google';
   avatar: string;
   username: string;
   name: string;

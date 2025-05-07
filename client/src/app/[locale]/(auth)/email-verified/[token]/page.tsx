@@ -1,5 +1,5 @@
-import React from "react";
-import VerificationSuccess from "./components/VerificationSuccess";
+import React from 'react';
+import VerificationSuccess from './components/VerificationSuccess';
 
 function VerificationSuccessPage() {
   return <VerificationSuccess />;

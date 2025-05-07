@@ -1,29 +1,29 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import { toast } from "react-toastify";
-import { useReCaptcha } from "next-recaptcha-v3";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import DOMPurify from "dompurify";
-import Image from "next/image";
-import { useTranslation } from "next-i18next";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { toast } from 'react-toastify';
+import { useReCaptcha } from 'next-recaptcha-v3';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import DOMPurify from 'dompurify';
+import Image from 'next/image';
+import { useTranslation } from 'next-i18next';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const { executeRecaptcha } = useReCaptcha();
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string>('');
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
 
-    if (token && role === "admin") {
-      router.push("/admin/dashboard");
+    if (token && role === 'admin') {
+      router.push('/admin/dashboard');
     }
   }, [router]);
 
@@ -45,15 +45,15 @@ const Login: React.FC = () => {
     const sanitizedPassword = sanitizeInput(password);
 
     if (!validateCredentials()) {
-      setError(t("adminLogin.errors.invalidFormat"));
+      setError(t('adminLogin.errors.invalidFormat'));
       return;
     }
 
     try {
       setLoading(true);
-      setError("");
+      setError('');
 
-      const recaptchaToken = await executeRecaptcha("form_submit");
+      const recaptchaToken = await executeRecaptcha('form_submit');
 
       const response = await AxiosConfig.post<{
         data: any;
@@ -66,19 +66,19 @@ const Login: React.FC = () => {
 
       const respdata = response.data.data;
 
-      if (respdata.role === "admin") {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("role", respdata.role);
-        router.push("/admin/dashboard");
+      if (respdata.role === 'admin') {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', respdata.role);
+        router.push('/admin/dashboard');
       } else {
         setLoading(false);
-        toast.error(t("adminLogin.errors.invalidCredentials"));
+        toast.error(t('adminLogin.errors.invalidCredentials'));
         return;
       }
     } catch (err: any) {
       setLoading(false);
       console.log(err);
-      const message = t("adminLogin.errors.invalidCredentials");
+      const message = t('adminLogin.errors.invalidCredentials');
       toast.error(message);
       setError(message);
     }
@@ -101,13 +101,13 @@ const Login: React.FC = () => {
           />
         </div>
         <h1 className="text-2xl font-bold flex justify-center text-gray-800 my-4">
-          {t("adminLogin.login.title")}
+          {t('adminLogin.login.title')}
         </h1>
 
         <form className="mt-6" onSubmit={handleLogin}>
           <div>
             <label htmlFor="username" className="block text-sm text-gray-800">
-              {t("adminLogin.fields.username")}
+              {t('adminLogin.fields.username')}
             </label>
             <input
               type="text"
@@ -119,7 +119,7 @@ const Login: React.FC = () => {
               value={username}
               autoComplete="username"
               onChange={(e) =>
-                setUsername(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))
+                setUsername(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))
               }
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
@@ -127,7 +127,7 @@ const Login: React.FC = () => {
 
           <div className="mt-4">
             <label htmlFor="password" className="block text-sm text-gray-800">
-              {t("adminLogin.fields.password")}
+              {t('adminLogin.fields.password')}
             </label>
             <input
               type="password"
@@ -157,30 +157,30 @@ const Login: React.FC = () => {
               {loading ? (
                 <LoadingSpinner size={6} />
               ) : (
-                t("adminLogin.login.submit")
+                t('adminLogin.login.submit')
               )}
             </button>
           </div>
         </form>
 
         <div className="mt-4 text-left text-sm text-gray-600">
-          {t("adminLogin.login.securityPrompt")}
+          {t('adminLogin.login.securityPrompt')}
           <ul className="list-disc list-inside text-left mt-2">
-            {t("adminLogin.login.secureTip1")}
+            {t('adminLogin.login.secureTip1')}
             <br />
-            {t("adminLogin.login.secureTip2")}
+            {t('adminLogin.login.secureTip2')}
             <br />
-            {t("adminLogin.login.secureTip3")}
+            {t('adminLogin.login.secureTip3')}
           </ul>
         </div>
         <p className="mt-6 text-xs text-gray-500 text-center">
-          {t("register.recaptcha_disclaimer")}{" "}
+          {t('register.recaptcha_disclaimer')}{' '}
           <a href="https://policies.google.com/privacy" className="underline">
-            {t("register.privacy")}
-          </a>{" "}
-          &{" "}
+            {t('register.privacy')}
+          </a>{' '}
+          &{' '}
           <a href="https://policies.google.com/terms" className="underline">
-            {t("register.terms")}
+            {t('register.terms')}
           </a>
         </p>
       </div>

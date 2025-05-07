@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/redux/store";
-import { fetchUsers } from "@/redux/user/usersSlice";
-import { FaRegTrashCan, FaPlus } from "react-icons/fa6";
-import { FaRegEdit } from "react-icons/fa";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import AddUserForm from "./UsersForm";
-import { User } from "@/types/user";
-import { toast } from "react-toastify";
-import Error from "@/app/[locale]/admin/components/Error/Error";
-import { useTranslation } from "next-i18next";
-import ConfirmationModal from "@/app/[locale]/admin/components/Utils/ConfirmationModal";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import Image from "next/image";
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@/redux/store';
+import { fetchUsers } from '@/redux/user/usersSlice';
+import { FaRegTrashCan, FaPlus } from 'react-icons/fa6';
+import { FaRegEdit } from 'react-icons/fa';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import AddUserForm from './UsersForm';
+import { User } from '@/types/user';
+import { toast } from 'react-toastify';
+import Error from '@/app/[locale]/admin/components/Error/Error';
+import { useTranslation } from 'next-i18next';
+import ConfirmationModal from '@/app/[locale]/admin/components/Utils/ConfirmationModal';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import Image from 'next/image';
 
 interface SortConfig {
   key: keyof User | null;
-  direction: "ascending" | "descending";
+  direction: 'ascending' | 'descending';
 }
 
 function Users() {
@@ -31,7 +31,7 @@ function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     key: null,
-    direction: "ascending",
+    direction: 'ascending',
   });
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isBulkDelete, setIsBulkDelete] = useState(false);
@@ -41,7 +41,7 @@ function Users() {
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const loggedInUserId = "sampleLoggedInUserId";
+  const loggedInUserId = 'sampleLoggedInUserId';
   const itemsPerPage = 5;
 
   const fetchNewUsers = useCallback(() => {
@@ -59,7 +59,7 @@ function Users() {
 
   const handleEditUser = (user: User) => {
     if (user._id === loggedInUserId) {
-      toast.error(t("users.currentUserError"));
+      toast.error(t('users.currentUserError'));
       return;
     }
     setEditingUser(user);
@@ -68,7 +68,7 @@ function Users() {
 
   const openModal = (userId: string) => {
     if (userId === loggedInUserId) {
-      toast.error(t("users.currentUserError"));
+      toast.error(t('users.currentUserError'));
       return;
     }
     setModalIsOpen(true);
@@ -88,17 +88,17 @@ function Users() {
   };
 
   const handleDeleteUser = async () => {
-    if (!userToDelete || typeof userToDelete !== "string") return;
+    if (!userToDelete || typeof userToDelete !== 'string') return;
 
     try {
       setIsLoading(true);
       await AxiosConfig.delete(`/users/${userToDelete}`);
       fetchNewUsers();
-      toast.success(t("users.deleteSuccess"));
+      toast.success(t('users.deleteSuccess'));
       setIsLoading(false);
       closeModal();
     } catch (error: any) {
-      toast.error(t("users.deleteError") + error);
+      toast.error(t('users.deleteError') + error);
       setIsLoading(false);
     }
   };
@@ -122,7 +122,7 @@ function Users() {
   const handleBulkDelete = () => {
     if (selectedUsers.length === 0) return;
     if (selectedUsers.includes(loggedInUserId)) {
-      toast.error(t("users.currentUserError"));
+      toast.error(t('users.currentUserError'));
       return;
     }
     setUserToDelete(selectedUsers);
@@ -141,10 +141,10 @@ function Users() {
       fetchNewUsers();
       setSelectedUsers([]);
       closeModal();
-      toast.success(t("users.bulkDeleteSuccess"));
+      toast.success(t('users.bulkDeleteSuccess'));
       setIsLoading(false);
     } catch (error: any) {
-      toast.error(t("users.deleteError") + error);
+      toast.error(t('users.deleteError') + error);
       setIsLoading(false);
     }
   };
@@ -153,9 +153,9 @@ function Users() {
     setSortConfig((prev) => ({
       key,
       direction:
-        prev.key === key && prev.direction === "ascending"
-          ? "descending"
-          : "ascending",
+        prev.key === key && prev.direction === 'ascending'
+          ? 'descending'
+          : 'ascending',
     }));
   };
 
@@ -167,9 +167,9 @@ function Users() {
         const bValue = b[sortConfig.key!];
 
         if (aValue < bValue)
-          return sortConfig.direction === "ascending" ? -1 : 1;
+          return sortConfig.direction === 'ascending' ? -1 : 1;
         if (aValue > bValue)
-          return sortConfig.direction === "ascending" ? 1 : -1;
+          return sortConfig.direction === 'ascending' ? 1 : -1;
         return 0;
       });
     }
@@ -204,7 +204,7 @@ function Users() {
   return (
     <section className="container px-4 mx-auto mt-8">
       <h2 className="text-lg font-medium text-gray-800">
-        {t("users.userDetails")}
+        {t('users.userDetails')}
       </h2>
       <div className="flex items-center justify-end gap-x-3 mt-6">
         {selectedUsers.length > 0 && (
@@ -253,56 +253,56 @@ function Users() {
                 <th
                   scope="col"
                   className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 cursor-pointer"
-                  onClick={() => handleSort("authProvider")}
+                  onClick={() => handleSort('authProvider')}
                 >
-                  {t("users.authProvider")}
-                  {sortConfig.key === "authProvider" &&
-                    (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
+                  {t('users.authProvider')}
+                  {sortConfig.key === 'authProvider' &&
+                    (sortConfig.direction === 'ascending' ? ' ▲' : ' ▼')}
                 </th>
                 <th
                   scope="col"
                   className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 cursor-pointer"
-                  onClick={() => handleSort("username")}
+                  onClick={() => handleSort('username')}
                 >
-                  {t("users.username")}
-                  {sortConfig.key === "username" &&
-                    (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
+                  {t('users.username')}
+                  {sortConfig.key === 'username' &&
+                    (sortConfig.direction === 'ascending' ? ' ▲' : ' ▼')}
                 </th>
                 <th
                   scope="col"
                   className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 cursor-pointer"
-                  onClick={() => handleSort("name")}
+                  onClick={() => handleSort('name')}
                 >
-                  {t("users.name")}
-                  {sortConfig.key === "name" &&
-                    (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
+                  {t('users.name')}
+                  {sortConfig.key === 'name' &&
+                    (sortConfig.direction === 'ascending' ? ' ▲' : ' ▼')}
                 </th>
                 <th
                   scope="col"
                   className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 cursor-pointer"
-                  onClick={() => handleSort("email")}
+                  onClick={() => handleSort('email')}
                 >
-                  {t("users.email")}
-                  {sortConfig.key === "email" &&
-                    (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
+                  {t('users.email')}
+                  {sortConfig.key === 'email' &&
+                    (sortConfig.direction === 'ascending' ? ' ▲' : ' ▼')}
                 </th>
                 <th
                   scope="col"
                   className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 cursor-pointer"
-                  onClick={() => handleSort("role")}
+                  onClick={() => handleSort('role')}
                 >
-                  {t("users.role")}
-                  {sortConfig.key === "role" &&
-                    (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
+                  {t('users.role')}
+                  {sortConfig.key === 'role' &&
+                    (sortConfig.direction === 'ascending' ? ' ▲' : ' ▼')}
                 </th>
                 <th
                   scope="col"
                   className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 cursor-pointer"
-                  onClick={() => handleSort("status")}
+                  onClick={() => handleSort('status')}
                 >
-                  {t("users.status")}
-                  {sortConfig.key === "status" &&
-                    (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
+                  {t('users.status')}
+                  {sortConfig.key === 'status' &&
+                    (sortConfig.direction === 'ascending' ? ' ▲' : ' ▼')}
                 </th>
                 <th
                   scope="col"
@@ -341,7 +341,7 @@ function Users() {
                           blurDataURL="data:image/png;base64,..."
                           sizes="(max-width: 768px) 100vw, 50vw"
                           src={user.avatar}
-                          alt={user.username + " avatar"}
+                          alt={user.username + ' avatar'}
                         />
                         <div>
                           <h2 className="font-medium text-gray-800">
@@ -365,23 +365,23 @@ function Users() {
                     <td className="px-4 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                       <div
                         className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${
-                          user.status === "active"
-                            ? "bg-emerald-100/60"
-                            : "bg-red-100/60"
+                          user.status === 'active'
+                            ? 'bg-emerald-100/60'
+                            : 'bg-red-100/60'
                         }`}
                       >
                         <span
                           className={`h-1.5 w-1.5 rounded-full ${
-                            user.status === "active"
-                              ? "bg-emerald-500"
-                              : "bg-red-500"
+                            user.status === 'active'
+                              ? 'bg-emerald-500'
+                              : 'bg-red-500'
                           }`}
                         ></span>
                         <span
                           className={`text-sm font-normal ${
-                            user.status === "active"
-                              ? "text-emerald-500"
-                              : "text-red-500"
+                            user.status === 'active'
+                              ? 'text-emerald-500'
+                              : 'text-red-500'
                           }`}
                         >
                           {user.status.charAt(0).toUpperCase() +
@@ -419,7 +419,7 @@ function Users() {
           <button
             onClick={handlePreviousPage}
             className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
-              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+              currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={currentPage === 1}
           >
@@ -437,7 +437,7 @@ function Users() {
                 d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
               />
             </svg>
-            <span>{t("users.previous")}</span>
+            <span>{t('users.previous')}</span>
           </button>
           <div className="items-center hidden lg:flex gap-x-3">
             {[...Array(totalPages)].map((_, index) => (
@@ -446,8 +446,8 @@ function Users() {
                 onClick={() => setCurrentPage(index + 1)}
                 className={`px-2 py-1 text-sm rounded-md ${
                   currentPage === index + 1
-                    ? "text-black bg-blue-100"
-                    : "text-gray-500 hover:bg-gray-100"
+                    ? 'text-black bg-blue-100'
+                    : 'text-gray-500 hover:bg-gray-100'
                 }`}
               >
                 {index + 1}
@@ -457,11 +457,11 @@ function Users() {
           <button
             onClick={handleNextPage}
             className={`flex items-center px-5 py-3 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 ${
-              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+              currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={currentPage === totalPages}
           >
-            <span>{t("users.next")}</span>
+            <span>{t('users.next')}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

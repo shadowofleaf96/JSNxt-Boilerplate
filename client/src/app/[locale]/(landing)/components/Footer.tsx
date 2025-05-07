@@ -10,32 +10,40 @@ const Footer: React.FC = () => {
   const footerNavigation = {
     solutions: {
       title: t('footer.navigation.solutions.title'),
-      items: t('footer.navigation.solutions.items', { returnObjects: true }) as Array<{
+      items: t('footer.navigation.solutions.items', {
+        returnObjects: true,
+      }) as Array<{
         name: string;
         href: string;
-      }>
+      }>,
     },
     support: {
       title: t('footer.navigation.support.title'),
-      items: t('footer.navigation.support.items', { returnObjects: true }) as Array<{
+      items: t('footer.navigation.support.items', {
+        returnObjects: true,
+      }) as Array<{
         name: string;
         href: string;
-      }>
+      }>,
     },
     company: {
       title: t('footer.navigation.company.title'),
-      items: t('footer.navigation.company.items', { returnObjects: true }) as Array<{
+      items: t('footer.navigation.company.items', {
+        returnObjects: true,
+      }) as Array<{
         name: string;
         href: string;
-      }>
+      }>,
     },
     legal: {
       title: t('footer.navigation.legal.title'),
-      items: t('footer.navigation.legal.items', { returnObjects: true }) as Array<{
+      items: t('footer.navigation.legal.items', {
+        returnObjects: true,
+      }) as Array<{
         name: string;
         href: string;
-      }>
-    }
+      }>,
+    },
   };
 
   return (
@@ -55,7 +63,9 @@ const Footer: React.FC = () => {
           <div className="mt-8 flex flex-wrap gap-8 xl:col-span-2 xl:mt-0">
             {Object.entries(footerNavigation).map(([sectionKey, section]) => (
               <div key={sectionKey} className="min-w-[120px]">
-                <h3 className="text-sm font-semibold capitalize">{section.title}</h3>
+                <h3 className="text-sm font-semibold capitalize">
+                  {section.title}
+                </h3>
                 <ul className="mt-4 space-y-2">
                   {section.items.map((item) => (
                     <li key={item.name}>

@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { ReactNode } from 'react';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 interface ButtonProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ const Button = ({
   children,
   loading = false,
   spinnerSize = 6,
-  className = "",
+  className = '',
   ...props
 }: ButtonProps) => {
   return (

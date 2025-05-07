@@ -13,7 +13,7 @@ import { useTranslation } from 'next-i18next';
 
 const Features: React.FC = () => {
   const { t } = useTranslation();
-  
+
   const features = t('features.items', { returnObjects: true }) as Array<{
     name: string;
     description: string;

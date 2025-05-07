@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import { Fragment } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { Menu, Transition } from "@headlessui/react";
-import ReactCountryFlag from "react-country-flag";
-import { FaChevronDown } from "react-icons/fa";
+import { Fragment } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { Menu, Transition } from '@headlessui/react';
+import ReactCountryFlag from 'react-country-flag';
+import { FaChevronDown } from 'react-icons/fa';
 
 const languages = [
-  { code: "en", countryCode: "GB", label: "English" },
-  { code: "fr", countryCode: "FR", label: "Français" },
-  { code: "ar", countryCode: "MA", label: "العربية" },
+  { code: 'en', countryCode: 'GB', label: 'English' },
+  { code: 'fr', countryCode: 'FR', label: 'Français' },
+  { code: 'ar', countryCode: 'MA', label: 'العربية' },
 ];
 
 const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const pathSegments = pathname.split("/").filter(Boolean);
+  const pathSegments = pathname.split('/').filter(Boolean);
 
   const isFirstSegmentLanguage = languages.some(
     (lang) => lang.code === pathSegments[0]
   );
 
-  const currentLangCode = isFirstSegmentLanguage ? pathSegments[0] : "en";
+  const currentLangCode = isFirstSegmentLanguage ? pathSegments[0] : 'en';
   const currentLanguage =
     languages.find((lang) => lang.code === currentLangCode) || languages[0];
 
@@ -30,7 +30,7 @@ const LanguageSwitcher = () => {
     let newPath: string;
 
     if (isFirstSegmentLanguage) {
-      newPath = `/${newLang}/${pathSegments.slice(1).join("/")}`;
+      newPath = `/${newLang}/${pathSegments.slice(1).join('/')}`;
     } else {
       newPath = `/${newLang}${pathname}`;
     }
@@ -46,7 +46,7 @@ const LanguageSwitcher = () => {
             <ReactCountryFlag
               countryCode={currentLanguage.countryCode}
               svg
-              style={{ width: "1.5em", height: "1.5em" }}
+              style={{ width: '1.5em', height: '1.5em' }}
               className="rounded-sm"
             />
             <span className="text-gray-700 dark:text-gray-200">
@@ -78,14 +78,14 @@ const LanguageSwitcher = () => {
                     onClick={() => handleLanguageChange(code)}
                     className={`${
                       active
-                        ? "bg-blue-50 text-blue-700 dark:bg-gray-700/80 dark:text-blue-400"
-                        : "text-gray-700 dark:text-gray-200"
+                        ? 'bg-blue-50 text-blue-700 dark:bg-gray-700/80 dark:text-blue-400'
+                        : 'text-gray-700 dark:text-gray-200'
                     } flex w-full items-center space-x-3 px-4 py-2.5 text-sm transition-colors`}
                   >
                     <ReactCountryFlag
                       countryCode={countryCode}
                       svg
-                      style={{ width: "1.5em", height: "1.5em" }}
+                      style={{ width: '1.5em', height: '1.5em' }}
                       className="rounded-sm"
                     />
                     <span>{label}</span>
