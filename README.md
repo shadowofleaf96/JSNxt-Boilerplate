@@ -14,8 +14,14 @@ This project is a modern full-stack web application starter built with **Next.js
 - **State Management**: Redux Toolkit
 - **Styling**: Tailwind CSS with custom configuration
 - **Internationalization**: I18n (English, French, Arabic) with dynamic locale routing
+- **Form Validation**:
+  - **Frontend**: Zod + React Hook Form
+  - **Backend**: Joi
+- **Security Middleware**: Helmet, hpp, express-useragent, express-rate-limit
 - **Testing**: Jest + React Testing Library (optional setup)
 - **Linting/Formatting**: ESLint + Prettier
+
+---
 
 ## 🔧 Features
 
@@ -48,10 +54,18 @@ This project is a modern full-stack web application starter built with **Next.js
 - ✅ Middleware handling for routing and locale detection
 - ✅ ESLint and Prettier for code quality and consistency
 - ✅ TypeScript types and interfaces for both frontend and backend
+- ✅ Form validation
+  - Frontend: Strong type-safe validation using `Zod` integrated with `React Hook Form`
+  - Backend: Schema validation using `Joi` for request bodies
+- ✅ Security enhancements:
+  - `Helmet` for HTTP headers
+  - `hpp` for HTTP parameter pollution
+  - `express-useragent` for device detection
+  - `express-rate-limit` for rate limiting
 - ✅ Ready for deployment on:
   - **Vercel** (frontend)
   - **Railway / Render / Heroku** (backend)
-  - Includes basic Dockerfile (Soon)
+  - Includes basic Dockerfile (multi-stage)
 
 ## 📁 Client Folder Structure
 
@@ -118,4 +132,4 @@ cd server && npm install && npm run dev
 ```
 
 Feel free to fork and contribute!
-Made with ❤️ by Mohammed Kotbi
+Made with ❤️ by Shadow Of Leaf
