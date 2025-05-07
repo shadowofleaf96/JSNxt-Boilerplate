@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { Dialog, DialogPanel } from "@headlessui/react";
-import { HiBars3, HiXMark } from "react-icons/hi2";
-import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
-import { fetchCurrentUser } from "@/redux/user/usersSlice";
-import { FiLogOut, FiUser } from "react-icons/fi";
-import { googleLogout } from "@react-oauth/google";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import { toast } from "react-toastify";
-import Image from "next/image";
-import { useTranslation } from "next-i18next";
-import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import { useEffect, useRef, useState } from 'react';
+import { Dialog, DialogPanel } from '@headlessui/react';
+import { HiBars3, HiXMark } from 'react-icons/hi2';
+import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchCurrentUser } from '@/redux/user/usersSlice';
+import { FiLogOut, FiUser } from 'react-icons/fi';
+import { googleLogout } from '@react-oauth/google';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { toast } from 'react-toastify';
+import Image from 'next/image';
+import { useTranslation } from 'next-i18next';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -41,23 +41,23 @@ const Header: React.FC = () => {
         setShowDropdown(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleLogout = async () => {
     setLogoutLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("No user is currently logged in.");
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No user is currently logged in.');
       await AxiosConfig.post(
         `/users/logout`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
       googleLogout();
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
       location.reload();
     } catch (error: any) {
       toast.error(error);
@@ -65,17 +65,17 @@ const Header: React.FC = () => {
     }
   };
   const navigation = [
-    { key: "features", href: "#features" },
-    { key: "testimonials", href: "#testimonials" },
-    { key: "pricing", href: "#pricing" },
-    { key: "faq", href: "#faq" },
+    { key: 'features', href: '#features' },
+    { key: 'testimonials', href: '#testimonials' },
+    { key: 'pricing', href: '#pricing' },
+    { key: 'faq', href: '#faq' },
     {
-      key: "github",
-      href: "https://github.com/shadowofleaf96/JSNXT-Boilerplate",
+      key: 'github',
+      href: 'https://github.com/shadowofleaf96/JSNXT-Boilerplate',
     },
   ];
 
-  const isRegularUser = currentUser?.role === "user";
+  const isRegularUser = currentUser?.role === 'user';
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -85,14 +85,14 @@ const Header: React.FC = () => {
       >
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5" prefetch={false}>
-            <span className="sr-only">{t("header.ariaLabels.company")}</span>
+            <span className="sr-only">{t('header.ariaLabels.company')}</span>
             <Image
               width={0}
               height={0}
               placeholder="blur"
               blurDataURL="data:image/png;base64,..."
               sizes="(max-width: 768px) 100vw, 50vw"
-              alt={t("header.ariaLabels.logo")}
+              alt={t('header.ariaLabels.logo')}
               src="/images/jsnxt-logo-white.webp"
               className="h-16 w-auto"
             />
@@ -105,7 +105,7 @@ const Header: React.FC = () => {
             onClick={() => setMobileMenuOpen(true)}
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400"
           >
-            <span className="sr-only">{t("header.ariaLabels.openMenu")}</span>
+            <span className="sr-only">{t('header.ariaLabels.openMenu')}</span>
             <HiBars3 className="size-6" />
           </button>
         </div>
@@ -163,7 +163,7 @@ const Header: React.FC = () => {
                       <>
                         <FiLogOut className="flex-shrink-0" />
                         <span className="font-semibold">
-                          {t("header.auth.logout")}
+                          {t('header.auth.logout')}
                         </span>
                       </>
                     )}
@@ -177,7 +177,7 @@ const Header: React.FC = () => {
               prefetch={false}
               className="text-sm font-semibold text-white"
             >
-              {t("header.auth.login")} <span aria-hidden="true">&rarr;</span>
+              {t('header.auth.login')} <span aria-hidden="true">&rarr;</span>
             </Link>
           )}
         </div>
@@ -192,7 +192,7 @@ const Header: React.FC = () => {
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
           <div className="flex items-center justify-between">
             <Link href="/" prefetch={false} className="-m-1.5 p-1.5">
-              <span className="sr-only">{t("header.ariaLabels.company")}</span>
+              <span className="sr-only">{t('header.ariaLabels.company')}</span>
               <Image
                 alt="Background Image"
                 width={0}
@@ -210,7 +210,7 @@ const Header: React.FC = () => {
               className="-m-2.5 rounded-md p-2.5 text-gray-400"
             >
               <span className="sr-only">
-                {t("header.ariaLabels.closeMenu")}
+                {t('header.ariaLabels.closeMenu')}
               </span>
               <HiXMark className="size-6" />
             </button>
@@ -241,13 +241,13 @@ const Header: React.FC = () => {
                       prefetch={false}
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
                     >
-                      {t("header.profile.title")}
+                      {t('header.profile.title')}
                     </Link>
                     <button
                       onClick={handleLogout}
                       className="w-full text-left -mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
                     >
-                      {t("header.auth.logout")}
+                      {t('header.auth.logout')}
                     </button>
                   </>
                 ) : (
@@ -256,7 +256,7 @@ const Header: React.FC = () => {
                     prefetch={false}
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
                   >
-                    {t("header.auth.login")}
+                    {t('header.auth.login')}
                   </Link>
                 )}
               </div>

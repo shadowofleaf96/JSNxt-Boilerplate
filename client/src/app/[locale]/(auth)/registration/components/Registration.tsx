@@ -1,28 +1,28 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import { toast } from "react-toastify";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import DOMPurify from "dompurify";
-import { useReCaptcha } from "next-recaptcha-v3";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import Link from "next/link";
-import Modal from "@/components/ui/Modal";
-import Image from "next/image";
-import { useTranslation } from "next-i18next";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { toast } from 'react-toastify';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import DOMPurify from 'dompurify';
+import { useReCaptcha } from 'next-recaptcha-v3';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import Link from 'next/link';
+import Modal from '@/components/ui/Modal';
+import Image from 'next/image';
+import { useTranslation } from 'next-i18next';
 
 const registrationSchema = z.object({
   name: z.string(),
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email('Please enter a valid email address'),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(50, "Password must be at most 50 characters"),
+    .min(8, 'Password must be at least 8 characters')
+    .max(50, 'Password must be at most 50 characters'),
   acceptPolicy: z.literal(true, {
-    errorMap: () => ({ message: "You must accept the privacy policy" }),
+    errorMap: () => ({ message: 'You must accept the privacy policy' }),
   }),
 });
 
@@ -31,7 +31,7 @@ const Registration: React.FC = () => {
   const { t } = useTranslation();
   const { executeRecaptcha } = useReCaptcha();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const error = "";
+  const error = '';
   const router = useRouter();
 
   const {
@@ -41,11 +41,11 @@ const Registration: React.FC = () => {
   } = useForm({ resolver: zodResolver(registrationSchema) });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
 
-    if (token && role === "user") {
-      router.push("/");
+    if (token && role === 'user') {
+      router.push('/');
     }
   }, [router]);
 
@@ -58,18 +58,18 @@ const Registration: React.FC = () => {
 
     try {
       setLoading(true);
-      const recaptchaToken = await executeRecaptcha("form_submit");
+      const recaptchaToken = await executeRecaptcha('form_submit');
 
       await AxiosConfig.post(`/users/register`, {
         ...sanitizedData,
         recaptchaToken,
       });
 
-      router.push("/verify-email");
+      router.push('/verify-email');
     } catch (err: any) {
       console.log(err);
       const msg =
-        "Registration failed. Please try again." + err?.response?.data?.message;
+        'Registration failed. Please try again.' + err?.response?.data?.message;
       toast.error(msg);
       setLoading(false);
     }
@@ -102,19 +102,19 @@ const Registration: React.FC = () => {
               src="/images/jsnxt-logo-black.webp"
               alt="Your Company"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = "/fallback-logo.png";
+                (e.target as HTMLImageElement).src = '/fallback-logo.png';
               }}
             />
             <h2 className="mt-8 text-2xl font-bold tracking-tight text-gray-900">
-              {t("register.create_account")}
+              {t('register.create_account')}
             </h2>
             <p className="mt-2 text-sm text-gray-600">
-              {t("register.already_have_account")}{" "}
+              {t('register.already_have_account')}{' '}
               <Link
                 href="/login"
                 className="font-semibold text-gray-600 hover:text-gray-500"
               >
-                {t("register.sign_in_here")}
+                {t('register.sign_in_here')}
               </Link>
             </p>
           </div>
@@ -126,11 +126,11 @@ const Registration: React.FC = () => {
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-900"
                 >
-                  {t("register.name")}{" "}
+                  {t('register.name')}{' '}
                 </label>
                 <div className="mt-2">
                   <input
-                    {...register("name")}
+                    {...register('name')}
                     id="name"
                     type="name"
                     placeholder="John Doe"
@@ -149,11 +149,11 @@ const Registration: React.FC = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-900"
                 >
-                  {t("register.email")}{" "}
+                  {t('register.email')}{' '}
                 </label>
                 <div className="mt-2">
                   <input
-                    {...register("email")}
+                    {...register('email')}
                     id="email"
                     type="email"
                     placeholder="you@example.com"
@@ -172,11 +172,11 @@ const Registration: React.FC = () => {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-900"
                 >
-                  {t("register.password")}{" "}
+                  {t('register.password')}{' '}
                 </label>
                 <div className="mt-2">
                   <input
-                    {...register("password")}
+                    {...register('password')}
                     id="password"
                     type="password"
                     placeholder="••••••••"
@@ -193,7 +193,7 @@ const Registration: React.FC = () => {
               <div className="flex items-start">
                 <div className="flex h-5 items-center">
                   <input
-                    {...register("acceptPolicy")}
+                    {...register('acceptPolicy')}
                     id="acceptPolicy"
                     type="checkbox"
                     required
@@ -201,13 +201,13 @@ const Registration: React.FC = () => {
                   />
                 </div>
                 <label htmlFor="acceptPolicy">
-                  {t("register.accept_policy")}{" "}
+                  {t('register.accept_policy')}{' '}
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(true)}
                     className="underline"
                   >
-                    {t("register.privacy_policy")}
+                    {t('register.privacy_policy')}
                   </button>
                 </label>
                 {errors.acceptPolicy && (
@@ -225,23 +225,23 @@ const Registration: React.FC = () => {
                   disabled={loading}
                   className="flex w-full justify-center rounded-md bg-black px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-60"
                 >
-                  {loading ? <LoadingSpinner size={5} /> : t("register.submit")}
+                  {loading ? <LoadingSpinner size={5} /> : t('register.submit')}
                 </button>
               </div>
               <p className="text-xs text-center text-gray-500 mt-6">
-                {t("register.recaptcha_disclaimer")}{" "}
+                {t('register.recaptcha_disclaimer')}{' '}
                 <a
                   href="https://policies.google.com/privacy"
                   className="underline"
                 >
-                  {t("register.privacy")}
-                </a>{" "}
-                &{" "}
+                  {t('register.privacy')}
+                </a>{' '}
+                &{' '}
                 <a
                   href="https://policies.google.com/terms"
                   className="underline"
                 >
-                  {t("register.terms")}
+                  {t('register.terms')}
                 </a>
               </p>
             </form>
@@ -249,9 +249,9 @@ const Registration: React.FC = () => {
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2 className="text-xl font-bold mb-4">{t("register.policy_title")}</h2>
+        <h2 className="text-xl font-bold mb-4">{t('register.policy_title')}</h2>
         {Object.values(
-          t("register.policy_content", { returnObjects: true })
+          t('register.policy_content', { returnObjects: true })
         ).map((text, index) => (
           <p key={index} className="mb-2">
             {text}

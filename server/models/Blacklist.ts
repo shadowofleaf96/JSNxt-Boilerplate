@@ -1,6 +1,7 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
-import sequelize from "../config/database";
+
+import sequelize from '../config/database';
 
 interface BlacklistAttributes {
   id?: string;
@@ -34,8 +35,8 @@ Blacklist.init(
   },
   {
     sequelize,
-    modelName: "Blacklist",
-    tableName: "Blacklists",
+    modelName: 'Blacklist',
+    tableName: 'Blacklists',
     timestamps: true,
   }
 );

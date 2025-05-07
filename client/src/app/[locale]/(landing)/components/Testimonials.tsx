@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import Image from "next/image";
-import { FaQuoteLeft } from "react-icons/fa";
-import { useTranslation } from "next-i18next";
+import Image from 'next/image';
+import { FaQuoteLeft } from 'react-icons/fa';
+import { useTranslation } from 'next-i18next';
 
 const Testimonials: React.FC = () => {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ const Testimonials: React.FC = () => {
           <div
             style={{
               clipPath:
-                "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
             }}
             className="aspect-1097/1023 w-[68.5625rem] bg-gradient-to-r from-[#ff4694] to-[#776fff] opacity-25"
           />
@@ -44,11 +44,13 @@ const Testimonials: React.FC = () => {
           <figure className="relative isolate pt-6 sm:pt-12">
             <FaQuoteLeft className="absolute top-0 left-0 text-white/20 text-5xl" />
             <blockquote className="text-xl/8 font-semibold text-white sm:text-2xl/9">
-              <p>{t("testimonial.text")}</p>
+              <p>{t('testimonial.text')}</p>
             </blockquote>
             <figcaption className="mt-8 text-base">
-              <div className="font-semibold text-white">{t("testimonial.author")}</div>
-              <div className="mt-1 text-gray-400">{t("testimonial.title")}</div>
+              <div className="font-semibold text-white">
+                {t('testimonial.author')}
+              </div>
+              <div className="mt-1 text-gray-400">{t('testimonial.title')}</div>
             </figcaption>
           </figure>
         </div>

@@ -1,34 +1,34 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
-import { useReCaptcha } from "next-recaptcha-v3";
-import DOMPurify from "dompurify";
-import ForgotPasswordModal from "@/app/[locale]/(auth)/forgot-password/components/ForgotPassword";
-import { toast } from "react-toastify";
-import { GoogleLogin } from "@react-oauth/google";
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
+import { useReCaptcha } from 'next-recaptcha-v3';
+import DOMPurify from 'dompurify';
+import ForgotPasswordModal from '@/app/[locale]/(auth)/forgot-password/components/ForgotPassword';
+import { toast } from 'react-toastify';
+import { GoogleLogin } from '@react-oauth/google';
+import Image from 'next/image';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [showForgotModal, setShowForgotModal] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const { executeRecaptcha } = useReCaptcha();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
 
-    if (token && role === "user") {
-      router.push("/");
+    if (token && role === 'user') {
+      router.push('/');
     }
   }, [router]);
 
@@ -49,18 +49,18 @@ const Login: React.FC = () => {
 
     if (!validateCredentials()) {
       if (!email) {
-        setError("Email is required");
+        setError('Email is required');
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        setError("Please enter a valid email address");
+        setError('Please enter a valid email address');
       } else if (!password) {
-        setError("Password is required");
+        setError('Password is required');
       } else if (password.length < 8) {
-        setError("Password must be at least 8 characters");
+        setError('Password must be at least 8 characters');
       }
       return;
     }
 
-    const recaptchaToken = await executeRecaptcha("form_submit");
+    const recaptchaToken = await executeRecaptcha('form_submit');
 
     try {
       setLoading(true);
@@ -76,13 +76,13 @@ const Login: React.FC = () => {
 
       const respdata = res.data.data;
 
-      if (respdata.role === "user") {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("role", respdata.role);
-        router.push("/");
+      if (respdata.role === 'user') {
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('role', respdata.role);
+        router.push('/');
       } else {
         setLoading(false);
-        toast.error(t("login.invalidCredentials"));
+        toast.error(t('login.invalidCredentials'));
         return;
       }
     } catch (err: any) {
@@ -95,17 +95,17 @@ const Login: React.FC = () => {
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
-      const recaptchaToken = await executeRecaptcha("google_login");
-      const res = await AxiosConfig.post("/users/google-login", {
+      const recaptchaToken = await executeRecaptcha('google_login');
+      const res = await AxiosConfig.post('/users/google-login', {
         credential: credentialResponse.credential,
         recaptchaToken,
       });
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.data.role);
-      router.push("/");
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('role', res.data.data.role);
+      router.push('/');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || t("login.googleLoginFailed"));
+      toast.error(err?.response?.data?.message || t('login.googleLoginFailed'));
     }
   };
 
@@ -124,20 +124,20 @@ const Login: React.FC = () => {
               src="/images/jsnxt-logo-black.webp"
               alt="JSNXT"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = "/fallback-logo.png";
+                (e.target as HTMLImageElement).src = '/fallback-logo.png';
               }}
             />
             <h2 className="mt-8 text-2xl font-bold tracking-tight text-gray-900">
-              {t("login.title")}
+              {t('login.title')}
             </h2>
             <p className="mt-2 text-sm text-gray-500">
-              {t("login.registerPrompt")}{" "}
+              {t('login.registerPrompt')}{' '}
               <Link
                 href="/registration"
                 prefetch={false}
                 className="font-semibold text-gray-600 hover:text-gray-500"
               >
-                {t("login.registerLink")}
+                {t('login.registerLink')}
               </Link>
             </p>
           </div>
@@ -149,7 +149,7 @@ const Login: React.FC = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-900"
                 >
-                  {t("login.email")}
+                  {t('login.email')}
                 </label>
                 <input
                   id="email"
@@ -171,7 +171,7 @@ const Login: React.FC = () => {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-900"
                 >
-                  {t("login.password")}
+                  {t('login.password')}
                 </label>
                 <input
                   id="password"
@@ -201,7 +201,7 @@ const Login: React.FC = () => {
                     onClick={() => setShowForgotModal(true)}
                     className="font-semibold text-gray-600 hover:text-gray-500 cursor-pointer"
                   >
-                    {t("login.forgotPassword")}
+                    {t('login.forgotPassword')}
                   </button>
                 </div>
               </div>
@@ -212,7 +212,7 @@ const Login: React.FC = () => {
                   disabled={loading}
                   className="flex w-full justify-center rounded-md bg-black px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-50"
                 >
-                  {loading ? <LoadingSpinner size={5} /> : t("login.signIn")}
+                  {loading ? <LoadingSpinner size={5} /> : t('login.signIn')}
                 </button>
                 <div className="mt-6">
                   <div className="relative">
@@ -221,7 +221,7 @@ const Login: React.FC = () => {
                     </div>
                     <div className="relative flex justify-center text-sm">
                       <span className="bg-white px-2 text-gray-500">
-                        {t("login.orContinueWith")}
+                        {t('login.orContinueWith')}
                       </span>
                     </div>
                   </div>
@@ -229,7 +229,7 @@ const Login: React.FC = () => {
                   <div className="mt-6 flex w-full justify-center">
                     <GoogleLogin
                       onSuccess={handleGoogleSuccess}
-                      onError={() => toast.error(t("login.googleLoginFailed"))}
+                      onError={() => toast.error(t('login.googleLoginFailed'))}
                       size="large"
                       type="standard"
                       shape="square"
@@ -242,19 +242,19 @@ const Login: React.FC = () => {
                 </div>
               </div>
               <p className="text-xs text-center text-gray-500 mt-6">
-                {t("register.recaptcha_disclaimer")}{" "}
+                {t('register.recaptcha_disclaimer')}{' '}
                 <a
                   href="https://policies.google.com/privacy"
                   className="underline"
                 >
-                  {t("register.privacy")}
-                </a>{" "}
-                &{" "}
+                  {t('register.privacy')}
+                </a>{' '}
+                &{' '}
                 <a
                   href="https://policies.google.com/terms"
                   className="underline"
                 >
-                  {t("register.terms")}
+                  {t('register.terms')}
                 </a>
               </p>
             </form>

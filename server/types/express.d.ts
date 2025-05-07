@@ -1,4 +1,4 @@
-import { UserDocument } from "../types/user.interface";
+import { UserDocument } from '../types/user.interface';
 
 declare module 'express' {
   interface Request {

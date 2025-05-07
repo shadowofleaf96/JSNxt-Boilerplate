@@ -1,41 +1,41 @@
-"use client";
-export const dynamic = "force-dynamic";
+'use client';
+export const dynamic = 'force-dynamic';
 
-import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { toast } from "react-toastify";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import Image from "next/image";
+import { useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { toast } from 'react-toastify';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
 const ResetPasswordPage: React.FC = () => {
   const { token } = useParams();
   const router = useRouter();
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password.length < 6) {
-      setError(t("passwordTooShort"));
+      setError(t('passwordTooShort'));
       return;
     }
     if (password !== confirm) {
-      setError(t("passwordsDontMatch"));
+      setError(t('passwordsDontMatch'));
       return;
     }
-    setError("");
+    setError('');
     try {
       setLoading(true);
       await AxiosConfig.put(`/users/reset-password/${token}`, { password });
-      toast.success(t("passwordResetSuccess"));
-      router.push("/login");
+      toast.success(t('passwordResetSuccess'));
+      router.push('/login');
     } catch (err: any) {
-      setError(err?.response?.data?.message || t("passwordResetError"));
+      setError(err?.response?.data?.message || t('passwordResetError'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -59,16 +59,16 @@ const ResetPasswordPage: React.FC = () => {
         </div>
 
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">
-          {t("reset.resetPassword")}
+          {t('reset.resetPassword')}
         </h1>
         <p className="text-sm text-center text-gray-600 mb-6">
-          {t("reset.enterNewPassword")}
+          {t('reset.enterNewPassword')}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("reset.newPassword")}
+              {t('reset.newPassword')}
             </label>
             <input
               type="password"
@@ -81,7 +81,7 @@ const ResetPasswordPage: React.FC = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("reset.confirmPassword")}
+              {t('reset.confirmPassword')}
             </label>
             <input
               type="password"
@@ -100,7 +100,7 @@ const ResetPasswordPage: React.FC = () => {
             disabled={loading}
             className="w-full bg-gray-800 text-white font-medium py-3 rounded-lg hover:bg-gray-600 transition disabled:opacity-50"
           >
-            {loading ? <LoadingSpinner size={5} /> : t("confirm")}
+            {loading ? <LoadingSpinner size={5} /> : t('confirm')}
           </button>
         </form>
       </div>

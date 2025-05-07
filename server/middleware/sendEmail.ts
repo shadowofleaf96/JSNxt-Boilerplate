@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
 interface SendEmailParams {
   to: string;
@@ -6,9 +6,13 @@ interface SendEmailParams {
   html: string;
 }
 
-const sendEmail = async ({ to, subject, html }: SendEmailParams): Promise<void> => {
+const sendEmail = async ({
+  to,
+  subject,
+  html,
+}: SendEmailParams): Promise<void> => {
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {

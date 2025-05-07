@@ -1,6 +1,6 @@
-import Image from "next/image";
-import React from "react";
-import { useTranslation } from "next-i18next";
+import Image from 'next/image';
+import React from 'react';
+import { useTranslation } from 'next-i18next';
 
 interface ErrorProps {
   error: {
@@ -23,7 +23,7 @@ const Error: React.FC<ErrorProps> = ({ error }) => {
         alt="errorImg"
       />
       <h2 className="flex flex-row font-semibold text-2xl mt-4 mb-4">
-        {t("navbar.errors.generic")}
+        {t('navbar.errors.generic')}
       </h2>
       <p>{error.message}</p>
     </div>

@@ -1,8 +1,8 @@
-"use client";
-import { useState, useEffect } from "react";
-import Navbar from "@/app/[locale]/admin/components/Layout/Navbar";
-import Sidebar from "@/app/[locale]/admin/components/Layout/Sidebar";
-import ProtectedRoute from "@/components/utils/ProtectedRoute";
+'use client';
+import { useState, useEffect } from 'react';
+import Navbar from '@/app/[locale]/admin/components/Layout/Navbar';
+import Sidebar from '@/app/[locale]/admin/components/Layout/Sidebar';
+import ProtectedRoute from '@/components/utils/ProtectedRoute';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,8 +26,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       setIsSidebarOpen(true);
     }
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [isSidebarOpen]);
 
   const toggleSidebar = () => {
@@ -37,7 +37,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ProtectedRoute allowedRoles={["admin"]}>
+    <ProtectedRoute allowedRoles={['admin']}>
       <div className="min-h-screen flex">
         <Sidebar
           isOpen={isSidebarOpen}

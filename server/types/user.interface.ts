@@ -1,5 +1,5 @@
 export interface UserDTO {
-  authProvider: "local" | "google";
+  authProvider: 'local' | 'google';
   googleId?: string;
   password?: string;
   username: string;
@@ -24,4 +24,3 @@ export interface UserDocument {
   resetPasswordToken?: string | null;
   resetPasswordExpire?: number | null;
 }
-

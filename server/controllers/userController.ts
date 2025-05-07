@@ -1,23 +1,26 @@
-import axios from "axios";
-import User from "../models/Users";
-import bcrypt from "bcrypt";
-import { Request, Response } from "express";
-import Blacklist from "../models/Blacklist";
-import * as crypto from "crypto";
-import { auth, OAuth2Client } from "google-auth-library";
+import axios from 'axios';
+import bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
+import { Request, Response } from 'express';
+import { auth, OAuth2Client } from 'google-auth-library';
+
+import Blacklist from '../models/Blacklist';
+import User from '../models/Users';
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-import sendEmail from "../middleware/sendEmail";
-import { generateUniqueUsername } from "../utils/generateUsername";
-import { getPublicUrl } from "@/utils/fileUtils";
+import { Op } from 'sequelize';
+
+import { getPublicUrl } from '@/utils/fileUtils';
+
+import sendEmail from '../middleware/sendEmail';
 import {
-  getWelcomeEmailTemplate,
-  getVerificationEmailTemplate,
-  getPasswordResetTemplate,
-  getLoginAlertTemplate,
-  passwordChangedTemplate,
   accountVerifiedTemplate,
-} from "../utils/emailTemplates";
-import { Op } from "sequelize";
+  getLoginAlertTemplate,
+  getPasswordResetTemplate,
+  getVerificationEmailTemplate,
+  getWelcomeEmailTemplate,
+  passwordChangedTemplate,
+} from '../utils/emailTemplates';
+import { generateUniqueUsername } from '../utils/generateUsername';
 
 const BACKEND_URL = process.env.BACKEND_URL;
 const FRONTEND_URL = process.env.FRONTEND_URL;
@@ -35,8 +38,8 @@ export const createUser = async (
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       res.status(400).json({
-        status: "failed",
-        message: "It seems you already have an account, please log in instead.",
+        status: 'failed',
+        message: 'It seems you already have an account, please log in instead.',
       });
       return;
     }
@@ -46,7 +49,7 @@ export const createUser = async (
     }
 
     await User.create({
-      authProvider: "local",
+      authProvider: 'local',
       name,
       username,
       password,
@@ -57,32 +60,32 @@ export const createUser = async (
       isVerified: true,
     });
 
-    const loginPath = role === "admin" ? "/admin/login" : "/login";
+    const loginPath = role === 'admin' ? '/admin/login' : '/login';
     const loginUrl = `${process.env.FRONTEND_URL}${loginPath}`;
 
     await sendEmail({
       to: email,
-      subject: "Welcome to JSNXT!",
+      subject: 'Welcome to JSNXT!',
       html: getWelcomeEmailTemplate({
         logoUrl: LOGO_URL,
         frontendUrl: process.env.FRONTEND_URL,
         user: { name },
         action: {
           url: loginUrl,
-          text: "Log In",
+          text: 'Log In',
         },
       }),
     });
 
     res.status(200).json({
-      status: "success",
-      message: "User created and welcome email sent successfully.",
+      status: 'success',
+      message: 'User created and welcome email sent successfully.',
     });
   } catch (err) {
-    console.error("Error creating user:", err);
+    console.error('Error creating user:', err);
     res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
+      status: 'error',
+      message: 'Internal Server Error',
     });
   }
 };
@@ -104,15 +107,15 @@ export const registerUser = async (
       };
 
       if (!success || score < 0.5) {
-        res.status(403).json({ message: "reCAPTCHA verification failed." });
+        res.status(403).json({ message: 'reCAPTCHA verification failed.' });
         return;
       }
 
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         res.status(400).json({
-          status: "failed",
-          message: "It seems you already have an account. Please log in.",
+          status: 'failed',
+          message: 'It seems you already have an account. Please log in.',
         });
         return;
       }
@@ -127,17 +130,17 @@ export const registerUser = async (
         avatarUrl = `${process.env.BACKEND_URL}/public/images/userIcon.png`;
       }
 
-      const emailToken = crypto.randomBytes(64).toString("hex");
+      const emailToken = crypto.randomBytes(64).toString('hex');
 
       const newUser = await User.create({
-        authProvider: "local",
+        authProvider: 'local',
         email,
         name,
         password,
         username: generatedUsername,
         avatar: avatarUrl,
-        role: "user",
-        status: "active",
+        role: 'user',
+        status: 'active',
         emailToken,
         isVerified: false,
       });
@@ -146,32 +149,32 @@ export const registerUser = async (
 
       await sendEmail({
         to: newUser.email,
-        subject: "JSNXT - Verify your email",
+        subject: 'JSNXT - Verify your email',
         html: getVerificationEmailTemplate({
           logoUrl: LOGO_URL,
           action: {
             url: verifyLink,
-            text: "Verify Email",
+            text: 'Verify Email',
           },
         }),
       });
 
       res.status(201).json({
-        status: "success",
+        status: 'success',
         message:
-          "Registration successful. Please check your email to verify your account.",
+          'Registration successful. Please check your email to verify your account.',
       });
       return;
     } catch (err) {
       console.error(err);
       res.status(500).json({
-        status: "error",
-        message: "Internal server error",
+        status: 'error',
+        message: 'Internal server error',
       });
       return;
     }
   } catch (error) {
-    res.status(500).json({ message: "reCAPTCHA verification error." });
+    res.status(500).json({ message: 'reCAPTCHA verification error.' });
     return;
   }
 };
@@ -184,20 +187,20 @@ export const verifyEmail = async (
     const { token } = req.params;
     const user = await User.findOne({ where: { emailToken: token } });
     if (!user) {
-      res.status(400).send("Invalid or expired token.");
+      res.status(400).send('Invalid or expired token.');
       return;
     }
 
     user.emailToken = undefined;
     user.isVerified = true;
-    user.status = "active";
+    user.status = 'active';
     await user.save();
 
     const loginToken = await user.generateAccessJWT();
 
     await sendEmail({
       to: user.email,
-      subject: "JSNXT - Welcome to JSNXT 🎉",
+      subject: 'JSNXT - Welcome to JSNXT 🎉',
       html: accountVerifiedTemplate({
         logoUrl: LOGO_URL,
         frontendUrl: FRONTEND_URL,
@@ -208,7 +211,7 @@ export const verifyEmail = async (
     return;
   } catch (err) {
     console.error(err);
-    res.status(500).send("Email verification failed.");
+    res.status(500).send('Email verification failed.');
     return;
   }
 };
@@ -217,7 +220,7 @@ export const googleAuth = async (req: Request, res: Response) => {
   try {
     const ua = req.useragent;
     const ipAddress =
-      req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+      req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const { credential, recaptchaToken } = req.body;
 
     const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
@@ -228,7 +231,7 @@ export const googleAuth = async (req: Request, res: Response) => {
     };
 
     if (!success || score < 0.5) {
-      res.status(403).json({ message: "reCAPTCHA verification failed" });
+      res.status(403).json({ message: 'reCAPTCHA verification failed' });
       return;
     }
 
@@ -239,7 +242,7 @@ export const googleAuth = async (req: Request, res: Response) => {
 
     const payload = ticket.getPayload();
     if (!payload?.email_verified) {
-      res.status(400).json({ message: "Email not verified by Google" });
+      res.status(400).json({ message: 'Email not verified by Google' });
       return;
     }
 
@@ -249,9 +252,9 @@ export const googleAuth = async (req: Request, res: Response) => {
       },
     });
 
-    if (user?.authProvider === "local") {
+    if (user?.authProvider === 'local') {
       res.status(409).json({
-        message: "Email already registered with password",
+        message: 'Email already registered with password',
       });
       return;
     }
@@ -266,10 +269,10 @@ export const googleAuth = async (req: Request, res: Response) => {
         name: payload.name,
         username: generatedUsername,
         avatar: payload.picture,
-        authProvider: "google",
+        authProvider: 'google',
         googleId: payload.sub,
-        role: "user",
-        status: "active",
+        role: 'user',
+        status: 'active',
         isVerified: true,
       });
     }
@@ -280,7 +283,7 @@ export const googleAuth = async (req: Request, res: Response) => {
     if (isNewUser) {
       await sendEmail({
         to: user.email,
-        subject: "Welcome to JSNXT 🎉",
+        subject: 'Welcome to JSNXT 🎉',
         html: `
           <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;border:1px solid #e0e0e0;border-radius:10px;background:#ffffff">
             <div style="text-align:center;margin-bottom:20px">
@@ -300,7 +303,7 @@ export const googleAuth = async (req: Request, res: Response) => {
     } else {
       await sendEmail({
         to: user.email,
-        subject: "JSNXT - New Login Detected",
+        subject: 'JSNXT - New Login Detected',
         html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0;">
           <div style="text-align: center;">
@@ -323,14 +326,14 @@ export const googleAuth = async (req: Request, res: Response) => {
     }
 
     res.json({
-      status: "success",
+      status: 'success',
       data: userData,
       token,
     });
     return;
   } catch (error) {
-    console.error("Google auth error:", error);
-    res.status(500).json({ message: "Google authentication failed" });
+    console.error('Google auth error:', error);
+    res.status(500).json({ message: 'Google authentication failed' });
     return;
   }
 };
@@ -339,7 +342,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const ua = req.useragent;
     const ipAddress =
-      req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+      req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const { identifier, password, recaptchaToken } = req.body;
 
     const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
@@ -350,52 +353,52 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     };
 
     if (!success || score < 0.5) {
-      res.status(403).json({ message: "reCAPTCHA verification failed." });
+      res.status(403).json({ message: 'reCAPTCHA verification failed.' });
       return;
     }
 
     const user = await User.findOne({
       where: {
         [Op.or]: [
-          { email: identifier, role: "user" },
-          { username: identifier, role: "admin" },
+          { email: identifier, role: 'user' },
+          { username: identifier, role: 'admin' },
         ],
       },
-      attributes: { include: ["password", "authProvider"] },
+      attributes: { include: ['password', 'authProvider'] },
     });
 
     if (!user) {
       res.status(401).json({
-        status: "failed",
-        message: "Invalid credentials. Please try again.",
+        status: 'failed',
+        message: 'Invalid credentials. Please try again.',
       });
       return;
     }
 
-    if (user.status === "inactive") {
+    if (user.status === 'inactive') {
       res.status(401).json({
-        status: "failed",
+        status: 'failed',
         message:
-          user.role === "admin"
-            ? "Admin account is inactive. Contact superadmin."
-            : "User account is inactive. Please contact support.",
+          user.role === 'admin'
+            ? 'Admin account is inactive. Contact superadmin.'
+            : 'User account is inactive. Please contact support.',
       });
       return;
     }
 
-    if (user.authProvider === "google") {
+    if (user.authProvider === 'google') {
       res.status(401).json({
-        status: "failed",
+        status: 'failed',
         message:
-          "This account was registered with Google. Please use Google Sign-In.",
+          'This account was registered with Google. Please use Google Sign-In.',
       });
       return;
     }
 
     if (!user.password) {
       res.status(401).json({
-        status: "failed",
-        message: "Password not set. Please use password reset.",
+        status: 'failed',
+        message: 'Password not set. Please use password reset.',
       });
       return;
     }
@@ -403,8 +406,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       res.status(401).json({
-        status: "failed",
-        message: "Invalid credentials. Please try again.",
+        status: 'failed',
+        message: 'Invalid credentials. Please try again.',
       });
       return;
     }
@@ -414,7 +417,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     await sendEmail({
       to: user_data.email,
-      subject: "JSNXT - New Login Detected",
+      subject: 'JSNXT - New Login Detected',
       html: getLoginAlertTemplate({
         logoUrl: LOGO_URL,
         ipAddress: ipAddress[0],
@@ -424,7 +427,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: user_data,
       token,
       message: `Successfully logged in as ${user.role}`,
@@ -432,8 +435,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
+      status: 'error',
+      message: 'Internal Server Error',
     });
   }
 };
@@ -445,14 +448,14 @@ export const getAllUsers = async (
   try {
     const users = await User.findAll();
     res.status(200).json({
-      status: "success",
+      status: 'success',
       users,
     });
     return;
   } catch (err) {
     res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
+      status: 'error',
+      message: 'Internal Server Error',
     });
     return;
   }
@@ -467,21 +470,21 @@ export const getUserInfo = async (
     const existingUser = await User.findByPk(id);
     if (!existingUser) {
       res.status(404).json({
-        status: "failed",
-        message: "User not found",
+        status: 'failed',
+        message: 'User not found',
       });
       return;
     } else {
       res.status(200).json({
-        status: "success",
+        status: 'success',
         user: existingUser,
       });
       return;
     }
   } catch (err) {
     res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
+      status: 'error',
+      message: 'Internal Server Error',
     });
     return;
   }
@@ -490,19 +493,19 @@ export const getUserInfo = async (
 export const profile = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
-      res.status(401).json({ message: "Unauthorized" });
+      res.status(401).json({ message: 'Unauthorized' });
       return;
     }
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       user: req.user,
     });
     return;
   } catch (err) {
     res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
+      status: 'error',
+      message: 'Internal Server Error',
     });
     return;
   }
@@ -523,8 +526,8 @@ export const updateUser = async (
     const existingUser = await User.findByPk(id);
     if (!existingUser) {
       res.status(404).json({
-        status: "failed",
-        message: "User not found",
+        status: 'failed',
+        message: 'User not found',
       });
     }
 
@@ -539,17 +542,17 @@ export const updateUser = async (
       if (userWithEmail && userWithEmail.id.toString() !== id) {
         res
           .status(400)
-          .json({ message: "Email is already in use by another user" });
+          .json({ message: 'Email is already in use by another user' });
       }
 
       if (userWithUsername && userWithUsername.id.toString() !== id) {
         res
           .status(400)
-          .json({ message: "Username is already in use by another user" });
+          .json({ message: 'Username is already in use by another user' });
       }
     }
 
-    if (existingUser.authProvider === "google" && updates.password) {
+    if (existingUser.authProvider === 'google' && updates.password) {
       delete updates.password;
     }
 
@@ -561,22 +564,22 @@ export const updateUser = async (
 
     if (!updatedUser) {
       res.status(500).json({
-        status: "failed",
-        message: "User not found",
+        status: 'failed',
+        message: 'User not found',
       });
       return;
     } else {
       res.status(200).json({
-        status: "success",
-        message: "User updated successfully",
+        status: 'success',
+        message: 'User updated successfully',
         data: updatedUser,
       });
       return;
     }
   } catch (err) {
     res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
+      status: 'error',
+      message: 'Internal Server Error',
     });
     return;
   }
@@ -595,21 +598,21 @@ export const deleteUser = async (
 
     if (deletedCount === 0) {
       res.status(404).json({
-        status: "failed",
-        message: "User not found",
+        status: 'failed',
+        message: 'User not found',
       });
       return;
     } else {
       res.status(200).json({
-        status: "success",
-        message: "This user is deleted successfully",
+        status: 'success',
+        message: 'This user is deleted successfully',
       });
       return;
     }
   } catch (err) {
     res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
+      status: 'error',
+      message: 'Internal Server Error',
     });
     return;
   }
@@ -632,28 +635,28 @@ export const forgotPassword = async (
       };
 
       if (!success || score < 0.5) {
-        res.status(403).json({ message: "reCAPTCHA verification failed." });
+        res.status(403).json({ message: 'reCAPTCHA verification failed.' });
         return;
       }
 
       if (!user) {
-        res.status(404).json({ message: "No user with that email." });
+        res.status(404).json({ message: 'No user with that email.' });
         return;
       }
 
-      if (user.authProvider === "google") {
+      if (user.authProvider === 'google') {
         res.status(404).json({
           message:
-            "This account uses Google login. Please sign in with Google.",
+            'This account uses Google login. Please sign in with Google.',
         });
         return;
       }
 
-      const resetToken = crypto.randomBytes(32).toString("hex");
+      const resetToken = crypto.randomBytes(32).toString('hex');
       const hashedToken = crypto
-        .createHash("sha256")
+        .createHash('sha256')
         .update(resetToken)
-        .digest("hex");
+        .digest('hex');
 
       user.resetPasswordToken = hashedToken;
       user.resetPasswordExpire = Date.now() + 3600000;
@@ -663,7 +666,7 @@ export const forgotPassword = async (
 
       await sendEmail({
         to: email,
-        subject: "JSNXT - Reset your password",
+        subject: 'JSNXT - Reset your password',
         html: getPasswordResetTemplate({
           logoUrl: LOGO_URL,
           action: {
@@ -672,15 +675,15 @@ export const forgotPassword = async (
         }),
       });
 
-      res.status(200).json({ message: "Password reset email sent." });
+      res.status(200).json({ message: 'Password reset email sent.' });
       return;
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Server error." });
+      res.status(500).json({ message: 'Server error.' });
       return;
     }
   } catch (error) {
-    res.status(500).json({ message: "reCAPTCHA verification error." });
+    res.status(500).json({ message: 'reCAPTCHA verification error.' });
     return;
   }
 };
@@ -694,11 +697,11 @@ export const resetPassword = async (
     const { token } = req.params;
 
     if (!password) {
-      res.status(400).json({ message: "Please provide a new password." });
+      res.status(400).json({ message: 'Please provide a new password.' });
       return;
     }
 
-    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
     const user = await User.findOne({
       where: {
@@ -708,62 +711,62 @@ export const resetPassword = async (
     });
 
     if (!user) {
-      res.status(400).json({ message: "Invalid or expired token." });
+      res.status(400).json({ message: 'Invalid or expired token.' });
       return;
     }
 
     user.password = password;
-    user.resetPasswordToken = "";
+    user.resetPasswordToken = '';
     user.resetPasswordExpire = undefined;
 
     await user.save();
 
     await sendEmail({
       to: user.email,
-      subject: "JSNXT - Password Changed Successfully",
+      subject: 'JSNXT - Password Changed Successfully',
       html: passwordChangedTemplate({
         logoUrl: LOGO_URL,
       }),
     });
 
-    res.status(200).json({ message: "Password reset successfully." });
+    res.status(200).json({ message: 'Password reset successfully.' });
   } catch (error) {
-    console.error("Reset Password Error:", error);
+    console.error('Reset Password Error:', error);
     res
       .status(500)
-      .json({ message: "Something went wrong. Please try again." });
+      .json({ message: 'Something went wrong. Please try again.' });
     return;
   }
 };
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {
-    const authHeader = req.headers["authorization"];
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(401).json({ message: "No user is currently logged in." });
+    const authHeader = req.headers['authorization'];
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      res.status(401).json({ message: 'No user is currently logged in.' });
       return;
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
     if (!token) {
-      res.status(401).json({ message: "No user is currently logged in." });
+      res.status(401).json({ message: 'No user is currently logged in.' });
       return;
     }
 
     const existingToken = await Blacklist.findOne({ where: { token } });
     if (existingToken) {
-      res.status(401).json({ message: "The session is already terminated." });
+      res.status(401).json({ message: 'The session is already terminated.' });
       return;
     }
 
     const newBlacklist = new Blacklist({ token });
     await newBlacklist.save();
 
-    res.status(200).json({ message: "You have successfully logged out." });
+    res.status(200).json({ message: 'You have successfully logged out.' });
   } catch (err) {
     res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
+      status: 'error',
+      message: 'Internal Server Error',
     });
   }
 };

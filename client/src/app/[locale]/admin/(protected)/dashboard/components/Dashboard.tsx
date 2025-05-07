@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
-import "chart.js/auto";
-import Error from "@/app/[locale]/admin/components/Error/Error";
-import { FaUserClock, FaUsers } from "react-icons/fa6";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import { toast } from "react-toastify";
-import { User } from "@/types/user";
-import AxiosConfig from "@/components/utils/AxiosConfig";
-import { useTranslation } from "next-i18next";
+import React, { useEffect, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
+import 'chart.js/auto';
+import Error from '@/app/[locale]/admin/components/Error/Error';
+import { FaUserClock, FaUsers } from 'react-icons/fa6';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { toast } from 'react-toastify';
+import { User } from '@/types/user';
+import AxiosConfig from '@/components/utils/AxiosConfig';
+import { useTranslation } from 'next-i18next';
 
 interface UserStats {
   totalUsers: number;
@@ -36,20 +36,20 @@ const Dashboard: React.FC = () => {
     const fetchUsers = async () => {
       try {
         const res = await AxiosConfig.get<{ users: User[] }>(
-          "/users/getallusers"
+          '/users/getallusers'
         );
         const users = res.data.users || [];
 
         const activeUsers = users.filter(
-          (user) => user.status === "active"
+          (user) => user.status === 'active'
         ).length;
 
         const usersByMonth: Record<string, number> = users.reduce(
           (acc, user) => {
             const createdAt = new Date(user.createdAt);
-            const month = createdAt.toLocaleString("default", {
-              month: "short",
-              year: "numeric",
+            const month = createdAt.toLocaleString('default', {
+              month: 'short',
+              year: 'numeric',
             });
             if (!acc[month]) acc[month] = 0;
             acc[month]++;
@@ -77,7 +77,7 @@ const Dashboard: React.FC = () => {
       } catch (err: any) {
         console.error(err);
         setError(err);
-        toast.error(t("Dashboard.errorFetch"));
+        toast.error(t('Dashboard.errorFetch'));
         setLoading(false);
       }
     };
@@ -89,9 +89,9 @@ const Dashboard: React.FC = () => {
     labels: usersData.map((u) => u.month),
     datasets: [
       {
-        label: t("Dashboard.usersRegistered"),
+        label: t('Dashboard.usersRegistered'),
         data: usersData.map((u) => u.count),
-        backgroundColor: "rgba(54, 162, 235, 0.6)",
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
       },
     ],
   };
@@ -116,12 +116,14 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen p-8">
-      <h1 className="text-xl font-medium text-gray-800 mb-6">{t("Dashboard.title")}</h1>
+      <h1 className="text-xl font-medium text-gray-800 mb-6">
+        {t('Dashboard.title')}
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
           <div>
             <h3 className="text-sm font-medium text-gray-700">
-              {t("Dashboard.totalUsers")}
+              {t('Dashboard.totalUsers')}
             </h3>
             <p className="text-2xl font-bold text-black">
               {userStats.totalUsers}
@@ -133,7 +135,7 @@ const Dashboard: React.FC = () => {
         <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
           <div>
             <h3 className="text-sm font-medium text-gray-700">
-              {t("Dashboard.activeUsers")}
+              {t('Dashboard.activeUsers')}
             </h3>
             <p className="text-2xl font-bold text-green-600">
               {userStats.activeUsers}
@@ -146,19 +148,19 @@ const Dashboard: React.FC = () => {
           <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
             <div>
               <h3 className="text-sm font-medium text-gray-700">
-                {t("Dashboard.recentlyActive")}
+                {t('Dashboard.recentlyActive')}
               </h3>
               <p className="text-md font-semibold text-gray-600">
                 {recentUser.name || recentUser.email}
               </p>
               <p className="text-sm text-gray-500">
-                {t("Dashboard.lastActive")}{" "}
+                {t('Dashboard.lastActive')}{' '}
                 {recentUser.lastActive
-                  ? new Date(recentUser.lastActive).toLocaleString("default", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
+                  ? new Date(recentUser.lastActive).toLocaleString('default', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
                     })
-                  : "N/A"}
+                  : 'N/A'}
               </p>
             </div>
             <FaUserClock size={30} className="text-orange-500" />
@@ -168,10 +170,10 @@ const Dashboard: React.FC = () => {
 
       <div
         className="bg-white p-6 rounded-xl shadow-md mt-12"
-        style={{ height: "400px" }}
+        style={{ height: '400px' }}
       >
         <h2 className="text-xl font-medium mb-4">
-          {t("Dashboard.userRegistrationsByMonth")}
+          {t('Dashboard.userRegistrationsByMonth')}
         </h2>
         <Bar data={userChartData} options={chartOptions} />
       </div>

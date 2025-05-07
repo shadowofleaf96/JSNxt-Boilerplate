@@ -1,4 +1,4 @@
-import axios, { InternalAxiosRequestConfig } from "axios";
+import axios, { InternalAxiosRequestConfig } from 'axios';
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -9,7 +9,7 @@ const AxiosConfig = axios.create({
 
 AxiosConfig.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
