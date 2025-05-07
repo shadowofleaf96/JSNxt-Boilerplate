@@ -1,0 +1,14 @@
+# Stage 1: Install dependencies and build the app
+FROM node:19-bullseye AS builder
+WORKDIR /app
+COPY server/package*.json ./
+RUN npm install
+COPY server/ .
+RUN npm run build
+
+# Stage 2: Run the app
+FROM node:19-bullseye
+WORKDIR /app
+COPY --from=builder /app ./
+EXPOSE 5000
+CMD ["npm", "start"]
