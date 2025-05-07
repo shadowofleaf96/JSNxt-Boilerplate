@@ -19,29 +19,28 @@ This project is a modern full-stack web application starter built with **Next.js
 
 ## 🔧 Features
 
-- ✅ Clean modular folder structure  
-  - `client/`: Next.js frontend  
-  - `server/`: Express.js backend  
+- ✅ Clean modular folder structure
+  - `client/`: Next.js frontend
+  - `server/`: Express.js backend
   - Well-defined separation of concerns and scalable architecture
 - ✅ Next.js App Router with dynamic routing and layout support
-- ✅ Full user authentication flow  
-  - JWT (register, login, reset password)  
-  - Google OAuth with secure callback and token handling  
-- ✅ Role-Based Access Control (RBAC)  
-  - Admin, User roles  
+- ✅ Full user authentication flow
+  - JWT (register, login, reset password)
+  - Google OAuth with secure callback and token handling
+- ✅ Role-Based Access Control (RBAC)
+  - Admin, User roles
   - Middleware protection on both frontend and backend
 - ✅ MongoDB integration using Mongoose (default)
 - ✅ MySQL integration using Sequelize (`mysql` branch)
 - ✅ Protected admin dashboard and pages
-- ✅ Internationalization (i18n)  
-  - `en`, `fr`, `ar`  
-  - Dynamic locale middleware that auto-redirects  
-  - Locale-specific content and translations stored in JSON  
-  - RTL support for Arabic  
+- ✅ Internationalization (i18n)
+  - `en`, `fr`, `ar`
+  - Dynamic locale middleware that auto-redirects
+  - Locale-specific content and translations stored in JSON
+  - RTL support for Arabic
   - Flag icon language switcher
 - ✅ Responsive UI built with Tailwind CSS
-  - Mobile-first design  
-  - Masonry layout image gallery  
+  - Mobile-first design
   - Reusable components with animation
 - ✅ Environment variables managed with `.env`
 - ✅ Static file handling (`public/` and `uploads/`)
@@ -49,12 +48,13 @@ This project is a modern full-stack web application starter built with **Next.js
 - ✅ Middleware handling for routing and locale detection
 - ✅ ESLint and Prettier for code quality and consistency
 - ✅ TypeScript types and interfaces for both frontend and backend
-- ✅ Ready for deployment on:  
-  - **Vercel** (frontend)  
-  - **Railway / Render / Heroku** (backend)  
+- ✅ Ready for deployment on:
+  - **Vercel** (frontend)
+  - **Railway / Render / Heroku** (backend)
   - Includes basic Dockerfile (Soon)
 
 ## 📁 Client Folder Structure
+
 ```bash
 ├── public/                 # Static assets (e.g., images, icons, fonts)
 ├── src/
@@ -82,6 +82,7 @@ This project is a modern full-stack web application starter built with **Next.js
 ```
 
 ## 📁 Server Folder Structure
+
 ```bash
 
 ├── config/                 # Configuration files (e.g., database connections, environment variables)
@@ -115,3 +116,6 @@ cd client && npm install && npm run dev
 cd server && npm install && npm run dev
 **Don't forget about env for Frontend and Backend**
 ```
+
+Feel free to fork and contribute!
+Made with ❤️ by Mohammed Kotbi
