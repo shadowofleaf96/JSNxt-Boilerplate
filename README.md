@@ -41,7 +41,6 @@ This project is a modern full-stack web application starter built with **Next.js
   - Flag icon language switcher
 - ✅ Responsive UI built with Tailwind CSS
   - Mobile-first design  
-  - Masonry layout image gallery  
   - Reusable components with animation
 - ✅ Environment variables managed with `.env`
 - ✅ Static file handling (`public/` and `uploads/`)
