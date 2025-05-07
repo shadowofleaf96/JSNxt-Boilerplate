@@ -16,5 +16,8 @@ services:
       dockerfile: Dockerfile.server
     env_file:
       - ./server/.env
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - "5000:5000"
