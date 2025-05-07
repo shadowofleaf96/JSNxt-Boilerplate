@@ -1,4 +1,4 @@
-import User from "../models/Users";
+import User from '../models/Users';
 
 /**
  * Generates a unique username based on the provided name.
@@ -8,12 +8,12 @@ import User from "../models/Users";
  * @returns A unique username string.
  */
 export async function generateUniqueUsername(name: string): Promise<string> {
-  console.log("Generating username for:", name);
+  console.log('Generating username for:', name);
   const baseUsername = name
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s]/g, "")
-    .replace(/\s+/g, "_");
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, '_');
 
   let username = baseUsername;
   let counter = 1;

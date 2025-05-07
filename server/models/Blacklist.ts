@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 interface IBlacklist extends Document {
   token: string;
@@ -9,14 +9,14 @@ const BlacklistSchema: Schema<IBlacklist> = new Schema(
     token: {
       type: String,
       required: true,
-      ref: "User",
+      ref: 'User',
     },
   },
   {
     timestamps: true,
     versionKey: false,
-    collection: "Blacklist",
+    collection: 'Blacklist',
   }
 );
 
-export default mongoose.model<IBlacklist>("Blacklist", BlacklistSchema);
+export default mongoose.model<IBlacklist>('Blacklist', BlacklistSchema);

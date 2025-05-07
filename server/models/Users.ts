@@ -1,41 +1,41 @@
-import mongoose, { Document, Schema } from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import Joi from "joi";
-import { UserDocument } from "../types/user.interface";
-import { resetPassword } from "@/controllers/userController";
+import mongoose, { Document, Schema } from 'mongoose';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import Joi from 'joi';
+import { UserDocument } from '../types/user.interface';
+import { resetPassword } from '@/controllers/userController';
 
 dotenv.config();
 
 export const UserJoiSchema = Joi.object({
   _id: Joi.any().strip(),
-  authProvider: Joi.string().valid("local", "google").required(),
+  authProvider: Joi.string().valid('local', 'google').required(),
   googleId: Joi.string().optional(),
   avatar: Joi.string().required(),
   name: Joi.string().optional(),
   username: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
-  password: Joi.when("authProvider", {
-    is: "local",
+  password: Joi.when('authProvider', {
+    is: 'local',
     then: Joi.string().min(8).required(),
-    otherwise: Joi.string().optional().allow(""),
+    otherwise: Joi.string().optional().allow(''),
   }),
-  role: Joi.string().valid("admin", "user").required(),
-  status: Joi.string().valid("active", "inactive").required(),
+  role: Joi.string().valid('admin', 'user').required(),
+  status: Joi.string().valid('active', 'inactive').required(),
   lastActive: Joi.date().optional(),
-  emailToken: Joi.string().allow(null, "").optional(),
+  emailToken: Joi.string().allow(null, '').optional(),
   isVerified: Joi.boolean().optional(),
-  resetPasswordToken: Joi.string().allow(null, "").optional(),
-  resetPasswordExpire: Joi.date().allow(null, "").optional(),
+  resetPasswordToken: Joi.string().allow(null, '').optional(),
+  resetPasswordExpire: Joi.date().allow(null, '').optional(),
 });
 
 const UserSchema: Schema<UserDocument> = new Schema<UserDocument>(
   {
     authProvider: {
       type: String,
-      enum: ["local", "google"],
-      default: "local",
+      enum: ['local', 'google'],
+      default: 'local',
       required: true,
     },
     googleId: {
@@ -59,7 +59,7 @@ const UserSchema: Schema<UserDocument> = new Schema<UserDocument>(
     password: {
       type: String,
       required: function () {
-        return this.authProvider === "local";
+        return this.authProvider === 'local';
       },
     },
     email: {
@@ -99,11 +99,11 @@ const UserSchema: Schema<UserDocument> = new Schema<UserDocument>(
   {
     timestamps: true,
     versionKey: false,
-    collection: "User",
+    collection: 'User',
   }
 );
 
-UserSchema.pre<UserDocument>("save", async function (next) {
+UserSchema.pre<UserDocument>('save', async function (next) {
   try {
     const validated = await UserJoiSchema.validateAsync(this.toObject(), {
       stripUnknown: true,
@@ -112,7 +112,7 @@ UserSchema.pre<UserDocument>("save", async function (next) {
 
     Object.assign(this, validated);
 
-    if (!this.isModified("password")) return next();
+    if (!this.isModified('password')) return next();
 
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
@@ -123,7 +123,7 @@ UserSchema.pre<UserDocument>("save", async function (next) {
   }
 });
 
-UserSchema.pre("findOneAndUpdate", async function (next) {
+UserSchema.pre('findOneAndUpdate', async function (next) {
   try {
     const update = this.getUpdate() as Partial<UserDocument>;
 
@@ -134,7 +134,7 @@ UserSchema.pre("findOneAndUpdate", async function (next) {
 
     const validated = await UserJoiSchema.validateAsync(update, {
       allowUnknown: true,
-      presence: "optional",
+      presence: 'optional',
     });
     this.setUpdate(validated);
 
@@ -144,7 +144,7 @@ UserSchema.pre("findOneAndUpdate", async function (next) {
   }
 });
 
-UserSchema.pre("updateOne", async function (next) {
+UserSchema.pre('updateOne', async function (next) {
   try {
     const update = this.getUpdate() as Partial<UserDocument>;
 
@@ -155,7 +155,7 @@ UserSchema.pre("updateOne", async function (next) {
 
     const validated = await UserJoiSchema.validateAsync(update, {
       allowUnknown: true,
-      presence: "optional",
+      presence: 'optional',
     });
     this.setUpdate(validated);
 
@@ -171,10 +171,10 @@ UserSchema.methods.generateAccessJWT = function (): string {
   };
 
   return jwt.sign(payload, process.env.SECRET_ACCESS_TOKEN as string, {
-    expiresIn: "10d",
+    expiresIn: '10d',
   });
 };
 
-const User = mongoose.model<UserDocument>("users", UserSchema);
+const User = mongoose.model<UserDocument>('users', UserSchema);
 
 export default User;

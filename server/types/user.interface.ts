@@ -1,7 +1,7 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
 
 export interface UserDTO {
-  authProvider: "local" | "google";
+  authProvider: 'local' | 'google';
   googleId?: string;
   password?: string;
   username: string;
@@ -10,7 +10,7 @@ export interface UserDTO {
 }
 
 export interface UserDocument extends Document {
-  authProvider: "local" | "google";
+  authProvider: 'local' | 'google';
   googleId?: string;
   avatar: string;
   name?: string;

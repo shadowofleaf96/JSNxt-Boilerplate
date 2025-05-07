@@ -7,12 +7,18 @@ interface DecodedToken extends JwtPayload {
   id: string;
 }
 
-const Verify = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const Verify = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const authHeader = req.headers['authorization'];
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      res.status(401).json({ message: 'Authorization header missing or malformed' });
+      res
+        .status(401)
+        .json({ message: 'Authorization header missing or malformed' });
       return;
     }
 
@@ -24,7 +30,10 @@ const Verify = async (req: Request, res: Response, next: NextFunction): Promise<
       return;
     }
 
-    const decoded = verify(token, process.env.SECRET_ACCESS_TOKEN as string) as DecodedToken;
+    const decoded = verify(
+      token,
+      process.env.SECRET_ACCESS_TOKEN as string
+    ) as DecodedToken;
 
     const user = await User.findById(decoded.id);
     if (!user) {

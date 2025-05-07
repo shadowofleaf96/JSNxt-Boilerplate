@@ -1,11 +1,11 @@
-import { EmailTemplateOptions } from "../types/email.interface";
+import { EmailTemplateOptions } from '../types/email.interface';
 
 export const getWelcomeEmailTemplate = (options: EmailTemplateOptions) => `
   <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;border:1px solid #e0e0e0;border-radius:10px;background:#ffffff">
     <div style="text-align:center;margin-bottom:20px">
       <img src="${options.logoUrl}" alt="JSNXT Logo" style="width:80px;height:auto" />
     </div>
-    <h2 style="color:#333333">Welcome, ${options.user?.name || "User"}!</h2>
+    <h2 style="color:#333333">Welcome, ${options.user?.name || 'User'}!</h2>
     <p style="font-size:16px;color:#555555">
       Your account has been successfully created. You can now log in using your credentials.
     </p>
@@ -16,7 +16,7 @@ export const getWelcomeEmailTemplate = (options: EmailTemplateOptions) => `
       <a href="${options.action.url}" style="background-color:#111;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold">${options.action.text}</a>
     </div>
     `
-        : ""
+        : ''
     }
     <p style="font-size:14px;color:#999999">
       If you have any questions, feel free to contact our support team.
@@ -34,7 +34,7 @@ export const getVerificationEmailTemplate = (options: EmailTemplateOptions) => `
       Thank you for registering. Please confirm your email address by clicking the button below:
     </p>
     <div style="margin:30px 0;text-align:center">
-      <a href="${options.action?.url}" style="background-color:#111;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold">${options.action?.text || "Verify Email"}</a>
+      <a href="${options.action?.url}" style="background-color:#111;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold">${options.action?.text || 'Verify Email'}</a>
     </div>
     <p style="font-size:14px;color:#999999">If you did not request this, please ignore this email.</p>
   </div>

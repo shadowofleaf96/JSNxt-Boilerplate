@@ -1,18 +1,14 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { UserDocument } from "../types/user.interface";
+import { UserDocument } from '../types/user.interface';
 
-const VerifyRole = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+const VerifyRole = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const user = req.user;
 
-    if (!user || user.role !== "admin") {
+    if (!user || user.role !== 'admin') {
       res.status(401).json({
-        status: "failed",
-        message: "You are not authorized to view this page.",
+        status: 'failed',
+        message: 'You are not authorized to view this page.',
       });
       return;
     }
@@ -20,10 +16,10 @@ const VerifyRole = (
     next();
   } catch (err) {
     res.status(500).json({
-      status: "error",
+      status: 'error',
       code: 500,
       data: [],
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
     });
   }
 };
