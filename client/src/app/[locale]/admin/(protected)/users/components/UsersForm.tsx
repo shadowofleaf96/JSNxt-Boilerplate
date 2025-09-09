@@ -16,32 +16,32 @@ const userSchema = z.object({
   authProvider: z.enum(['local', 'google']),
   avatar: z
     .any()
-    .refine((files) => {
-      if (!files || files.length === 0) return true;
-      return files[0] instanceof File;
-    }, 'userForm:errors.invalidFile')
+    .refine(
+      (files) => !files || files.length === 0 || files[0] instanceof File,
+      { message: 'userForm.errors.invalidFile' }
+    )
     .refine(
       (files) => !files || files.length === 0 || files[0].size <= 5_000_000,
-      'userForm:errors.fileSize'
+      { message: 'userForm.errors.fileSize' }
     )
     .optional(),
   name: z
     .string()
-    .min(3, 'userForm:errors.nameMin')
-    .max(20, 'userForm:errors.nameMax')
+    .min(3, { message: 'userForm.errors.nameMin' })
+    .max(20, { message: 'userForm.errors.nameMax' })
     .trim(),
   username: z
     .string()
-    .min(3, 'userForm:errors.usernameMin')
-    .max(20, 'userForm:errors.usernameMax')
+    .min(3, { message: 'userForm.errors.usernameMin' })
+    .max(20, { message: 'userForm.errors.usernameMax' })
     .trim(),
   password: z
     .string()
-    .min(6, 'userForm:errors.passwordMin')
-    .max(20, 'userForm:errors.passwordMax')
+    .min(6, { message: 'userForm.errors.passwordMin' })
+    .max(20, { message: 'userForm.errors.passwordMax' })
     .trim(),
-  email: z.string().email('userForm:errors.invalidEmail').trim(),
-  role: z.string().min(1, 'userForm:errors.roleRequired'),
+  email: z.string().email({ message: 'userForm.errors.invalidEmail' }).trim(),
+  role: z.string().min(1, { message: 'userForm.errors.roleRequired' }),
   status: z.enum(['active', 'inactive']),
 });
 
@@ -134,7 +134,7 @@ const UsersForm: React.FC<UsersFormProps> = ({
       onClose();
       refreshUsers();
     } catch (error: any) {
-      toast.error('An error occurred. Please try again.' + error);
+      toast.error(t('userForm.errors.generic') + error.response.data.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -432,13 +432,10 @@ const UsersForm: React.FC<UsersFormProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-blue-500 text-white py-3 font-light px-4 rounded transition-colors duration-200 hover:bg-blue-600"
+              className="bg-blue-500 text-white py-3 w-20 font-light px-4 rounded transition-colors duration-200 hover:bg-blue-600 flex justify-center items-center"
             >
               {isSubmitting ? (
-                <LoadingSpinner
-                  size={6}
-                  className="w-auto py-1 px-3 h-auto text-white"
-                />
+                <LoadingSpinner size={24} className="text-white" />
               ) : isEditMode ? (
                 t('userForm.buttons.update')
               ) : (
