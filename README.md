@@ -124,7 +124,7 @@ This project is a modern full-stack web application starter built with **Next.js
 1. **Clone repository**
 
 ```bash
-git clone https://github.com/yourusername/next-express-boilerplate.git
+git clone https://github.com/shadowofleaf96/JSNxt-Boilerplate.git
 cd next-express-boilerplate
 cd client && npm install && npm run dev
 cd server && npm install && npm run dev
