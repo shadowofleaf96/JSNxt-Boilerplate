@@ -38,7 +38,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
       onClose();
     } catch (error: any) {
       console.error(error);
-      toast.error(t('forgot.error') + error.message);
+      toast.error(t('forgot.error') + error.response.data.message);
     } finally {
       setLoading(false);
     }
