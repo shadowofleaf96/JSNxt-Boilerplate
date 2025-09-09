@@ -38,7 +38,7 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install client dependencies
-        run: npm ci
+        run: npm i
 
       - name: Build client
         run: npm run build
@@ -61,7 +61,7 @@ jobs:
           cache-dependency-path: server/package-lock.json
 
       - name: Install server dependencies
-        run: npm ci
+        run: npm i
 
       - name: Build server
         run: npm run build
