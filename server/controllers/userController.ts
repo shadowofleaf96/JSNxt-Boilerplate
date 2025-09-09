@@ -556,10 +556,8 @@ export const updateUser = async (
       delete updates.password;
     }
 
-    await User.update(updates, {
-      where: { id },
-    });
-
+    await existingUser.update(updates);
+    
     const updatedUser = await User.findByPk(id);
 
     if (!updatedUser) {
