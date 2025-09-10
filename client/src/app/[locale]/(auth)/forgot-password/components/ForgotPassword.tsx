@@ -38,7 +38,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
       onClose();
     } catch (error: any) {
       console.error(error);
-      toast.error(t('forgot.error') + error.message);
+      toast.error(t('forgot.error') + error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             disabled={loading}
             className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
           >
-            {loading ? <LoadingSpinner size={5} /> : t('forgot.button')}
+            {loading ? <LoadingSpinner size={20} /> : t('forgot.button')}
           </button>
           <p className="text-xs text-center text-gray-500 mt-6">
             {t('register.recaptcha_disclaimer')}{' '}

@@ -222,7 +222,7 @@ const Registration: React.FC = () => {
                   disabled={loading}
                   className="flex w-full justify-center rounded-md bg-black px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-60"
                 >
-                  {loading ? <LoadingSpinner size={5} /> : t('register.submit')}
+                  {loading ? <LoadingSpinner size={20} /> : t('register.submit')}
                 </button>
               </div>
               <p className="text-xs text-center text-gray-500 mt-6">

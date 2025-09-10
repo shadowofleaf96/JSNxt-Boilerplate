@@ -39,7 +39,7 @@ const VerificationSuccess = () => {
         <p className="text-lg text-gray-700 mb-8 py-4">
           Logging you in automatically...
         </p>
-        <LoadingSpinner size={8} className="mx-auto" />
+        <LoadingSpinner size={32} className="mx-auto" />
       </div>
     </div>
   );
