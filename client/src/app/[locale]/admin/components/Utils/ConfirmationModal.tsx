@@ -68,7 +68,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           className="px-4 py-3 bg-red-500 text-white rounded hover:bg-red-600"
           disabled={isLoading}
         >
-          {isLoading ? <LoadingSpinner size={6} /> : t('buttons.delete')}
+          {isLoading ? <LoadingSpinner size={24} /> : t('buttons.delete')}
         </button>
       </div>
     </Modal>

@@ -117,7 +117,7 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
           <LanguageSwitcher />
 
           {userLoading ? (
-            <LoadingSpinner size={5} />
+            <LoadingSpinner size={20} />
           ) : currentUser ? (
             <div className="relative" ref={dropdownRef}>
               <button
@@ -146,7 +146,7 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
                     className="w-full px-4 py-4 text-left text-red-600 hover:bg-gray-50 flex items-center gap-3 transition-colors rounded-md font-semibold cursor-pointer"
                   >
                     {loading ? (
-                      <LoadingSpinner size={4} className="mx-auto" />
+                      <LoadingSpinner size={16} className="mx-auto" />
                     ) : (
                       <>
                         <FiLogOut className="flex-shrink-0" />

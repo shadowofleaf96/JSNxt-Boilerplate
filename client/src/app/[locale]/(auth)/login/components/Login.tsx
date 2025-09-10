@@ -212,7 +212,7 @@ const Login: React.FC = () => {
                   disabled={loading}
                   className="flex w-full justify-center rounded-md bg-black px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-50"
                 >
-                  {loading ? <LoadingSpinner size={5} /> : t('login.signIn')}
+                  {loading ? <LoadingSpinner size={20} /> : t('login.signIn')}
                 </button>
                 <div className="mt-6">
                   <div className="relative">
