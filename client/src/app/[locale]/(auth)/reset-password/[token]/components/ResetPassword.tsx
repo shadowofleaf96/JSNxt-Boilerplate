@@ -100,7 +100,7 @@ const ResetPasswordPage: React.FC = () => {
             disabled={loading}
             className="w-full bg-gray-800 text-white font-medium py-3 rounded-lg hover:bg-gray-600 transition disabled:opacity-50"
           >
-            {loading ? <LoadingSpinner size={5} /> : t('confirm')}
+            {loading ? <LoadingSpinner size={20} /> : t('confirm')}
           </button>
         </form>
       </div>
