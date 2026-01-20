@@ -9,6 +9,17 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+
 const ResetPasswordPage: React.FC = () => {
   const { token } = useParams();
   const router = useRouter();
@@ -43,67 +54,65 @@ const ResetPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-white flex items-center justify-center px-4 py-12">
-      <div className="bg-white rounded-2xl shadow-lg max-w-md w-full p-8">
-        <div className="flex justify-center mb-6">
-          <Image
-            src="/images/jsnxt-logo-black.webp"
-            alt="Logo"
-            className="h-16 w-16"
-            width={0}
-            height={0}
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,..."
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-        </div>
-
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">
-          {t('reset.resetPassword')}
-        </h1>
-        <p className="text-sm text-center text-gray-600 mb-6">
-          {t('reset.enterNewPassword')}
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t('reset.newPassword')}
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
-              required
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
+      <Card className="w-full max-w-md shadow-lg border-border">
+        <CardHeader className="space-y-2 pb-6">
+          <div className="flex justify-center mb-2">
+            <Image
+              src="/images/jsnxt-logo-black.webp"
+              alt="Logo"
+              className="h-16 w-16"
+              width={0}
+              height={0}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPvd7POQAAAABJRU5ErkJggg=="
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t('reset.confirmPassword')}
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 transition"
-              required
-            />
-          </div>
+          <CardTitle className="text-2xl font-bold text-center text-foreground">
+            {t('reset.resetPassword')}
+          </CardTitle>
+          <CardDescription className="text-center text-muted-foreground">
+            {t('reset.enterNewPassword')}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="password">{t('reset.newPassword')}</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirm">{t('reset.confirmPassword')}</Label>
+              <Input
+                id="confirm"
+                type="password"
+                placeholder="••••••••"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                required
+              />
+            </div>
 
-          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+            {error && (
+              <p className="text-sm text-destructive text-center font-medium">
+                {error}
+              </p>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gray-800 text-white font-medium py-3 rounded-lg hover:bg-gray-600 transition disabled:opacity-50"
-          >
-            {loading ? <LoadingSpinner size={20} /> : t('confirm')}
-          </button>
-        </form>
-      </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? <LoadingSpinner size={20} /> : t('confirm')}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

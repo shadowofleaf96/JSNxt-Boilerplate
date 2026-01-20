@@ -681,6 +681,11 @@ export const resetPassword = async (
     const { password } = req.body as { password: string };
     const { token } = req.params;
 
+    if (!token || Array.isArray(token)) {
+      res.status(400).json({ message: 'Invalid or missing token.' });
+      return;
+    }
+
     if (!password) {
       res.status(400).json({ message: 'Please provide a new password.' });
       return;

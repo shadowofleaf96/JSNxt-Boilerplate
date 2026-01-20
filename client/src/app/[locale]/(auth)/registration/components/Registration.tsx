@@ -10,19 +10,44 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
-import Modal from '@/components/ui/Modal';
 import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+
 const registrationSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1, 'Name is required'),
   email: z.string().email('Please enter a valid email address'),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters')
     .max(50, 'Password must be at most 50 characters'),
-  acceptPolicy: z.literal(true, {
-    errorMap: () => ({ message: 'You must accept the privacy policy' }),
+  acceptPolicy: z.boolean().refine((val) => val === true, {
+    message: 'You must accept the privacy policy',
   }),
 });
 
@@ -31,14 +56,18 @@ const Registration: React.FC = () => {
   const { t } = useTranslation();
   const { executeRecaptcha } = useReCaptcha();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const error = '';
+  const [error, setError] = useState('');
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: zodResolver(registrationSchema) });
+  const form = useForm<z.infer<typeof registrationSchema>>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      acceptPolicy: false,
+    },
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -49,7 +78,7 @@ const Registration: React.FC = () => {
     }
   }, [router]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: z.infer<typeof registrationSchema>) => {
     const sanitizedData = {
       name: DOMPurify.sanitize(data.name.trim()),
       email: DOMPurify.sanitize(data.email.trim()),
@@ -58,6 +87,7 @@ const Registration: React.FC = () => {
 
     try {
       setLoading(true);
+      setError('');
       const recaptchaToken = await executeRecaptcha('form_submit');
 
       await AxiosConfig.post(`/users/register`, {
@@ -69,196 +99,177 @@ const Registration: React.FC = () => {
     } catch (err: any) {
       console.log(err);
       const msg =
-        'Registration failed. Please try again.' + err?.response?.data?.message;
+        'Registration failed. Please try again. ' +
+        (err?.response?.data?.message || '');
       toast.error(msg);
+      setError(msg);
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen flex-1">
-      <div className="relative hidden w-0 flex-1 lg:block">
-        <Image
-          width={0}
-          height={0}
-          placeholder="blur"
-          blurDataURL="data:image/png;base64,..."
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Background Image"
-          src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-          className="absolute inset-0 size-full object-cover"
-        />
-      </div>
-      <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div>
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-sm border-border shadow-md">
+        <CardHeader className="space-y-2 pb-6">
+          <div className="flex justify-center mx-auto mb-2">
             <Image
-              className="md:w-32 w-20 h-auto mx-auto"
+              className="w-auto h-20 sm:h-20"
               width={0}
               height={0}
               placeholder="blur"
-              blurDataURL="data:image/png;base64,..."
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPvd7POQAAAABJRU5ErkJggg=="
               sizes="(max-width: 768px) 100vw, 50vw"
               src="/images/jsnxt-logo-black.webp"
               alt="Your Company"
             />
-            <h2 className="mt-8 text-2xl font-bold tracking-tight text-gray-900">
-              {t('register.create_account')}
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              {t('register.already_have_account')}{' '}
-              <Link
-                href="/login"
-                className="font-semibold text-gray-600 hover:text-gray-500"
-              >
-                {t('register.sign_in_here')}
-              </Link>
-            </p>
           </div>
+          <CardTitle className="text-2xl font-bold tracking-tight text-center text-foreground">
+            {t('register.create_account')}
+          </CardTitle>
+          <CardDescription className="text-center text-muted-foreground">
+            {t('register.already_have_account')}{' '}
+            <Link
+              href="/login"
+              className="font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              {t('register.sign_in_here')}
+            </Link>
+          </CardDescription>
+        </CardHeader>
 
-          <div className="mt-10">
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-900"
-                >
-                  {t('register.name')}{' '}
-                </label>
-                <div className="mt-2">
-                  <input
-                    {...register('name')}
-                    id="name"
-                    type="name"
-                    placeholder="John Doe"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
-                  />
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.name.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-900"
-                >
-                  {t('register.email')}{' '}
-                </label>
-                <div className="mt-2">
-                  <input
-                    {...register('email')}
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-900"
-                >
-                  {t('register.password')}{' '}
-                </label>
-                <div className="mt-2">
-                  <input
-                    {...register('password')}
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    className="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:outline-gray-600 focus:ring-gray-600 sm:text-sm"
-                  />
-                  {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.password.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="flex h-5 items-center">
-                  <input
-                    {...register('acceptPolicy')}
-                    id="acceptPolicy"
-                    type="checkbox"
-                    required
-                    className="h-4 w-4 rounded border-gray-300 text-black accent-gray-700 focus:ring-black rtl:ml-3"
-                  />
-                </div>
-                <label htmlFor="acceptPolicy">
-                  {t('register.accept_policy')}{' '}
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(true)}
-                    className="underline"
-                  >
-                    {t('register.privacy_policy')}
-                  </button>
-                </label>
-                {errors.acceptPolicy && (
-                  <p className="text-sm text-red-600">
-                    {t(errors.acceptPolicy.message as string)}
-                  </p>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('register.name')}</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </div>
+              />
 
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('register.email')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="you@example.com"
+                        type="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex w-full justify-center rounded-md bg-black px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-60"
-                >
-                  {loading ? (
-                    <LoadingSpinner size={20} />
-                  ) : (
-                    t('register.submit')
-                  )}
-                </button>
-              </div>
-              <p className="text-xs text-center text-gray-500 mt-6">
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('register.password')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="••••••••"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="acceptPolicy"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-4 bg-muted/50 border border-muted">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="font-normal text-sm text-foreground">
+                        {t('register.accept_policy')}{' '}
+                        <button
+                          type="button"
+                          onClick={() => setIsModalOpen(true)}
+                          className="underline font-medium text-primary hover:text-primary/80"
+                        >
+                          {t('register.privacy_policy')}
+                        </button>
+                      </FormLabel>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              {error && (
+                <div className="text-sm text-destructive font-medium">
+                  {error}
+                </div>
+              )}
+
+              <Button type="submit" className="w-full mt-2" disabled={loading}>
+                {loading ? <LoadingSpinner size={20} /> : t('register.submit')}
+              </Button>
+
+              <p className="text-xs text-center text-muted-foreground mt-4">
                 {t('register.recaptcha_disclaimer')}{' '}
                 <a
                   href="https://policies.google.com/privacy"
-                  className="underline"
+                  className="underline hover:text-foreground"
                 >
                   {t('register.privacy')}
                 </a>{' '}
                 &{' '}
                 <a
                   href="https://policies.google.com/terms"
-                  className="underline"
+                  className="underline hover:text-foreground"
                 >
                   {t('register.terms')}
                 </a>
               </p>
             </form>
+          </Form>
+        </CardContent>
+      </Card>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{t('register.policy_title')}</DialogTitle>
+            <DialogDescription>
+              {t('register.policy_description') ||
+                'Please read our privacy policy carefully.'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="max-h-[60vh] overflow-y-auto">
+            {Object.values(
+              t('register.policy_content', { returnObjects: true })
+            ).map((text: any, index: number) => (
+              <p key={index} className="mb-2 text-sm text-muted-foreground">
+                {text}
+              </p>
+            ))}
           </div>
-        </div>
-      </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2 className="text-xl font-bold mb-4">{t('register.policy_title')}</h2>
-        {Object.values(
-          t('register.policy_content', { returnObjects: true })
-        ).map((text, index) => (
-          <p key={index} className="mb-2">
-            {text}
-          </p>
-        ))}
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

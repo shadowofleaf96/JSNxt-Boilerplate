@@ -1,11 +1,12 @@
 'use client';
 import React from 'react';
-import { FaHome, FaUser } from 'react-icons/fa';
-import { IoClose } from 'react-icons/io5';
+import { Home, Users, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -30,14 +31,14 @@ export default function Sidebar({
       name: t('navbar.dashboard'),
       href: `/${currentLocale}/admin/dashboard`,
       current: pathname === `/${currentLocale}/admin/dashboard`,
-      icon: <FaHome className="text-xl md:text-2xl" />,
+      icon: Home,
     },
     {
       key: 'users',
       name: t('navbar.users'),
       href: `/${currentLocale}/admin/users`,
       current: pathname === `/${currentLocale}/admin/users`,
-      icon: <FaUser className="text-xl md:text-2xl" />,
+      icon: Users,
     },
   ];
 
@@ -45,17 +46,18 @@ export default function Sidebar({
     <>
       {isOpen && isMobile && (
         <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
           onClick={toggleSidebar}
         />
       )}
 
       <aside
-        className={`${
+        className={cn(
+          'fixed z-50 flex h-screen w-56 flex-col border-r border-border bg-background transition-transform duration-300 ease-in-out md:relative md:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0 w-56 fixed md:relative h-screen bg-white border-r border-gray-300 z-50 transition-transform duration-300 ease-in-out flex flex-col`}
+        )}
       >
-        <div className="relative p-2 flex items-center justify-center">
+        <div className="relative flex items-center justify-center p-4">
           <Link
             href={`/${currentLocale}`}
             prefetch={true}
@@ -73,13 +75,15 @@ export default function Sidebar({
             />
           </Link>
           {isMobile && (
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={toggleSidebar}
-              className="absolute right-2 md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              aria-label={t('navbar.buttons.close')}
+              className="absolute right-2 top-2 md:hidden"
             >
-              <IoClose className="text-xl" />
-            </button>
+              <X className="h-5 w-5" />
+              <span className="sr-only">{t('navbar.buttons.close')}</span>
+            </Button>
           )}
         </div>
         <div className="flex-1 overflow-y-auto p-4">
@@ -88,22 +92,21 @@ export default function Sidebar({
               <Link
                 key={item.key}
                 href={item.href}
-                prefetch={false}
                 onClick={() => isMobile && toggleSidebar()}
-                className={`flex items-center px-3 py-2.5 rounded-lg transition-colors ${
+                className={cn(
+                  'flex items-center rounded-lg px-3 py-2.5 transition-colors text-sm font-medium',
                   item.current
-                    ? 'bg-blue-50 text-black'
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                )}
               >
-                <span
-                  className={`${item.current ? 'text-black' : 'text-gray-500'}`}
-                >
-                  {item.icon}
-                </span>
-                <span className="ml-3 text-sm font-medium rtl:mr-3">
-                  {item.name}
-                </span>
+                <item.icon
+                  className={cn(
+                    'mr-3 h-5 w-5',
+                    item.current ? 'text-primary' : 'text-muted-foreground'
+                  )}
+                />
+                {item.name}
               </Link>
             ))}
           </nav>

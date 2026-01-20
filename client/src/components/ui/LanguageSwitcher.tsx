@@ -1,10 +1,16 @@
 'use client';
 
-import { Fragment } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Menu, Transition } from '@headlessui/react';
 import ReactCountryFlag from 'react-country-flag';
 import { FaChevronDown } from 'react-icons/fa';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const languages = [
   { code: 'en', countryCode: 'GB', label: 'English' },
@@ -39,64 +45,48 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left mr-3 rtl:ml-3">
-      <div>
-        <Menu.Button className="inline-flex w-full justify-center gap-x-2 rounded-md bg-gray-700 px-4 py-2 text-sm font-medium text-gray-800 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors">
-          <div className="flex items-center space-x-2">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          className="gap-x-2 bg-gray-700 text-gray-100 hover:bg-gray-600 border-gray-600"
+        >
+          <ReactCountryFlag
+            countryCode={currentLanguage.countryCode}
+            svg
+            style={{ width: '1.5em', height: '1.5em' }}
+            className="rounded-sm"
+          />
+          <span className="hidden sm:inline-block">
+            {currentLanguage.label}
+          </span>
+          <FaChevronDown className="h-4 w-4 opacity-50" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="end"
+        className="w-36 bg-white dark:bg-gray-800"
+      >
+        {languages.map(({ code, countryCode, label }) => (
+          <DropdownMenuItem
+            key={code}
+            onClick={() => handleLanguageChange(code)}
+            className={cn(
+              'flex items-center gap-x-3 cursor-pointer',
+              currentLangCode === code && 'bg-gray-100 dark:bg-gray-700'
+            )}
+          >
             <ReactCountryFlag
-              countryCode={currentLanguage.countryCode}
+              countryCode={countryCode}
               svg
               style={{ width: '1.5em', height: '1.5em' }}
               className="rounded-sm"
             />
-            <span className="text-gray-700 dark:text-gray-200">
-              {currentLanguage.label}
-            </span>
-          </div>
-          <FaChevronDown
-            className="-mr-1 h-5 w-5 text-gray-600 dark:text-gray-400"
-            aria-hidden="true"
-          />
-        </Menu.Button>
-      </div>
-
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-36 sm:w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 focus:outline-none">
-          <div className="py-1">
-            {languages.map(({ code, countryCode, label }) => (
-              <Menu.Item key={code}>
-                {({ active }) => (
-                  <button
-                    onClick={() => handleLanguageChange(code)}
-                    className={`${
-                      active
-                        ? 'bg-blue-50 text-blue-700 dark:bg-gray-700/80 dark:text-blue-400'
-                        : 'text-gray-700 dark:text-gray-200'
-                    } flex w-full items-center space-x-3 px-4 py-2.5 text-sm transition-colors`}
-                  >
-                    <ReactCountryFlag
-                      countryCode={countryCode}
-                      svg
-                      style={{ width: '1.5em', height: '1.5em' }}
-                      className="rounded-sm"
-                    />
-                    <span>{label}</span>
-                  </button>
-                )}
-              </Menu.Item>
-            ))}
-          </div>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+            <span>{label}</span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
