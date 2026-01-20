@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Joi from 'joi';
 import { UserDocument } from '../types/user.interface';
-import { resetPassword } from '@/controllers/userController';
 
 dotenv.config();
 
@@ -12,7 +11,7 @@ export const UserJoiSchema = Joi.object({
   _id: Joi.any().strip(),
   authProvider: Joi.string().valid('local', 'google').required(),
   googleId: Joi.string().optional(),
-  avatar: Joi.string().required(),
+  avatar: Joi.string().allow(null, '').optional(),
   name: Joi.string().optional(),
   username: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
@@ -45,7 +44,6 @@ const UserSchema: Schema<UserDocument> = new Schema<UserDocument>(
     },
     avatar: {
       type: String,
-      required: true,
     },
     name: {
       type: String,

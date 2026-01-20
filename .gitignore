@@ -13,6 +13,7 @@ dist
 dist-ssr
 *.local
 .next
+.history
 next-env.d.ts
 dist
 

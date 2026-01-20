@@ -12,7 +12,7 @@ export interface UserDTO {
 export interface UserDocument extends Document {
   authProvider: 'local' | 'google';
   googleId?: string;
-  avatar: string;
+  avatar?: string;
   name?: string;
   username: string;
   password?: string;
