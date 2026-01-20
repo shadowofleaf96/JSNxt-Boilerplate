@@ -11,7 +11,7 @@ export interface UserDocument {
   id: string;
   authProvider: 'local' | 'google';
   googleId?: string;
-  avatar: string;
+  avatar?: string;
   name?: string;
   username: string;
   email: string;

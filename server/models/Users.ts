@@ -8,13 +8,15 @@ import { UserDocument } from '@/types/user.interface';
 
 import sequelize from '../config/database';
 
-interface UserCreationAttributes
-  extends Optional<UserDocument, 'id' | 'lastActive' | 'isVerified'> {}
+interface UserCreationAttributes extends Optional<
+  UserDocument,
+  'id' | 'lastActive' | 'isVerified'
+> {}
 
 export const UserJoiSchema = Joi.object({
   authProvider: Joi.string().valid('local', 'google').required(),
   googleId: Joi.string().optional(),
-  avatar: Joi.string().required(),
+  avatar: Joi.string().optional(),
   name: Joi.string().optional(),
   username: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),

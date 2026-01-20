@@ -557,7 +557,7 @@ export const updateUser = async (
     }
 
     await existingUser.update(updates);
-    
+
     const updatedUser = await User.findByPk(id);
 
     if (!updatedUser) {

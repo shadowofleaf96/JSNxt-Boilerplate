@@ -4,13 +4,14 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
 
 const Verification = () => {
   const router = useRouter();
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-background">
       <div className="py-8">
         <Image
           className="md:w-32 w-20 h-auto mx-auto"
@@ -26,16 +27,18 @@ const Verification = () => {
           }}
         />
       </div>
-      <h1 className="text-3xl font-bold mb-4">{t('verification.title')}</h1>
-      <p className="text-lg text-gray-700 mb-8 text-center">
+      <h1 className="text-3xl font-bold mb-4 text-foreground">
+        {t('verification.title')}
+      </h1>
+      <p className="text-lg text-muted-foreground mb-8 text-center max-w-md">
         {t('verification.message')}
       </p>
-      <button
+      <Button
         onClick={() => router.push('/login')}
-        className="px-6 py-3 rounded-md text-white bg-black hover:bg-gray-700"
+        className="w-full sm:w-auto"
       >
         {t('verification.back')}
-      </button>
+      </Button>
     </div>
   );
 };

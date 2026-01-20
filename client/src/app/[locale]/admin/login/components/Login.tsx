@@ -8,6 +8,10 @@ import AxiosConfig from '@/components/utils/AxiosConfig';
 import DOMPurify from 'dompurify';
 import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
@@ -85,105 +89,111 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="h-screen m-auto flex items-center">
-      <div className="w-full max-w-sm p-6 mx-auto bg-white rounded-lg shadow-md">
-        <div className="flex justify-center mx-auto">
-          <Image
-            className="w-auto h-24 sm:h-24"
-            width={0}
-            height={0}
-            priority
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,..."
-            sizes="(max-width: 768px) 100vw, 50vw"
-            src="/images/jsnxt-logo-black.webp"
-            alt="Company Logo"
-          />
-        </div>
-        <h1 className="text-2xl font-bold flex justify-center text-gray-800 my-4">
-          {t('adminLogin.login.title')}
-        </h1>
-
-        <form className="mt-6" onSubmit={handleLogin}>
-          <div>
-            <label htmlFor="username" className="block text-sm text-gray-800">
-              {t('adminLogin.fields.username')}
-            </label>
-            <input
-              type="text"
-              name="username"
-              required
-              minLength={4}
-              maxLength={20}
-              pattern="[a-zA-Z0-9]+"
-              value={username}
-              autoComplete="username"
-              onChange={(e) =>
-                setUsername(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))
-              }
-              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-sm border-border shadow-md">
+        <CardHeader className="space-y-2 pb-6">
+          <div className="flex justify-center mx-auto mb-2">
+            <Image
+              className="w-auto h-24 sm:h-24"
+              width={0}
+              height={0}
+              priority
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,..."
+              sizes="(max-width: 768px) 100vw, 50vw"
+              src="/images/jsnxt-logo-black.webp"
+              alt="Company Logo"
             />
           </div>
+          <CardTitle className="text-2xl font-bold flex justify-center text-foreground my-4">
+            {t('adminLogin.login.title')}
+          </CardTitle>
+        </CardHeader>
 
-          <div className="mt-4">
-            <label htmlFor="password" className="block text-sm text-gray-800">
-              {t('adminLogin.fields.password')}
-            </label>
-            <input
-              type="password"
-              name="password"
-              required
-              minLength={8}
-              maxLength={50}
-              value={password}
-              autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
-              className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
-            />
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username">
+                {t('adminLogin.fields.username')}
+              </Label>
+              <Input
+                id="username"
+                type="text"
+                name="username"
+                required
+                minLength={4}
+                maxLength={20}
+                pattern="[a-zA-Z0-9]+"
+                value={username}
+                autoComplete="username"
+                onChange={(e) =>
+                  setUsername(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))
+                }
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">
+                {t('adminLogin.fields.password')}
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                required
+                minLength={8}
+                maxLength={50}
+                value={password}
+                autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            {error && (
+              <p className="text-sm text-destructive" role="alert">
+                {error}
+              </p>
+            )}
+
+            <div className="mt-6">
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading ? (
+                  <LoadingSpinner size={24} />
+                ) : (
+                  t('adminLogin.login.submit')
+                )}
+              </Button>
+            </div>
+          </form>
+
+          <div className="mt-4 text-left text-sm text-muted-foreground">
+            {t('adminLogin.login.securityPrompt')}
+            <ul className="list-disc list-inside text-left mt-2">
+              {t('adminLogin.login.secureTip1')}
+              <br />
+              {t('adminLogin.login.secureTip2')}
+              <br />
+              {t('adminLogin.login.secureTip3')}
+            </ul>
           </div>
-
-          {error && (
-            <p className="mt-2 text-sm text-red-600" role="alert">
-              {error}
-            </p>
-          )}
-
-          <div className="mt-6">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 disabled:opacity-75 disabled:cursor-not-allowed"
+          <p className="mt-6 text-xs text-muted-foreground text-center">
+            {t('register.recaptcha_disclaimer')}{' '}
+            <a
+              href="https://policies.google.com/privacy"
+              className="underline hover:text-foreground"
             >
-              {loading ? (
-                <LoadingSpinner size={24} />
-              ) : (
-                t('adminLogin.login.submit')
-              )}
-            </button>
-          </div>
-        </form>
-
-        <div className="mt-4 text-left text-sm text-gray-600">
-          {t('adminLogin.login.securityPrompt')}
-          <ul className="list-disc list-inside text-left mt-2">
-            {t('adminLogin.login.secureTip1')}
-            <br />
-            {t('adminLogin.login.secureTip2')}
-            <br />
-            {t('adminLogin.login.secureTip3')}
-          </ul>
-        </div>
-        <p className="mt-6 text-xs text-gray-500 text-center">
-          {t('register.recaptcha_disclaimer')}{' '}
-          <a href="https://policies.google.com/privacy" className="underline">
-            {t('register.privacy')}
-          </a>{' '}
-          &{' '}
-          <a href="https://policies.google.com/terms" className="underline">
-            {t('register.terms')}
-          </a>
-        </p>
-      </div>
+              {t('register.privacy')}
+            </a>{' '}
+            &{' '}
+            <a
+              href="https://policies.google.com/terms"
+              className="underline hover:text-foreground"
+            >
+              {t('register.terms')}
+            </a>
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 };
