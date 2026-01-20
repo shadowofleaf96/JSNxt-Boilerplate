@@ -21,7 +21,7 @@ const VerificationSuccess = () => {
   }, [router, token]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-background">
       <div className="py-8">
         <Image
           className="h-24 w-24 mx-auto py-4"
@@ -35,8 +35,10 @@ const VerificationSuccess = () => {
         />
       </div>
       <div className="w-full max-w-md text-center">
-        <h1 className="text-3xl font-bold mb-4 py-4">Email Verified!</h1>
-        <p className="text-lg text-gray-700 mb-8 py-4">
+        <h1 className="text-3xl font-bold mb-4 py-4 text-foreground">
+          Email Verified!
+        </h1>
+        <p className="text-lg text-muted-foreground mb-8 py-4">
           Logging you in automatically...
         </p>
         <LoadingSpinner size={32} className="mx-auto" />

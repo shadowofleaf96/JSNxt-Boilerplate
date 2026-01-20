@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AxiosConfig from '@/components/utils/AxiosConfig';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/redux/user/usersSlice';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useReCaptcha } from 'next-recaptcha-v3';
@@ -12,9 +14,20 @@ import ForgotPasswordModal from '@/app/[locale]/(auth)/forgot-password/component
 import { toast } from 'react-toastify';
 import { GoogleLogin } from '@react-oauth/google';
 import Image from 'next/image';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [password, setPassword] = useState('');
@@ -79,6 +92,7 @@ const Login: React.FC = () => {
       if (respdata.role === 'user') {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('role', respdata.role);
+        dispatch(setUser(respdata));
         router.push('/');
       } else {
         setLoading(false);
@@ -110,166 +124,140 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-1">
-      <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div>
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-sm border-border shadow-md">
+        <CardHeader className="space-y-2 pb-6">
+          <div className="flex justify-center mx-auto mb-2">
             <Image
-              className="md:w-32 w-20 h-auto mx-auto"
+              className="w-auto h-20 sm:h-20"
               width={0}
               height={0}
+              priority
               placeholder="blur"
-              blurDataURL="data:image/png;base64,..."
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPvd7POQAAAABJRU5ErkJggg=="
               sizes="(max-width: 768px) 100vw, 50vw"
               src="/images/jsnxt-logo-black.webp"
               alt="JSNXT"
             />
-            <h2 className="mt-8 text-2xl font-bold tracking-tight text-gray-900">
-              {t('login.title')}
-            </h2>
-            <p className="mt-2 text-sm text-gray-500">
-              {t('login.registerPrompt')}{' '}
-              <Link
-                href="/registration"
-                prefetch={false}
-                className="font-semibold text-gray-600 hover:text-gray-500"
-              >
-                {t('login.registerLink')}
-              </Link>
-            </p>
           </div>
+          <CardTitle className="text-2xl font-bold tracking-tight text-center text-foreground">
+            {t('login.title')}
+          </CardTitle>
+          <CardDescription className="text-center text-muted-foreground">
+            {t('login.registerPrompt')}{' '}
+            <Link
+              href="/registration"
+              className="font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              {t('login.registerLink')}
+            </Link>
+          </CardDescription>
+        </CardHeader>
 
-          <div className="mt-10">
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-900"
-                >
-                  {t('login.email')}
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  minLength={5}
-                  maxLength={320}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600 sm:text-sm"
-                />
-              </div>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">{t('login.email')}</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder="you@example.com"
+                autoComplete="email"
+                minLength={5}
+                maxLength={320}
+                value={email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setEmail(e.target.value)
+                }
+              />
+            </div>
 
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-900"
-                >
-                  {t('login.password')}
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                  minLength={8}
-                  maxLength={50}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600 sm:text-sm"
-                />
-              </div>
-
-              {error && (
-                <p className="text-sm text-red-600" role="alert">
-                  {error}
-                </p>
-              )}
-
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <div className="text-sm">
-                  <button
-                    type="button"
-                    onClick={() => setShowForgotModal(true)}
-                    className="font-semibold text-gray-600 hover:text-gray-500 cursor-pointer"
-                  >
-                    {t('login.forgotPassword')}
-                  </button>
-                </div>
-              </div>
-
-              <div>
+                <Label htmlFor="password">{t('login.password')}</Label>
                 <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex w-full justify-center rounded-md bg-black px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-50"
+                  type="button"
+                  onClick={() => setShowForgotModal(true)}
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors cursor-pointer"
                 >
-                  {loading ? <LoadingSpinner size={20} /> : t('login.signIn')}
+                  {t('login.forgotPassword')}
                 </button>
-                <div className="mt-6">
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gray-300" />
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                      <span className="bg-white px-2 text-gray-500">
-                        {t('login.orContinueWith')}
-                      </span>
-                    </div>
-                  </div>
+              </div>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                placeholder="••••••••"
+                autoComplete="current-password"
+                minLength={8}
+                maxLength={50}
+                value={password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setPassword(e.target.value)
+                }
+              />
+            </div>
 
-                  <div className="mt-6 flex w-full justify-center">
-                    <GoogleLogin
-                      onSuccess={handleGoogleSuccess}
-                      onError={() => toast.error(t('login.googleLoginFailed'))}
-                      size="large"
-                      type="standard"
-                      shape="square"
-                      useOneTap
-                      ux_mode="popup"
-                      context="signin"
-                      use_fedcm_for_prompt={true}
-                    />
-                  </div>
+            {error && (
+              <p className="text-sm text-destructive font-medium" role="alert">
+                {error}
+              </p>
+            )}
+
+            <div className="pt-2 space-y-4">
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading ? <LoadingSpinner size={20} /> : t('login.signIn')}
+              </Button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-muted" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-muted-foreground font-medium">
+                    {t('login.orContinueWith')}
+                  </span>
                 </div>
               </div>
-              <p className="text-xs text-center text-gray-500 mt-6">
-                {t('register.recaptcha_disclaimer')}{' '}
-                <a
-                  href="https://policies.google.com/privacy"
-                  className="underline"
-                >
-                  {t('register.privacy')}
-                </a>{' '}
-                &{' '}
-                <a
-                  href="https://policies.google.com/terms"
-                  className="underline"
-                >
-                  {t('register.terms')}
-                </a>
-              </p>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div className="relative hidden w-0 flex-1 lg:block">
-        <Image
-          width={0}
-          height={0}
-          placeholder="blur"
-          blurDataURL="data:image/png;base64,..."
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="Background"
-          src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-          className="absolute inset-0 size-full object-cover"
-        />
-      </div>
+
+              <div className="flex w-full justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => toast.error(t('login.googleLoginFailed'))}
+                  size="large"
+                  type="standard"
+                  shape="rectangular"
+                  width="100%"
+                  useOneTap
+                  ux_mode="popup"
+                  context="signin"
+                  use_fedcm_for_prompt={true}
+                />
+              </div>
+            </div>
+
+            <p className="text-xs text-center text-muted-foreground mt-4">
+              {t('register.recaptcha_disclaimer')}{' '}
+              <a
+                href="https://policies.google.com/privacy"
+                className="underline hover:text-foreground"
+              >
+                {t('register.privacy')}
+              </a>{' '}
+              &{' '}
+              <a
+                href="https://policies.google.com/terms"
+                className="underline hover:text-foreground"
+              >
+                {t('register.terms')}
+              </a>
+            </p>
+          </form>
+        </CardContent>
+      </Card>
       <ForgotPasswordModal
         isOpen={showForgotModal}
         onClose={() => setShowForgotModal(false)}

@@ -1,8 +1,11 @@
 'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const Footer: React.FC = () => {
   const { t } = useTranslation();
@@ -57,7 +60,7 @@ const Footer: React.FC = () => {
             width={0}
             height={0}
             placeholder="blur"
-            blurDataURL="data:image/png;base64,..."
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPvd7POQAAAABJRU5ErkJggg=="
             sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div className="mt-8 flex flex-wrap gap-8 xl:col-span-2 xl:mt-0">
@@ -71,8 +74,10 @@ const Footer: React.FC = () => {
                     <li key={item.name}>
                       <Link
                         href={item.href}
-                        prefetch={false}
-                        className="text-sm text-gray-400 hover:text-white"
+                        className={cn(
+                          buttonVariants({ variant: 'link' }),
+                          'text-gray-400 hover:text-white h-auto p-0 text-sm font-normal'
+                        )}
                       >
                         {item.name}
                       </Link>

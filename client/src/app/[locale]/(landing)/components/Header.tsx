@@ -1,25 +1,40 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { Dialog, DialogPanel } from '@headlessui/react';
-import { HiBars3, HiXMark } from 'react-icons/hi2';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { googleLogout } from '@react-oauth/google';
+import { toast } from 'react-toastify';
+import { Menu, LogOut } from 'lucide-react';
+
 import { AppDispatch, RootState } from '@/redux/store';
 import { fetchCurrentUser } from '@/redux/user/usersSlice';
-import { FiLogOut, FiUser } from 'react-icons/fi';
-import { googleLogout } from '@react-oauth/google';
 import AxiosConfig from '@/components/utils/AxiosConfig';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { toast } from 'react-toastify';
-import Image from 'next/image';
-import { useTranslation } from 'next-i18next';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
 const Header: React.FC = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -29,21 +44,10 @@ const Header: React.FC = () => {
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchCurrentUser());
-  }, [dispatch]);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    if (!currentUser) {
+      dispatch(fetchCurrentUser());
+    }
+  }, [dispatch, currentUser]);
 
   const handleLogout = async () => {
     setLogoutLoading(true);
@@ -64,6 +68,7 @@ const Header: React.FC = () => {
       console.error(error);
     }
   };
+
   const navigation = [
     { key: 'features', href: '#features' },
     { key: 'testimonials', href: '#testimonials' },
@@ -84,13 +89,13 @@ const Header: React.FC = () => {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5" prefetch={false}>
+          <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">{t('header.ariaLabels.company')}</span>
             <Image
               width={0}
               height={0}
               placeholder="blur"
-              blurDataURL="data:image/png;base64,..."
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPvd7POQAAAABJRU5ErkJggg=="
               sizes="(max-width: 768px) 100vw, 50vw"
               alt={t('header.ariaLabels.logo')}
               src="/images/jsnxt-logo-white.webp"
@@ -100,14 +105,103 @@ const Header: React.FC = () => {
         </div>
 
         <div className="flex lg:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400"
-          >
-            <span className="sr-only">{t('header.ariaLabels.openMenu')}</span>
-            <HiBars3 className="size-6" />
-          </button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="-m-2.5 text-gray-400"
+              >
+                <span className="sr-only">
+                  {t('header.ariaLabels.openMenu')}
+                </span>
+                <Menu className="size-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="bg-gray-900 border-gray-800 text-white"
+            >
+              <SheetHeader>
+                <SheetTitle className="sr-only">
+                  {t('header.ariaLabels.company')}
+                </SheetTitle>
+                <SheetDescription className="sr-only">
+                  Mobile Navigation
+                </SheetDescription>
+                <div className="flex items-center justify-between">
+                  <Link href="/" className="-m-1.5 p-1.5">
+                    <Image
+                      alt="Background Image"
+                      width={0}
+                      height={0}
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPvd7POQAAAABJRU5ErkJggg=="
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      src="/images/jsnxt-logo-black.webp"
+                      className="h-12 w-auto"
+                    />
+                  </Link>
+                </div>
+              </SheetHeader>
+              <div className="mt-6 flow-root">
+                <div className="-my-6 divide-y divide-gray-500/25">
+                  <div className="space-y-2 py-6">
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.key}
+                        href={item.href}
+                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800"
+                      >
+                        {t(`header.navigation.${item.key}`)}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="py-6 flex items-center gap-4 flex-wrap">
+                    <LanguageSwitcher />
+                    {currentUser && isRegularUser ? (
+                      <div className="w-full">
+                        <div className="flex items-center gap-3 py-2.5 text-white">
+                          <Avatar>
+                            <AvatarImage
+                              src={currentUser.avatar}
+                              alt={currentUser.name}
+                            />
+                            <AvatarFallback>
+                              {currentUser.name?.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-base font-semibold">
+                            {currentUser.name}
+                          </span>
+                        </div>
+
+                        <Link
+                          href="/"
+                          className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
+                        >
+                          {t('header.profile.title')}
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left -mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
+                        >
+                          {t('header.auth.logout')}
+                        </button>
+                      </div>
+                    ) : (
+                      <Link
+                        href="/login"
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
+                      >
+                        {t('header.auth.login')}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
 
         <div className="hidden lg:flex lg:gap-x-12">
@@ -115,155 +209,70 @@ const Header: React.FC = () => {
             <Link
               key={item.key}
               href={item.href}
-              prefetch={false}
-              className="text-sm font-semibold text-white"
+              className="text-sm font-semibold text-white hover:text-gray-300 transition-colors"
             >
               {t(`header.navigation.${item.key}`)}
             </Link>
           ))}
         </div>
 
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
           <LanguageSwitcher />
           {loading ? (
             <LoadingSpinner size={20} />
           ) : currentUser && isRegularUser ? (
-            <div className="relative" ref={dropdownRef}>
-              <button
-                className="p-1.5 rounded-full hover:bg-gray-600 transition-colors cursor-pointer"
-                onClick={() => setShowDropdown((prev) => !prev)}
-              >
-                <Image
-                  width={0}
-                  height={0}
-                  placeholder="blur"
-                  blurDataURL="data:image/png;base64,..."
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="h-9 w-9 rounded-full object-cover ring-2 ring-white"
-                  src={currentUser.avatar}
-                  alt="User Avatar"
-                />
-              </button>
-
-              {showDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                  <div className="p-2 flex items-center gap-2 border-b border-gray-200">
-                    <FiUser className="text-gray-600" />
-                    <span className="text-sm font-medium">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="relative h-10 w-10 rounded-full"
+                >
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage
+                      src={currentUser.avatar}
+                      alt={currentUser.name}
+                    />
+                    <AvatarFallback>
+                      {currentUser.name?.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">
                       {currentUser.name}
-                    </span>
+                    </p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {currentUser.email}
+                    </p>
                   </div>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full px-4 py-4 text-left text-red-600 hover:bg-gray-50 flex items-center gap-3 transition-colors rounded-md font-semibold cursor-pointer"
-                  >
-                    {logoutLoading ? (
-                      <LoadingSpinner size={16} className="mx-auto" />
-                    ) : (
-                      <>
-                        <FiLogOut className="flex-shrink-0" />
-                        <span className="font-semibold">
-                          {t('header.auth.logout')}
-                        </span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              )}
-            </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-red-600 focus:text-red-600 cursor-pointer"
+                >
+                  {logoutLoading ? (
+                    <LoadingSpinner size={16} />
+                  ) : (
+                    <LogOut className="mr-2 h-4 w-4" />
+                  )}
+                  <span>{t('header.auth.logout')}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Link
               href="/login"
-              prefetch={false}
-              className="text-sm font-semibold text-white"
+              className="text-sm font-semibold text-white hover:text-gray-300 transition-colors"
             >
               {t('header.auth.login')} <span aria-hidden="true">&rarr;</span>
             </Link>
           )}
         </div>
       </nav>
-
-      <Dialog
-        open={mobileMenuOpen}
-        onClose={setMobileMenuOpen}
-        className="lg:hidden"
-      >
-        <div className="fixed inset-0 z-50" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
-          <div className="flex items-center justify-between">
-            <Link href="/" prefetch={false} className="-m-1.5 p-1.5">
-              <span className="sr-only">{t('header.ariaLabels.company')}</span>
-              <Image
-                alt="Background Image"
-                width={0}
-                height={0}
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,..."
-                sizes="(max-width: 768px) 100vw, 50vw"
-                src="/images/jsnxt-logo-black.webp"
-                className="h-12 w-auto"
-              />
-            </Link>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="-m-2.5 rounded-md p-2.5 text-gray-400"
-            >
-              <span className="sr-only">
-                {t('header.ariaLabels.closeMenu')}
-              </span>
-              <HiXMark className="size-6" />
-            </button>
-          </div>
-
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/25">
-              <div className="space-y-2 py-6">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.key}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-white hover:bg-gray-800"
-                  >
-                    {t(`header.navigation.${item.key}`)}
-                  </Link>
-                ))}
-              </div>
-              <div className="py-6 flex items-center">
-                <LanguageSwitcher />
-                {currentUser && isRegularUser ? (
-                  <>
-                    <h1 className="text-white underline py-2.5">
-                      {currentUser.name}
-                    </h1>
-                    <Link
-                      href="/"
-                      prefetch={false}
-                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
-                    >
-                      {t('header.profile.title')}
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left -mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
-                    >
-                      {t('header.auth.logout')}
-                    </button>
-                  </>
-                ) : (
-                  <Link
-                    href="/login"
-                    prefetch={false}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-white hover:bg-gray-800"
-                  >
-                    {t('header.auth.login')}
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
-        </DialogPanel>
-      </Dialog>
     </header>
   );
 };

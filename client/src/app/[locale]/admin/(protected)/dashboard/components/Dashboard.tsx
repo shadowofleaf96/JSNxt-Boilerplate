@@ -4,12 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import Error from '@/app/[locale]/admin/components/Error/Error';
-import { FaUserClock, FaUsers } from 'react-icons/fa6';
+import { Users, UserCheck, Clock } from 'lucide-react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { toast } from 'react-toastify';
 import { User } from '@/types/user';
 import AxiosConfig from '@/components/utils/AxiosConfig';
 import { useTranslation } from 'next-i18next';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface UserStats {
   totalUsers: number;
@@ -115,45 +116,50 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen p-8">
-      <h1 className="text-xl font-medium text-gray-800 mb-6">
+    <div className="p-8 space-y-8">
+      <h1 className="text-3xl font-bold tracking-tight text-foreground">
         {t('Dashboard.title')}
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
-          <div>
-            <h3 className="text-sm font-medium text-gray-700">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card className="hover:shadow-lg transition-shadow duration-300">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               {t('Dashboard.totalUsers')}
-            </h3>
-            <p className="text-2xl font-bold text-black">
-              {userStats.totalUsers}
-            </p>
-          </div>
-          <FaUsers size={30} className="text-black" />
-        </div>
+            </CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{userStats.totalUsers}</div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
-          <div>
-            <h3 className="text-sm font-medium text-gray-700">
+        <Card className="hover:shadow-lg transition-shadow duration-300">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               {t('Dashboard.activeUsers')}
-            </h3>
-            <p className="text-2xl font-bold text-green-600">
+            </CardTitle>
+            <UserCheck className="h-4 w-4 text-green-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-green-600">
               {userStats.activeUsers}
-            </p>
-          </div>
-          <FaUsers size={30} className="text-green-500" />
-        </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {recentUser && (
-          <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between hover:scale-105 transition duration-300">
-            <div>
-              <h3 className="text-sm font-medium text-gray-700">
+          <Card className="hover:shadow-lg transition-shadow duration-300">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 {t('Dashboard.recentlyActive')}
-              </h3>
-              <p className="text-md font-semibold text-gray-600">
+              </CardTitle>
+              <Clock className="h-4 w-4 text-orange-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg font-semibold truncate">
                 {recentUser.name || recentUser.email}
-              </p>
-              <p className="text-sm text-gray-500">
+              </div>
+              <p className="text-xs text-muted-foreground">
                 {t('Dashboard.lastActive')}{' '}
                 {recentUser.lastActive
                   ? new Date(recentUser.lastActive).toLocaleString('default', {
@@ -162,21 +168,21 @@ const Dashboard: React.FC = () => {
                     })
                   : 'N/A'}
               </p>
-            </div>
-            <FaUserClock size={30} className="text-orange-500" />
-          </div>
+            </CardContent>
+          </Card>
         )}
       </div>
 
-      <div
-        className="bg-white p-6 rounded-xl shadow-md mt-12"
-        style={{ height: '400px' }}
-      >
-        <h2 className="text-xl font-medium mb-4">
-          {t('Dashboard.userRegistrationsByMonth')}
-        </h2>
-        <Bar data={userChartData} options={chartOptions} />
-      </div>
+      <Card className="col-span-4">
+        <CardHeader>
+          <CardTitle>{t('Dashboard.userRegistrationsByMonth')}</CardTitle>
+        </CardHeader>
+        <CardContent className="pl-2">
+          <div style={{ height: '400px' }}>
+            <Bar data={userChartData} options={chartOptions} />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -11,6 +11,8 @@ import {
   FaGithub,
 } from 'react-icons/fa';
 import { RiNextjsFill } from 'react-icons/ri';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const Hero: React.FC = () => {
   const { t } = useTranslation();
@@ -21,7 +23,7 @@ const Hero: React.FC = () => {
           width={0}
           height={0}
           placeholder="blur"
-          blurDataURL="data:image/png;base64,..."
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI8wNPvd7POQAAAABJRU5ErkJggg=="
           sizes="(max-width: 768px) 100vw, 50vw"
           alt="Background Image"
           src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2830&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"
@@ -57,41 +59,64 @@ const Hero: React.FC = () => {
               <p className="mt-8 text-lg font-medium text-gray-400 sm:text-xl">
                 {t('hero.subtitle')}
               </p>
-              <div className="mt-10 flex items-center justify-center gap-x-6">
+              <div className="mt-10 flex items-center justify-center gap-x-6 mb-20">
                 <Link
                   href="/docs"
-                  className="rounded-md bg-gray-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                  className={cn(buttonVariants({ variant: 'secondary' }))}
                 >
                   {t('hero.cta.docs')}
                 </Link>
                 <Link
                   href="https://github.com/shadowofleaf96/JSNXT-Boilerplate"
-                  className="text-sm font-semibold text-white"
+                  className={cn(
+                    buttonVariants({ variant: 'link' }),
+                    'text-white hover:text-gray-300'
+                  )}
                 >
-                  {t('hero.cta.github')} <span aria-hidden="true">→</span>
+                  {t('hero.cta.github')}{' '}
+                  <span aria-hidden="true" className="ml-2">
+                    →
+                  </span>
                 </Link>
               </div>
             </div>
-          </div>
-
-          <div className="mx-auto grid max-w-lg grid-cols-3 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-7 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-6">
-            <div className="flex items-center justify-center">
-              <RiNextjsFill size={64} className="text-white" />
-            </div>
-            <div className="flex items-center justify-center">
-              <FaReact size={64} className="text-white" />
-            </div>
-            <div className="flex items-center justify-center">
-              <FaNodeJs size={64} className="text-white" />
-            </div>
-            <div className="flex items-center justify-center">
-              <FaDatabase size={64} className="text-white" />
-            </div>
-            <div className="flex items-center justify-center">
-              <FaCss3Alt size={64} className="text-white" />
-            </div>
-            <div className="flex items-center justify-center">
-              <FaGithub size={64} className="text-white" />
+            <div className="mx-auto grid max-w-lg grid-cols-3 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-7 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-6">
+              <div className="flex items-center justify-center">
+                <RiNextjsFill
+                  size={64}
+                  className="text-white opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="flex items-center justify-center">
+                <FaReact
+                  size={64}
+                  className="text-white opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="flex items-center justify-center">
+                <FaNodeJs
+                  size={64}
+                  className="text-white opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="flex items-center justify-center">
+                <FaDatabase
+                  size={64}
+                  className="text-white opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="flex items-center justify-center">
+                <FaCss3Alt
+                  size={64}
+                  className="text-white opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="flex items-center justify-center">
+                <FaGithub
+                  size={64}
+                  className="text-white opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </div>
             </div>
           </div>
         </div>
