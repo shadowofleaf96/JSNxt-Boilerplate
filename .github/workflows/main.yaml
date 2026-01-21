@@ -24,8 +24,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-          cache-dependency-path: client/package-lock.json
+          cache: "bun"
+          cache-dependency-path: |
+            client/package-lock.json
+            client/bun.lockb
 
       - name: Cache Next.js build
         uses: actions/cache@v4
@@ -42,7 +44,7 @@ jobs:
 
       - name: Build client
         run: npm run build
-        
+
   server:
     name: Server Checks
     runs-on: ubuntu-latest
@@ -57,8 +59,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-          cache-dependency-path: server/package-lock.json
+          cache: "bun"
+          cache-dependency-path: |
+            server/package-lock.json
+            server/bun.lockb
 
       - name: Install server dependencies
         run: npm i
