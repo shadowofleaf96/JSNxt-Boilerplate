@@ -73,10 +73,11 @@ const Login: React.FC = () => {
       return;
     }
 
+    setLoading(true);
+    setError('');
     const recaptchaToken = await executeRecaptcha('form_submit');
 
     try {
-      setLoading(true);
       const res = await AxiosConfig.post<{
         data: any;
         role: string;
