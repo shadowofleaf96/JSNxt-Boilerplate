@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: ["main", "dev"]
+    branches: ["main", "dev", "mySQL"]
   pull_request:
-    branches: ["main", "dev"]
+    branches: ["main", "dev", "mySQL"]
 
 env:
   NODE_VERSION: 24.x
