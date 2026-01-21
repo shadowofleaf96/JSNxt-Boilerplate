@@ -7,7 +7,7 @@ on:
     branches: ["main", "dev"]
 
 env:
-  NODE_VERSION: 22.x
+  NODE_VERSION: 24.x
 
 jobs:
   client:
@@ -20,14 +20,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "bun"
-          cache-dependency-path: |
-            client/package-lock.json
-            client/bun.lockb
+          bun-version: latest
 
       - name: Cache Next.js build
         uses: actions/cache@v4
@@ -40,10 +36,10 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install client dependencies
-        run: npm i
+        run: bun i
 
       - name: Build client
-        run: npm run build
+        run: bun run build
 
   server:
     name: Server Checks
@@ -55,17 +51,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "bun"
-          cache-dependency-path: |
-            server/package-lock.json
-            server/bun.lockb
+          bun-version: latest
 
       - name: Install server dependencies
-        run: npm i
+        run: bun i
 
       - name: Build server
-        run: npm run build
+        run: bun run build
