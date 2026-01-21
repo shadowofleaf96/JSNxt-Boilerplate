@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "test": "jest --watch",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."

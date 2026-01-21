@@ -14,6 +14,7 @@ export interface User {
 
 export interface CurrentUser {
   _id: string;
+  email: string;
   avatar: string;
   name: string;
   role: string;
