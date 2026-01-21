@@ -251,7 +251,7 @@ const Registration: React.FC = () => {
       </Card>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-106.25">
           <DialogHeader>
             <DialogTitle>{t('register.policy_title')}</DialogTitle>
             <DialogDescription>

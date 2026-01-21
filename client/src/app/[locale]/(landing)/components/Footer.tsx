@@ -65,7 +65,7 @@ const Footer: React.FC = () => {
           />
           <div className="mt-8 flex flex-wrap gap-8 xl:col-span-2 xl:mt-0">
             {Object.entries(footerNavigation).map(([sectionKey, section]) => (
-              <div key={sectionKey} className="min-w-[120px]">
+              <div key={sectionKey} className="min-w-30">
                 <h3 className="text-sm font-semibold capitalize">
                   {section.title}
                 </h3>

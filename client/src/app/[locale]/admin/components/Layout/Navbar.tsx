@@ -4,11 +4,10 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { fetchCurrentUser } from '@/redux/user/usersSlice';
-import { User, LogOut, Menu, Search } from 'lucide-react';
+import { LogOut, Menu, Search } from 'lucide-react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { toast } from 'react-toastify';
 import AxiosConfig from '@/components/utils/AxiosConfig';
-import Image from 'next/image';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 import { useTranslation } from 'next-i18next';
 import { Button } from '@/components/ui/button';
@@ -60,7 +59,7 @@ function Navbar({ toggleSidebar, isSidebarOpen }: NavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-[60] flex w-full flex-wrap border-b border-border bg-background py-2 sm:flex-nowrap sm:justify-start sm:py-4">
+    <header className="sticky top-0 z-60 flex w-full flex-wrap border-b border-border bg-background py-2 sm:flex-nowrap sm:justify-start sm:py-4">
       <nav
         className="mx-auto flex w-full max-w-7xl basis-full items-center px-4 sm:px-6 lg:px-8"
         aria-label="Global"
