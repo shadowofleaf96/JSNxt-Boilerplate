@@ -14,7 +14,16 @@ import Error from '@/app/[locale]/admin/components/Error/Error';
 import { useTranslation } from 'next-i18next';
 import ConfirmationModal from '@/app/[locale]/admin/components/Utils/ConfirmationModal';
 import AxiosConfig from '@/components/utils/AxiosConfig';
-import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+const getInitials = (name: string | null) => {
+  if (!name) return '??';
+  const parts = name.split(' ');
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+};
 
 interface SortConfig {
   key: keyof User | null;
@@ -58,7 +67,7 @@ function Users() {
   };
 
   const handleEditUser = (user: User) => {
-    if (user._id === loggedInUserId) {
+    if (user.id === loggedInUserId) {
       toast.error(t('users.currentUserError'));
       return;
     }
@@ -115,7 +124,7 @@ function Users() {
     setSelectedUsers((prev) =>
       prev.length === currentItems.length
         ? []
-        : currentItems.map((user) => user._id)
+        : currentItems.map((user) => user.id)
     );
   };
 
@@ -150,7 +159,7 @@ function Users() {
   };
 
   const handleSort = (key: keyof User) => {
-    setSortConfig((prev) => ({
+    setSortConfig((prev: any) => ({
       key,
       direction:
         prev.key === key && prev.direction === 'ascending'
@@ -223,7 +232,7 @@ function Users() {
         </button>
       </div>
       {showAddUserModal && (
-        <div className="flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
+        <div className="flex items-center justify-center bg-black bg-opacity-50 z-9999">
           <div className="rounded-lg shadow-lg w-3/4 max-w-2xl">
             <AddUserForm
               onClose={closeAddModal}
@@ -322,27 +331,26 @@ function Users() {
                 </tr>
               ) : (
                 currentItems.map((user) => (
-                  <tr key={user._id}>
+                  <tr key={user.id}>
                     <td className="px-4 py-4 text-sm text-gray-700 whitespace-nowrap">
                       <input
                         type="checkbox"
                         className="text-black border-gray-300 rounded"
-                        onChange={() => handleCheckboxChange(user._id)}
-                        checked={selectedUsers.includes(user._id)}
+                        onChange={() => handleCheckboxChange(user.id)}
+                        checked={selectedUsers.includes(user.id)}
                       />
                     </td>
                     <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap">
                       <div className="flex items-center">
-                        <Image
-                          className="object-cover w-10 h-10 rounded-full mr-2"
-                          width={0}
-                          height={0}
-                          placeholder="blur"
-                          blurDataURL="data:image/png;base64,..."
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          src={user.avatar}
-                          alt={user.username + ' avatar'}
-                        />
+                        <Avatar className="h-10 w-10 mr-2">
+                          <AvatarImage
+                            src={user.avatar || undefined}
+                            alt={user.username}
+                          />
+                          <AvatarFallback>
+                            {getInitials(user.name || user.username)}
+                          </AvatarFallback>
+                        </Avatar>
                         <div>
                           <h2 className="font-medium text-gray-800">
                             {user.authProvider}
@@ -394,7 +402,7 @@ function Users() {
                         <div className="h-auto w-auto">
                           <button
                             className="text-red-600 transition-colors duration-200 hover:text-red-500 focus:outline-none"
-                            onClick={() => openModal(user._id)}
+                            onClick={() => openModal(user.id)}
                           >
                             <FaRegTrashCan size={22} />
                           </button>

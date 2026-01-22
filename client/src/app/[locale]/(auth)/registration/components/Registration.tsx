@@ -37,6 +37,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 const registrationSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -225,7 +226,7 @@ const Registration: React.FC = () => {
               )}
 
               <div>
-                <button
+                <Button
                   type="submit"
                   disabled={loading}
                   className="flex w-full justify-center rounded-md bg-black px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-600 disabled:opacity-60"
@@ -235,7 +236,7 @@ const Registration: React.FC = () => {
                   ) : (
                     t('register.submit')
                   )}
-                </button>
+                </Button>
               </div>
               <p className="text-xs text-center text-gray-500 mt-6">
                 {t('register.recaptcha_disclaimer')}{' '}

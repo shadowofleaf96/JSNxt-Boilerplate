@@ -208,7 +208,7 @@ const Login: React.FC = () => {
               </p>
             )}
 
-            <div className="pt-2 space-y-4">
+            <div className="pt-2 space-y-4 py-3">
               <Button type="submit" disabled={loading} className="w-full">
                 {loading ? <LoadingSpinner size={20} /> : t('login.signIn')}
               </Button>

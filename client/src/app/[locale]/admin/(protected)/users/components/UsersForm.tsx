@@ -9,8 +9,17 @@ import { IoClose } from 'react-icons/io5';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from '@/types/user';
-import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslation } from 'next-i18next';
+
+const getInitials = (name: string) => {
+  if (!name) return '??';
+  const parts = name.split(' ');
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+};
 
 const userSchema = z.object({
   authProvider: z.enum(['local', 'google']),
@@ -124,8 +133,8 @@ const UsersForm: React.FC<UsersFormProps> = ({
     });
 
     try {
-      if (isEditMode && initialData?._id) {
-        await AxiosConfig.put(`/users/${initialData._id}`, userData);
+      if (isEditMode && initialData?.id) {
+        await AxiosConfig.put(`/users/${initialData.id}`, userData);
         toast.success(t('userForm.notifications.updated'));
       } else {
         await AxiosConfig.post(`/users/create-user`, userData);
@@ -317,7 +326,7 @@ const UsersForm: React.FC<UsersFormProps> = ({
               {t('userForm.fields.avatar')}
             </label>
             <div className="flex items-center gap-4">
-              <div className="relative flex-shrink-0">
+              <div className="relative shrink-0">
                 <input
                   type="file"
                   id="avatar"
@@ -359,16 +368,15 @@ const UsersForm: React.FC<UsersFormProps> = ({
               <div className="flex items-center gap-2">
                 {imagePreview ? (
                   <div className="relative">
-                    <Image
-                      width={0}
-                      height={0}
-                      placeholder="blur"
-                      blurDataURL="data:image/png;base64,..."
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      src={imagePreview}
-                      alt="New avatar preview"
-                      className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
-                    />
+                    <Avatar className="w-16 h-16 border-2 border-gray-200">
+                      <AvatarImage
+                        src={imagePreview}
+                        alt="New avatar preview"
+                      />
+                      <AvatarFallback>
+                        {getInitials(watch('name') || watch('username'))}
+                      </AvatarFallback>
+                    </Avatar>
                     <span className="absolute -bottom-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -386,33 +394,21 @@ const UsersForm: React.FC<UsersFormProps> = ({
                     </span>
                   </div>
                 ) : initialData?.avatar ? (
-                  <Image
-                    width={0}
-                    height={0}
-                    placeholder="blur"
-                    blurDataURL="data:image/png;base64,..."
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    src={initialData?.avatar}
-                    alt="Current avatar"
-                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
-                  />
+                  <Avatar className="w-16 h-16 border-2 border-gray-200">
+                    <AvatarImage
+                      src={initialData.avatar}
+                      alt="Current avatar"
+                    />
+                    <AvatarFallback>
+                      {getInitials(initialData.name || initialData.username)}
+                    </AvatarFallback>
+                  </Avatar>
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-8 w-8 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                      />
-                    </svg>
-                  </div>
+                  <Avatar className="w-16 h-16 border-2 border-gray-200">
+                    <AvatarFallback>
+                      {getInitials(watch('name') || watch('username'))}
+                    </AvatarFallback>
+                  </Avatar>
                 )}
 
                 <span className="text-sm text-gray-500">

@@ -58,11 +58,7 @@ export default function Sidebar({
         )}
       >
         <div className="relative flex items-center justify-center p-4">
-          <Link
-            href={`/${currentLocale}`}
-            prefetch={true}
-            className="flex justify-center"
-          >
+          <Link href={`/${currentLocale}`} className="flex justify-center">
             <Image
               width={0}
               height={0}
