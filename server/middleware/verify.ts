@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify, JwtPayload } from 'jsonwebtoken';
-import User from '../models/Users';
-import Blacklist from '../models/Blacklist';
+import prisma from '../models/client';
 
 interface DecodedToken extends JwtPayload {
   id: string;
@@ -24,7 +23,10 @@ const Verify = async (
 
     const token = authHeader.split(' ')[1];
 
-    const blacklistedToken = await Blacklist.findOne({ token });
+    const blacklistedToken = await prisma.blacklist.findUnique({
+      where: { token },
+    });
+
     if (blacklistedToken) {
       res.status(401).json({ message: 'Token has been revoked' });
       return;
@@ -35,12 +37,16 @@ const Verify = async (
       process.env.SECRET_ACCESS_TOKEN as string
     ) as DecodedToken;
 
-    const user = await User.findById(decoded.id);
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+    });
+
     if (!user) {
       res.status(401).json({ message: 'User not found' });
       return;
     }
 
+    // @ts-ignore
     req.user = user;
     next();
   } catch (err) {

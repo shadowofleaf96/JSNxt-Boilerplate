@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+enum AuthProvider {
+  local
+  google
+}
+
+enum Status {
+  active
+  inactive
+}
+
+model User {
+  id                  String       @id @default(uuid())
+  authProvider        AuthProvider @default(local)
+  googleId            String?      @unique
+  avatar              String?
+  name                String?
+  username            String       @unique
+  email               String       @unique
+  password            String?
+  role                Role
+  status              Status
+  lastActive          DateTime     @default(now())
+  emailToken          String?
+  isVerified          Boolean      @default(false)
+  resetPasswordToken  String?
+  resetPasswordExpire DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  @@map("users")
+}
+
+model Blacklist {
+  id        String   @id @default(uuid())
+  token     String   @unique // Token should be unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("blacklist")
+}

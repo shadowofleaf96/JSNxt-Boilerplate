@@ -1,11 +1,10 @@
 import axios from 'axios';
-import User from '../models/Users';
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
-import Blacklist from '../models/Blacklist';
 import * as crypto from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+import prisma from '../models/client';
+import { generateAccessJWT } from '../utils/jwt';
 import sendEmail from '../middleware/sendEmail';
 import { generateUniqueUsername } from '../utils/generateUsername';
 import { getPublicUrl } from '@/utils/fileUtils';
@@ -17,6 +16,8 @@ import {
   passwordChangedTemplate,
   accountVerifiedTemplate,
 } from '../utils/emailTemplates';
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const BACKEND_URL = process.env.BACKEND_URL;
 const FRONTEND_URL = process.env.FRONTEND_URL;
@@ -31,7 +32,7 @@ export const createUser = async (
     const { name, username, password, email, role, status } = req.body;
     let avatarUrl = null;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       res.status(400).json({
         status: 'failed',
@@ -44,19 +45,22 @@ export const createUser = async (
       avatarUrl = getPublicUrl(req.file.path);
     }
 
-    const newUser = new User({
-      authProvider: 'local',
-      name,
-      username,
-      password,
-      email,
-      role,
-      status,
-      avatar: avatarUrl,
-      isVerified: true,
-    });
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    await newUser.save();
+    await prisma.user.create({
+      data: {
+        authProvider: 'local',
+        name,
+        username,
+        password: hashedPassword,
+        email,
+        role,
+        status,
+        avatar: avatarUrl,
+        isVerified: true,
+      },
+    });
 
     const loginPath = role === 'admin' ? '/admin/login' : '/login';
     const loginUrl = `${process.env.FRONTEND_URL}${loginPath}`;
@@ -80,7 +84,7 @@ export const createUser = async (
       message: 'User created and welcome email sent successfully.',
     });
   } catch (err) {
-    console.error('Error creating user:', err);
+    console.log('Error creating user:', err);
     res.status(500).json({
       status: 'error',
       message: 'Internal Server Error',
@@ -109,7 +113,7 @@ export const registerUser = async (
         return;
       }
 
-      const existingUser = await User.findOne({ email });
+      const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
         res.status(400).json({
           status: 'failed',
@@ -127,21 +131,23 @@ export const registerUser = async (
       }
 
       const emailToken = crypto.randomBytes(64).toString('hex');
+      const salt = await bcrypt.genSalt(12);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-      const newUser = new User({
-        authProvider: 'local',
-        email,
-        name,
-        password,
-        username: generatedUsername,
-        avatar: avatarUrl,
-        role: 'user',
-        status: 'active',
-        emailToken,
-        isVerified: false,
+      const newUser = await prisma.user.create({
+        data: {
+          authProvider: 'local',
+          email,
+          name,
+          password: hashedPassword,
+          username: generatedUsername,
+          avatar: avatarUrl,
+          role: 'user',
+          status: 'active',
+          emailToken,
+          isVerified: false,
+        },
       });
-
-      await newUser.save();
 
       const verifyLink = `${BACKEND_URL}/api/users/verify-email/${emailToken}`;
 
@@ -183,18 +189,24 @@ export const verifyEmail = async (
 ): Promise<void> => {
   try {
     const { token } = req.params;
-    const user = await User.findOne({ emailToken: token });
+    const user = await prisma.user.findFirst({
+      where: { emailToken: token as string },
+    });
     if (!user) {
       res.status(400).send('Invalid or expired token.');
       return;
     }
 
-    user.emailToken = undefined;
-    user.isVerified = true;
-    user.status = 'active';
-    await user.save();
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        emailToken: null,
+        isVerified: true,
+        status: 'active',
+      },
+    });
 
-    const loginToken = user.generateAccessJWT();
+    const loginToken = generateAccessJWT(user.id);
 
     await sendEmail({
       to: user.email,
@@ -244,8 +256,10 @@ export const googleAuth = async (req: Request, res: Response) => {
       return;
     }
 
-    let user = await User.findOne({
-      $or: [{ email: payload.email }, { googleId: payload.sub }],
+    let user = await prisma.user.findFirst({
+      where: {
+        OR: [{ email: payload.email }, { googleId: payload.sub }],
+      },
     });
 
     if (user?.authProvider === 'local') {
@@ -258,23 +272,28 @@ export const googleAuth = async (req: Request, res: Response) => {
     const isNewUser = !user;
 
     if (!user) {
-      const generatedUsername = await generateUniqueUsername(payload.name);
+      const generatedUsername = await generateUniqueUsername(
+        payload.name || ''
+      );
 
-      user = await User.create({
-        email: payload.email,
-        name: payload.name,
-        username: generatedUsername,
-        avatar: payload.picture,
-        authProvider: 'google',
-        googleId: payload.sub,
-        role: 'user',
-        status: 'active',
-        isVerified: true,
+      user = await prisma.user.create({
+        data: {
+          email: payload.email!,
+          name: payload.name,
+          username: generatedUsername,
+          avatar: payload.picture,
+          authProvider: 'google',
+          googleId: payload.sub,
+          role: 'user',
+          status: 'active',
+          isVerified: true,
+        },
       });
     }
 
-    const token = user.generateAccessJWT();
-    const { password: _, ...userData } = user.toObject();
+    const token = generateAccessJWT(user.id);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...userData } = user;
 
     if (isNewUser) {
       await sendEmail({
@@ -353,12 +372,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const user = await User.findOne({
-      $or: [
-        { email: identifier, role: 'user' },
-        { username: identifier, role: 'admin' },
-      ],
-    }).select('+password +authProvider');
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: identifier, role: 'user' },
+          { username: identifier, role: 'admin' },
+        ],
+      },
+    });
 
     if (!user) {
       res.status(401).json({
@@ -405,17 +426,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const token = user.generateAccessJWT();
-    const { password: _, ...user_data } = user.toObject();
+    const token = generateAccessJWT(user.id);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...user_data } = user;
 
     await sendEmail({
       to: user_data.email,
       subject: 'JSNXT - Verify your email',
       html: getLoginAlertTemplate({
         logoUrl: LOGO_URL,
-        ipAddress: ipAddress[0],
-        browser: ua.browser,
-        platform: ua.platform,
+        ipAddress: Array.isArray(ipAddress) ? ipAddress[0] : ipAddress || '',
+        browser: ua?.browser || 'Unknown',
+        platform: ua?.platform || 'Unknown',
       }),
     });
 
@@ -439,7 +461,7 @@ export const getAllUsers = async (
   res: Response
 ): Promise<void> => {
   try {
-    const users = await User.find();
+    const users = await prisma.user.findMany();
     res.status(200).json({
       status: 'success',
       users,
@@ -460,7 +482,9 @@ export const getUserInfo = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const existingUser = await User.findById(id);
+    const existingUser = await prisma.user.findUnique({
+      where: { id: id as string },
+    });
     if (!existingUser) {
       res.status(404).json({
         status: 'failed',
@@ -516,30 +540,40 @@ export const updateUser = async (
       updates.avatar = getPublicUrl(req.file.path);
     }
 
-    const existingUser = await User.findById(id);
+    const existingUser = await prisma.user.findUnique({
+      where: { id: id as string },
+    });
     if (!existingUser) {
       res.status(404).json({
         status: 'failed',
         message: 'User not found',
       });
+      return;
     }
 
     if (updates.email || updates.username) {
-      const userWithEmail = await User.findOne({ email: updates.email });
-      const userWithUsername = await User.findOne({
-        username: updates.username,
-      });
-
-      if (userWithEmail && userWithEmail._id.toString() !== id) {
-        res
-          .status(400)
-          .json({ message: 'Email is already in use by another user' });
+      if (updates.email) {
+        const userWithEmail = await prisma.user.findUnique({
+          where: { email: updates.email },
+        });
+        if (userWithEmail && userWithEmail.id !== id) {
+          res
+            .status(400)
+            .json({ message: 'Email is already in use by another user' });
+          return;
+        }
       }
 
-      if (userWithUsername && userWithUsername._id.toString() !== id) {
-        res
-          .status(400)
-          .json({ message: 'Username is already in use by another user' });
+      if (updates.username) {
+        const userWithUsername = await prisma.user.findUnique({
+          where: { username: updates.username },
+        });
+        if (userWithUsername && userWithUsername.id !== id) {
+          res
+            .status(400)
+            .json({ message: 'Username is already in use by another user' });
+          return;
+        }
       }
     }
 
@@ -547,24 +581,17 @@ export const updateUser = async (
       delete updates.password;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(id, updates, {
-      new: true,
+    const updatedUser = await prisma.user.update({
+      where: { id: id as string },
+      data: updates,
     });
 
-    if (!updatedUser) {
-      res.status(500).json({
-        status: 'failed',
-        message: 'User not found',
-      });
-      return;
-    } else {
-      res.status(200).json({
-        status: 'success',
-        message: 'User updated successfully',
-        data: updatedUser,
-      });
-      return;
-    }
+    res.status(200).json({
+      status: 'success',
+      message: 'User updated successfully',
+      data: updatedUser,
+    });
+    return;
   } catch (err) {
     res.status(500).json({
       status: 'error',
@@ -580,20 +607,26 @@ export const deleteUser = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const existingUser = await User.findByIdAndDelete(id);
-    if (!existingUser) {
-      res.status(404).json({
-        status: 'failed',
-        message: 'User not found',
-      });
-      return;
-    } else {
+
+    // Check if user exists first to match Mongoose findByIdAndDelete behavior which returns null if not found
+    // Prisma delete throws if record not found
+    try {
+      await prisma.user.delete({ where: { id: id as string } });
       res.status(200).json({
         status: 'success',
         message: 'This user is deleted successfully',
       });
-      return;
+    } catch (e: any) {
+      if (e.code === 'P2025') {
+        res.status(404).json({
+          status: 'failed',
+          message: 'User not found',
+        });
+      } else {
+        throw e;
+      }
     }
+    return;
   } catch (err) {
     res.status(500).json({
       status: 'error',
@@ -609,7 +642,7 @@ export const forgotPassword = async (
 ): Promise<void> => {
   try {
     const { email, recaptchaToken } = req.body;
-    const user = await User.findOne({ email });
+
     const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
 
     try {
@@ -623,6 +656,8 @@ export const forgotPassword = async (
         res.status(403).json({ message: 'reCAPTCHA verification failed.' });
         return;
       }
+
+      const user = await prisma.user.findUnique({ where: { email } });
 
       if (!user) {
         res.status(404).json({ message: 'No user with that email.' });
@@ -643,9 +678,13 @@ export const forgotPassword = async (
         .update(resetToken)
         .digest('hex');
 
-      user.resetPasswordToken = hashedToken;
-      user.resetPasswordExpire = Date.now() + 3600000;
-      await user.save();
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          resetPasswordToken: hashedToken,
+          resetPasswordExpire: new Date(Date.now() + 3600000),
+        },
+      });
 
       const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
 
@@ -693,9 +732,11 @@ export const resetPassword = async (
 
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-    const user = await User.findOne({
-      resetPasswordToken: hashedToken,
-      resetPasswordExpire: { $gt: Date.now() },
+    const user = await prisma.user.findFirst({
+      where: {
+        resetPasswordToken: hashedToken,
+        resetPasswordExpire: { gt: new Date() },
+      },
     });
 
     if (!user) {
@@ -703,11 +744,17 @@ export const resetPassword = async (
       return;
     }
 
-    user.password = password;
-    user.resetPasswordToken = '';
-    user.resetPasswordExpire = undefined;
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    await user.save();
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null,
+        resetPasswordExpire: null,
+      },
+    });
 
     await sendEmail({
       to: user.email,
@@ -741,14 +788,17 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const existingToken = await Blacklist.findOne({ token });
+    const existingToken = await prisma.blacklist.findUnique({
+      where: { token },
+    });
     if (existingToken) {
       res.status(401).json({ message: 'The session is already terminated.' });
       return;
     }
 
-    const newBlacklist = new Blacklist({ token });
-    await newBlacklist.save();
+    await prisma.blacklist.create({
+      data: { token },
+    });
 
     res.status(200).json({ message: 'You have successfully logged out.' });
   } catch (err) {

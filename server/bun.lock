@@ -8,13 +8,14 @@
         "@eslint/compat": "^1.4.1",
         "@eslint/eslintrc": "^3.3.3",
         "@eslint/js": "^9.39.2",
+        "@prisma/client": "5.10.2",
         "@shopify/admin-api-client": "^0.2.9",
         "@shopify/shopify-api": "^10.0.0",
         "@types/axios": "^0.9.36",
         "@types/express-useragent": "^1.0.5",
         "@types/hpp": "^0.2.7",
-        "@typescript-eslint/eslint-plugin": "^8.53.0",
-        "@typescript-eslint/parser": "^8.53.0",
+        "@typescript-eslint/eslint-plugin": "^8.53.1",
+        "@typescript-eslint/parser": "^8.53.1",
         "axios": "^1.13.2",
         "bcrypt": "^6.0.0",
         "check": "^1.0.0",
@@ -56,6 +57,7 @@
         "nodemon": "^3.1.11",
         "npm": "^10.9.4",
         "prettier": "^3.8.0",
+        "prisma": "5.10.2",
         "ts-node": "^10.9.2",
         "tsx": "^4.21.0",
         "typescript": "^5.9.3",
@@ -268,6 +270,18 @@
     "@mongodb-js/saslprep": ["@mongodb-js/saslprep@1.4.4", "", { "dependencies": { "sparse-bitfield": "^3.0.3" } }, "sha512-p7X/ytJDIdwUfFL/CLOhKgdfJe1Fa8uw9seJYvdOmnP9JBWGWHW69HkOixXS6Wy9yvGf1MbhcS6lVmrhy4jm2g=="],
 
     "@pkgr/core": ["@pkgr/core@0.2.9", "", {}, "sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA=="],
+
+    "@prisma/client": ["@prisma/client@5.10.2", "", { "peerDependencies": { "prisma": "*" }, "optionalPeers": ["prisma"] }, "sha512-ef49hzB2yJZCvM5gFHMxSFL9KYrIP9udpT5rYo0CsHD4P9IKj473MbhU1gjKKftiwWBTIyrt9jukprzZXazyag=="],
+
+    "@prisma/debug": ["@prisma/debug@5.10.2", "", {}, "sha512-bkBOmH9dpEBbMKFJj8V+Zp8IZHIBjy3fSyhLhxj4FmKGb/UBSt9doyfA6k1UeUREsMJft7xgPYBbHSOYBr8XCA=="],
+
+    "@prisma/engines": ["@prisma/engines@5.10.2", "", { "dependencies": { "@prisma/debug": "5.10.2", "@prisma/engines-version": "5.10.0-34.5a9203d0590c951969e85a7d07215503f4672eb9", "@prisma/fetch-engine": "5.10.2", "@prisma/get-platform": "5.10.2" } }, "sha512-HkSJvix6PW8YqEEt3zHfCYYJY69CXsNdhU+wna+4Y7EZ+AwzeupMnUThmvaDA7uqswiHkgm5/SZ6/4CStjaGmw=="],
+
+    "@prisma/engines-version": ["@prisma/engines-version@5.10.0-34.5a9203d0590c951969e85a7d07215503f4672eb9", "", {}, "sha512-uCy/++3Jx/O3ufM+qv2H1L4tOemTNqcP/gyEVOlZqTpBvYJUe0tWtW0y3o2Ueq04mll4aM5X3f6ugQftOSLdFQ=="],
+
+    "@prisma/fetch-engine": ["@prisma/fetch-engine@5.10.2", "", { "dependencies": { "@prisma/debug": "5.10.2", "@prisma/engines-version": "5.10.0-34.5a9203d0590c951969e85a7d07215503f4672eb9", "@prisma/get-platform": "5.10.2" } }, "sha512-dSmXcqSt6DpTmMaLQ9K8ZKzVAMH3qwGCmYEZr/uVnzVhxRJ1EbT/w2MMwIdBNq1zT69Rvh0h75WMIi0mrIw7Hg=="],
+
+    "@prisma/get-platform": ["@prisma/get-platform@5.10.2", "", { "dependencies": { "@prisma/debug": "5.10.2" } }, "sha512-nqXP6vHiY2PIsebBAuDeWiUYg8h8mfjBckHh6Jezuwej0QJNnjDiOq30uesmg+JXxGk99nqyG3B7wpcOODzXvg=="],
 
     "@shopify/admin-api-client": ["@shopify/admin-api-client@0.2.9", "", { "dependencies": { "@shopify/graphql-client": "^0.10.4" } }, "sha512-0K/P6e4bofCyk5BQ1OCiw9bq2d2hlxHM3B8FQEQclyMyU/b3oMowhy56sOQQODViaiZoDH/atmeWJwOX1di0Qg=="],
 
@@ -846,6 +860,8 @@
     "prettier": ["prettier@3.8.0", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-yEPsovQfpxYfgWNhCfECjG5AQaO+K3dp6XERmOepyPDVqcJm+bjyCVO3pmU+nAPe0N5dDvekfGezt/EIiRe1TA=="],
 
     "prettier-linter-helpers": ["prettier-linter-helpers@1.0.1", "", { "dependencies": { "fast-diff": "^1.1.2" } }, "sha512-SxToR7P8Y2lWmv/kTzVLC1t/GDI2WGjMwNhLLE9qtH8Q13C+aEmuRlzDst4Up4s0Wc8sF2M+J57iB3cMLqftfg=="],
+
+    "prisma": ["prisma@5.10.2", "", { "dependencies": { "@prisma/engines": "5.10.2" }, "bin": { "prisma": "build/index.js" } }, "sha512-hqb/JMz9/kymRE25pMWCxkdyhbnIWrq+h7S6WysJpdnCvhstbJSNP/S6mScEcqiB8Qv2F+0R3yG+osRaWqZacQ=="],
 
     "proxy-addr": ["proxy-addr@2.0.7", "", { "dependencies": { "forwarded": "0.2.0", "ipaddr.js": "1.9.1" } }, "sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg=="],
 

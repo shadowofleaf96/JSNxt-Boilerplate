@@ -3,16 +3,14 @@ import express, { Request, Response } from 'express';
 import cors, { CorsOptions } from 'cors';
 import helmet from 'helmet';
 import path from 'path';
-import connectDB from './config/database';
 import useragent from 'express-useragent';
 import hpp from 'hpp';
 import userRoutes from './routes/userRoutes';
 import { apiLimiter, sensitiveMethodsLimiter } from './middleware/rateLimiting';
+import prisma from './models/client';
 
 const app = express();
 app.use(useragent.express());
-
-connectDB();
 
 const port = parseInt(process.env.PORT || '5000', 10);
 const allowedOrigins = ['http://localhost:3000', process.env.FRONTEND_URL];
@@ -87,8 +85,14 @@ app.get('/', (req: Request, res: Response) => {
   res.redirect(process.env.FRONTEND_URL);
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
+  try {
+    await prisma.$connect();
+    console.log('Database connected successfully');
+  } catch (error) {
+    console.error('Database connection failed', error);
+  }
 });
 
 process.on('unhandledRejection', (err: Error) => {
