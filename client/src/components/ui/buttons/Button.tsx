@@ -17,7 +17,7 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   return (
-    <div className="mt-6">
+    <div className="mt-2">
       <button
         {...props}
         disabled={loading}

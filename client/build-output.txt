@@ -1,0 +1,54 @@
+﻿bun : $ next build
+At line:1 char:1
++ bun run build 2>&1 | Out-File 
+-FilePath build-output.txt 
+-Encoding ut ...
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : No 
+   tSpecified: ($ next build:St  
+  ring) [], RemoteException
+    + FullyQualifiedErrorId : Na 
+   tiveCommandError
+ 
+Γû▓ Next.js 16.1.4 (Turbopack)
+- Environments: .env
+
+ΓÜá The "middleware" file 
+convention is deprecated. Please 
+use "proxy" instead. Learn more: 
+https://nextjs.org/docs/messages/
+middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 19.5s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/admin/Layout/Nav
+bar.tsx:2:8
+Type error: 'React' is declared 
+but its value is never read.
+
+[0m [90m 1 |[39m [32m'use 
+client'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 2 
+|[39m [36mimport[39m 
+[33mReact[39m[33m,[39m { 
+useEffect } [36mfrom[39m 
+[32m'react'[39m[33m;[39m
+ [90m   |[39m        
+[31m[1m^[22m[39m
+ [90m 3 |[39m [36mimport[39m 
+{ useRouter } [36mfrom[39m [32
+m'next/navigation'[39m[33m;[39
+m
+ [90m 4 |[39m [36mimport[39m 
+{ useSelector } [36mfrom[39m [
+32m'react-redux'[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m 
+{ [33mRootState[39m } 
+[36mfrom[39m [32m'@/redux/stor
+e'[39m[33m;[39m[0m
+Next.js build worker exited with 
+code: 1 and signal: null
+error: script "build" exited 
+with code 1

@@ -1,5 +1,4 @@
-import React from 'react';
-import Dashboard from './components/Dashboard';
+import Dashboard from '@/components/admin/Dashboard/Dashboard';
 
 function DashboardPage() {
   return <Dashboard />;

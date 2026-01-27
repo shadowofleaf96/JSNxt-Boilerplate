@@ -1,5 +1,4 @@
-import React from 'react';
-import Users from './components/Users';
+import Users from '@/components/admin/Users/Users';
 
 function UsersPage() {
   return <Users />;

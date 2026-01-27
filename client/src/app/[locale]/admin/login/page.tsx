@@ -1,5 +1,4 @@
-import React from 'react';
-import Login from './components/Login';
+import Login from '@/components/auth/AdminLogin';
 
 function LoginPage() {
   return <Login />;

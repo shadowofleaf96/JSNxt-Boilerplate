@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Navbar from '@/app/[locale]/admin/components/Layout/Navbar';
-import Sidebar from '@/app/[locale]/admin/components/Layout/Sidebar';
+import Navbar from '@/components/admin/Layout/Navbar';
+import Sidebar from '@/components/admin/Layout/Sidebar';
 import ProtectedRoute from '@/components/utils/ProtectedRoute';
 
 export default function Layout({ children }: { children: React.ReactNode }) {

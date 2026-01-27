@@ -1,8 +1,7 @@
 import '@/styles/index.css';
 import { Poppins } from 'next/font/google';
 import { ReduxProvider } from '@/components/utils/ReduxProvider';
-import { ReCaptchaProvider } from 'next-recaptcha-v3';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { SupabaseAuthProvider } from '@/components/utils/SupabaseAuthProvider';
 import initTranslations from '@/app/utils/i18n';
 import i18nConfig from '@/app/utils/i18nConfig';
 import TranslationProvider from '@/app/utils/TranslationProvider';
@@ -47,21 +46,15 @@ export default async function RootLayout({
       </head>
       <body className={poppins.variable}>
         <ReduxProvider>
-          <ReCaptchaProvider
-            reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
-          >
-            <GoogleOAuthProvider
-              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}
+          <SupabaseAuthProvider>
+            <TranslationProvider
+              locale={locale}
+              resources={resources}
+              namespaces={i18nNamespaces}
             >
-              <TranslationProvider
-                locale={locale}
-                resources={resources}
-                namespaces={i18nNamespaces}
-              >
-                <ToastProvider>{children}</ToastProvider>
-              </TranslationProvider>
-            </GoogleOAuthProvider>
-          </ReCaptchaProvider>
+              <ToastProvider>{children}</ToastProvider>
+            </TranslationProvider>
+          </SupabaseAuthProvider>
         </ReduxProvider>
       </body>
     </html>

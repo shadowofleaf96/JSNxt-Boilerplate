@@ -1,5 +1,4 @@
-import React from 'react';
-import VerificationSuccess from './components/VerificationSuccess';
+import VerificationSuccess from '@/components/auth/VerificationSuccess';
 
 function VerificationSuccessPage() {
   return <VerificationSuccess />;
