@@ -8,7 +8,7 @@ import { OAuth2Client } from 'google-auth-library';
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 import sendEmail from '../middleware/sendEmail';
 import { generateUniqueUsername } from '../utils/generateUsername';
-import { getPublicUrl } from '@/utils/fileUtils';
+import { getPublicUrl } from '../utils/fileUtils';
 import {
   getWelcomeEmailTemplate,
   getVerificationEmailTemplate,
